@@ -5,6 +5,16 @@
 #ifndef GIOCO_H
 #define GIOCO_H
 
+#include <stdint.h>
+
+#ifndef MAX_CHAR
+#define MAX_CHAR 255
+#endif
+
+#ifndef MAX_GENERI
+#define MAX_GENERI 10
+#endif
+
 typedef struct recensioni {
     char nome_utente[MAX_CHAR];
     uint8_t valutazione;
@@ -18,7 +28,7 @@ typedef struct gioco {
     char descrizione [MAX_CHAR];
     unsigned short anno_pubblicazione;
     unsigned long copie_vendute;
-    char generi[MAX_CHAR];
+    char generi[MAX_GENERI][MAX_CHAR];
 }gioco_t;
 
-#endif //GIOCO_H
+#endif GIOCO_H

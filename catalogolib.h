@@ -4,7 +4,7 @@
 #ifndef CATALOGOLIB_H
 #define CATALOGOLIB_H
 
-#include <stdint.h>
+#include "gioco.h"
 
 #ifndef PATH
 /**
@@ -14,18 +14,24 @@
 #endif
 
 
-#ifndef NOMEFILE
+#ifndef NOME_FILE
 /**
  * Nome del file del catalogo
  */
 #define NOME_FILE "catalogo"
 #endif
 
-#ifndef MAX_CHAR
-#define MAX_CHAR 255
+#ifndef DELIM
+#define DELIM ','
 #endif
 
+#ifndef TOKEN_1
+#define TOKEN_1 '$'
+#endif
 
+#ifndef TOKEN_2
+#define TOKEN_2 '#'
+#endif
 
 void aggiungiGioco();
 
@@ -37,4 +43,4 @@ void ricerca();
 
 void analisiQuery();
 
-#endif //CATALOGOLIB_H
+#endif CATALOGOLIB_H
