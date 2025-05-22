@@ -13,7 +13,11 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 cmake-build-debug
-editor.xml
+
+#xml
+/.idea
+.idea/editor.xml
+*.xml
 
 # Prerequisites
 *.d
@@ -68,4 +72,3 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .DS_Store
-.idea/editor.xml
