@@ -39,8 +39,10 @@ void modificaGioco();
 
 void cancellaGioco();
 
-void ricerca();
+void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco);
 
-void analisiQuery();
+void ricercaGlobale();
 
-#endif CATALOGOLIB_H
+void analisiQuery(char query[MAX_CHAR]);
+
+#endif //CATALOGOLIB_H

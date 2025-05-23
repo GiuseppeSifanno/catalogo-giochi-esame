@@ -31,4 +31,4 @@ typedef struct gioco {
     char generi[MAX_GENERI][MAX_CHAR];
 }gioco_t;
 
-#endif GIOCO_H
+#endif //GIOCO_H
