@@ -5,6 +5,7 @@
 #define CATALOGOLIB_H
 
 #include "gioco.h"
+#include "utility.h"
 
 #ifndef PATH
 /**
@@ -13,7 +14,6 @@
 #define PATH "./"
 #endif
 
-
 #ifndef NOME_FILE
 /**
  * Nome del file del catalogo
@@ -21,19 +21,7 @@
 #define NOME_FILE "catalogo"
 #endif
 
-#ifndef DELIM
-#define DELIM ','
-#endif
-
-#ifndef TOKEN_1
-#define TOKEN_1 '$'
-#endif
-
-#ifndef TOKEN_2
-#define TOKEN_2 '#'
-#endif
-
-void aggiungiGioco();
+void aggiungiGioco(gioco_t *gioco);
 
 void modificaGioco();
 
@@ -41,12 +29,6 @@ void cancellaGioco();
 
 void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco);
 
-void ricercaGlobale();
-
-void analisiQuery(char query[MAX_CHAR]);
-
-void trim(char *query);
-
-void checkMemory(const unsigned short *num_param, unsigned short *dim, const size_t *len, char ***parametri);
+void ricercaGlobale(char query[MAX_CHAR]);
 
 #endif //CATALOGOLIB_H
