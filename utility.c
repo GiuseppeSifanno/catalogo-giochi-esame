@@ -34,7 +34,7 @@ void analisiQuery(char query[MAX_CHAR]) {
         // Rimuovi spazi all'inizio e alla fine
         trim(token_copy);
 
-        size_t len = strlen(token_copy);
+        unsigned short len = strlen(token_copy);
 
         // Se il token non è vuoto dopo il trimming
         if (len > 0) {
@@ -88,7 +88,7 @@ void trim(char *token) {
     }
 
     if (token[0] == TOKEN_1 || token[0] == TOKEN_2) {
-        size_t j = 1;
+        unsigned short j = 1;
         while (isspace((unsigned char)token[j])) {
             j++;
         }
@@ -96,7 +96,7 @@ void trim(char *token) {
     }
 }
 
-void checkMemory(const unsigned short *num_param, unsigned short *dim, const size_t *len, char ***parametri) {
+void checkMemory(const unsigned short *num_param, unsigned short *dim, const unsigned short *len, char ***parametri) {
     // Verifica se abbiamo bisogno di più spazio per i parametri
     if (*num_param >= *dim) {
         (*dim)++; // Incremento la capacità

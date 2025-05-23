@@ -23,6 +23,6 @@ void analisiQuery(char query[MAX_CHAR]);
 
 void trim(char *token);
 
-void checkMemory(const unsigned short *num_param, unsigned short *dim, const size_t *len, char ***parametri);
+void checkMemory(const unsigned short *num_param, unsigned short *dim, const unsigned short *len, char ***parametri);
 
 #endif //CATALOGO_UTILITY_H
