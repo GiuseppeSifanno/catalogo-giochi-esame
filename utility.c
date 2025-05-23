@@ -11,8 +11,8 @@
 #include <string.h>
 
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
-    unsigned short dim = 1, new_param = *param;
-    char **parametri = malloc(sizeof(char *) * dim);
+    unsigned short capacita = 1, num_elementi = *param;
+    char **parametri = malloc(sizeof(char *) * capacita);
 
     if (parametri == NULL) {
         printf("Errore di allocazione memoria\n");
@@ -38,18 +38,21 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
         // Se il token non è vuoto dopo il trimming
         if (len > 0) {
-            checkMemory(&new_param, &dim, &len, &parametri);
+            //checkMemory(&new_param, &dim, &len, &parametri);
+			if (checkMemory(&num_elementi, &capacita, (len + 1) * sizeof(char), sizeof(char *), (void***)&parametri) == 0) {
+                return NULL;
+            }
 
             // Copia il parametro
-            strncpy(parametri[new_param], token_copy, len);
-            parametri[new_param][len] = '\0'; // Termina la stringa
+            strncpy(parametri[num_elementi], token_copy, len);
+            parametri[num_elementi][len] = '\0'; // Termina la stringa
 
-            new_param++;
+            num_elementi++;
         }
 
         token = strtok(NULL, DELIM);
     }
-    *param = new_param;
+    *param = num_elementi;
     return parametri;
 }
 
@@ -83,37 +86,54 @@ void trim(char *token) {
     }
 }
 
-void checkMemory(const unsigned short *num_param, unsigned short *dim, const unsigned short *len, char ***parametri) {
-    // Verifica se abbiamo bisogno di più spazio per i parametri
-    if (*num_param >= *dim) {
-        (*dim)++; // Incremento la capacità
-
-        // Usa un puntatore temporaneo per realloc
-        char **temp = realloc(*parametri, (*dim) * sizeof(char *));
-        if (temp == NULL) {
-            printf("Errore di allocazione memoria\n");
+/**
+ * Gestisce l'allocazione dinamica della memoria per array di elementi generici.
+ * Verifica se è necessario espandere un array e alloca memoria per un nuovo elemento.
+ * 
+ * @param num_elementi Puntatore al numero attuale di elementi nell'array
+ * @param capacita Puntatore alla capacità attuale dell'array (verrà incrementata se necessario)
+ * @param dimensione_elemento Dimensione in byte del nuovo elemento da allocare
+ * @param dimensione_puntatore Dimensione in byte di ciascun puntatore nell'array (es. sizeof(int*))
+ * @param array Puntatore triplo all'array da gestire
+ * @return 1 se l'allocazione è avvenuta con successo, 0 in caso di errore
+ */
+int checkMemory(const unsigned short *num_elementi, unsigned short *capacita, 
+                unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array) {
+    // Verifica se è necessario espandere l'array
+    if (*num_elementi >= *capacita) {
+        // Incrementa la capacità
+        unsigned short nuova_capacita = (*capacita) + 1;
+        
+        // Esegue il realloc usando dimensione_puntatore
+        void **nuovo_array = realloc(*array, nuova_capacita * dimensione_puntatore);
+        
+        if (nuovo_array == NULL) {
+            printf("Errore nell'espansione dell'array: memoria insufficiente\n");
             // Libera la memoria già allocata
-            for (unsigned short j = 0; j < *num_param; j++) {
-                free((*parametri)[j]);
+            for (unsigned short i = 0; i < *num_elementi; i++) {
+                free((*array)[i]);
             }
-
-            free(*parametri);  // Non perdiamo il puntatore originale
-            return;
+            free(*array);
+            return 0; // Segnala fallimento
         }
-        *parametri = temp;  // Solo se realloc ha avuto successo
+        
+        // Aggiorna il puntatore e la capacità
+        *array = nuovo_array;
+        *capacita = nuova_capacita;
     }
-
-    // Alloca memoria per questo parametro
-    (*parametri)[*num_param] = malloc(((*len) + 1) * sizeof(char));
-
-    //se malloc non ha avuto successo
-    if ((*parametri)[*num_param] == NULL) {
-        printf("Errore di allocazione memoria\n");
+    
+    // Alloca memoria per il nuovo elemento
+    (*array)[*num_elementi] = malloc(dimensione_elemento);
+    
+    if ((*array)[*num_elementi] == NULL) {
+        printf("Errore nell'allocazione del nuovo elemento: memoria insufficiente\n");
         // Libera la memoria già allocata
-        for (unsigned short j = 0; j < *num_param; j++) {
-                free((*parametri)[j]);
+        for (unsigned short i = 0; i < *num_elementi; i++) {
+            free((*array)[i]);
         }
-        free(*parametri);
-        return;
+        free(*array);
+        return 0; // Segnala fallimento
     }
+    
+    return 1; // Segnala successo
 }
