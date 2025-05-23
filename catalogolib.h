@@ -45,4 +45,8 @@ void ricercaGlobale();
 
 void analisiQuery(char query[MAX_CHAR]);
 
+void trim(char *query);
+
+void checkMemory(const unsigned short *num_param, unsigned short *dim, const size_t *len, char ***parametri);
+
 #endif //CATALOGOLIB_H
