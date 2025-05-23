@@ -21,7 +21,7 @@
 #define NOME_FILE "catalogo"
 #endif
 
-void aggiungiGioco(gioco_t *gioco);
+void aggiungiGioco(const gioco_t *gioco);
 
 void modificaGioco();
 

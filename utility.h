@@ -8,7 +8,7 @@
 #include "gioco.h"
 
 #ifndef DELIM
-#define DELIM ','
+#define DELIM ","
 #endif
 
 #ifndef TOKEN_1
@@ -19,7 +19,7 @@
 #define TOKEN_2 '#'
 #endif
 
-void analisiQuery(char query[MAX_CHAR]);
+char** analisiQuery(char query[MAX_CHAR], unsigned short *param);
 
 void trim(char *token);
 

@@ -10,13 +10,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-void analisiQuery(char query[MAX_CHAR]) {
-    unsigned short num_param = 0, dim = 1;
+char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
+    unsigned short dim = 1, new_param = *param;
     char **parametri = malloc(sizeof(char *) * dim);
 
     if (parametri == NULL) {
         printf("Errore di allocazione memoria\n");
-        return;
+        exit(-1);
     }
 
     // Crea una copia della stringa query per strtok
@@ -38,32 +38,19 @@ void analisiQuery(char query[MAX_CHAR]) {
 
         // Se il token non è vuoto dopo il trimming
         if (len > 0) {
-            checkMemory(&num_param, &dim, &len, &parametri);
+            checkMemory(&new_param, &dim, &len, &parametri);
 
             // Copia il parametro
-            strncpy(parametri[num_param], token_copy, len);
-            parametri[num_param][len] = '\0'; // Termina la stringa
+            strncpy(parametri[new_param], token_copy, len);
+            parametri[new_param][len] = '\0'; // Termina la stringa
 
-            num_param++;
+            new_param++;
         }
 
-        token = strtok(NULL, ",");
+        token = strtok(NULL, DELIM);
     }
-
-    ///////////////////////
-    // Rimuovere terminata la fase di sviluppo del programma
-    printf("Numero totale di parametri: %d\n", num_param);
-
-    for (unsigned short i = 0; i < num_param; i++) {
-        printf("Parametro %d: %s\n", i + 1, parametri[i]);
-    }
-    ///////////////////////
-
-    // Libera tutta la memoria allocata
-    for (unsigned short i = 0; i < num_param; i++) {
-        free(parametri[i]);
-    }
-    free(parametri);
+    *param = new_param;
+    return parametri;
 }
 
 void trim(char *token) {
