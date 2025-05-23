@@ -71,6 +71,7 @@ void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco) {
 
 void ricercaGlobale(char query[MAX_CHAR]) {
     unsigned short num_param = 0, valido = 0;
+
     gioco_t gioco;
     //parametri recuperati durante l'analisi della query in input dell'utente
     char **parametri = analisiQuery(query, &num_param);
@@ -88,6 +89,15 @@ void ricercaGlobale(char query[MAX_CHAR]) {
         printf("Parametro %d: %s\n", i + 1, parametri[i]);
     }
     ///////////////////////
+
+    unsigned short capacita = 1, num_elementi = 0;
+    unsigned short *offset = malloc(sizeof(unsigned short *) * capacita);
+
+    if (offset == NULL) {
+        free(offset);
+        printf("Errore di allocazione memoria\n");
+        exit(-1);
+    }
 
     //apro il file in modalità lettura
     FILE *file = fopen(NOME_FILE, "rb");
@@ -124,6 +134,13 @@ void ricercaGlobale(char query[MAX_CHAR]) {
                     break;
             }
             if (valido == 0) break;
+
+        }
+        if (valido == 1) {
+            checkMemory(&num_elementi, &capacita, sizeof(unsigned short), sizeof(unsigned short *), (void ***)&offset);
+            //ftell indica la posizione corrente del file pointer
+            offset[num_elementi] = ftell(file);
+            num_elementi++;
         }
     }
 }
