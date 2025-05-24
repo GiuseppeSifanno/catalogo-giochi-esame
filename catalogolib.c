@@ -8,13 +8,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "gioco.h"
 #include "utility.h"
 
-void aggiungiGioco(gioco_t gioco) {
+unsigned short aggiungiGioco(gioco_t gioco) {
+
+    //controlliamo se il gioco è già presente nel catalogo
+    if (isAlredyAdded(&gioco) == 1) return 1;
+
     //apro il file in modalità scrittura
-    FILE *file = fopen(NOME_FILE, "wb");
+    FILE *file = fopen(NOME_FILE, "wb+");
+
+    //rimuovere terminata la fase di sviluppo del programma
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("\nDirectory attuale: %s\n", cwd);
+    ///////////////////////
 
     if (file == NULL) {
         fprintf(stderr, "Errore apertura file\n");
@@ -31,6 +42,7 @@ void aggiungiGioco(gioco_t gioco) {
     printf("\nGioco aggiunto correttamente\n");
     //chiudo il file e salvo le modifiche
     fclose(file);
+    return 0;
 }
 
 void modificaGioco() {
@@ -41,10 +53,53 @@ void cancellaGioco() {
 
 }
 
-//ricerca specifica sul file
-void ricercaSpecifica(long *offset, gioco_t *gioco) {
+unsigned short isAlredyAdded(gioco_t *new_gioco) {
+    gioco_t gioco;
     //apro il file in modalità lettura
     FILE *file = fopen(NOME_FILE, "rb");
+
+    //rimuovere terminata la fase di sviluppo del programma
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("\nDirectory attuale: %s\n", cwd);
+    ///////////////////////
+
+    if (file == NULL) {
+        fprintf(stderr, "Errore apertura file\n");
+        exit(-1);
+    }
+
+    //valido: 0 non presente nel catalogo (valido), 1 altrimenti
+    unsigned short int valido = 0;
+
+    while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        valido = gioco.anno_pubblicazione == new_gioco->anno_pubblicazione  &&
+                 gioco.copie_vendute == new_gioco->copie_vendute            &&
+                 strcmp(gioco.titolo, new_gioco->titolo) == 0               &&
+                 strcmp(gioco.descrizione, new_gioco->descrizione) == 0     &&
+                 strcmp(gioco.editore, new_gioco->editore) == 0             &&
+                 strcmp(gioco.sviluppatore, new_gioco->sviluppatore) == 0 ? 1 : 0;
+
+        for (unsigned short i = 0; i < MAX_GENERI; i++) {
+            valido = strcmp(gioco.generi[i], new_gioco->generi[i]) == 0 ? 1 : 0;
+        }
+
+        if (valido == 1) break;
+    }
+    return valido;
+}
+
+
+//ricerca specifica sul file
+void ricercaSpecifica(long offset, gioco_t *gioco) {
+    //apro il file in modalità lettura
+    FILE *file = fopen(NOME_FILE, "rb");
+
+    //rimuovere terminata la fase di sviluppo del programma
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("\nDirectory attuale: %s\n", cwd);
+    ///////////////////////
 
     if (file == NULL) {
         fprintf(stderr, "Errore apertura file\n");
@@ -52,7 +107,7 @@ void ricercaSpecifica(long *offset, gioco_t *gioco) {
     }
 
     //mi posizione in una posizione specifica
-    if (fseek(file, *offset, SEEK_SET) != 0) {
+    if (fseek(file, offset, SEEK_SET) != 0) {
         fprintf(stderr, "Errore posizione file\n");
         fclose(file);
         exit(-1);
@@ -69,7 +124,7 @@ void ricercaSpecifica(long *offset, gioco_t *gioco) {
     fclose(file);
 }
 
-long *ricercaGlobale(char query[MAX_CHAR]) {
+long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     unsigned short num_param = 0, valido = 0;
 
     //trasforma la stringa inserita in input dall'utente tutta in minuscolo
@@ -95,8 +150,8 @@ long *ricercaGlobale(char query[MAX_CHAR]) {
     }
     ///////////////////////
 
-    unsigned short capacita = 1, num_elementi = 0;
-    long *offset = malloc(sizeof(unsigned short *) * capacita);
+    unsigned short capacita = 1;
+    long *offset = calloc(capacita, sizeof(long));
 
     if (offset == NULL) {
         free(offset);
@@ -107,19 +162,26 @@ long *ricercaGlobale(char query[MAX_CHAR]) {
     //apro il file in modalità lettura
     FILE *file = fopen(NOME_FILE, "rb");
 
+    //rimuovere terminata la fase di sviluppo del programma
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("\nDirectory attuale: %s\n", cwd);
+    ///////////////////////
+
     if (file == NULL) {
         fprintf(stderr, "Errore apertura file\n");
         exit(-1);
     }
 
-    while (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
+    long pos = ftello(file);
+    while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         valido = 0;
         for (unsigned short i = 0; i < num_param; i++) {
             switch (parametri[i][0]) {
                 case TOKEN_1: {
                     memmove(&parametri[i][0], &parametri[i][0 + 1], strlen(parametri[i]) - 0);
-                    if (gioco.anno_pubblicazione != (typeof(gioco.anno_pubblicazione)) *parametri[i]) break;
-                    valido = 1;
+                    if (gioco.anno_pubblicazione == (typeof(gioco.anno_pubblicazione)) *parametri[i])
+                        valido = 1;
                 }
                     break;
                 case TOKEN_2 : {
@@ -129,7 +191,6 @@ long *ricercaGlobale(char query[MAX_CHAR]) {
                             valido = 1;
                             break;
                         }
-                        if (valido == 1) break;
                     }
                 }
                     break;
@@ -140,12 +201,13 @@ long *ricercaGlobale(char query[MAX_CHAR]) {
                 }
                     break;
             }
+            if (valido == 1) break;
         }
         if (valido == 1) {
-            checkMemory(&num_elementi, &capacita, sizeof(unsigned short), sizeof(unsigned short *), (void ***)&offset);
-            //ftell indica la posizione corrente del file pointer
-            offset[num_elementi] = ftell(file);
-            num_elementi++;
+            checkMemory(num_elementi, &capacita, sizeof(long), sizeof(typeof(offset)), (void ***)&offset);
+            offset[*num_elementi] = pos;
+            (*num_elementi)++;
+            pos = ftello(file);
         }
     }
     return offset;

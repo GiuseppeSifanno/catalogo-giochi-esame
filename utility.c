@@ -37,17 +37,8 @@ gioco_t inserisciGioco() {
     scanf(" %[^\n]", gioco.descrizione);
     tolower_str(gioco.descrizione);
 
-   /* do {
-        printf("Inserisci anno di pubblicazione (%d): ", ANNO_MIN);//ANNO_MAX);
-        scanf("%hu", &gioco.anno_pubblicazione);
-        if (gioco.anno_pubblicazione < ANNO_MIN ){//|| gioco.anno_pubblicazione > ANNO_MAX) {
-            printf("Anno non valido. Riprova.\n");
-        }
-    } while (gioco.anno_pubblicazione < ANNO_MIN); //|| gioco.anno_pubblicazione > ANNO_MAX);
-    */
-
     do {
-        printf("Inserisci anno di pubblicazione (%d): ", ANNO_MIN);
+        printf("Inserisci anno di pubblicazione (>= %d): ", ANNO_MIN);
         result = scanf("%hu", &gioco.anno_pubblicazione);
 
         if (result != 1) {
@@ -102,7 +93,7 @@ gioco_t inserisciGioco() {
 
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     unsigned short capacita = 1, num_elementi = *param;
-    char **parametri = malloc(sizeof(char *) * capacita);
+    char **parametri = calloc(capacita,sizeof(char *));
 
     if (parametri == NULL) {
         printf("Errore di allocazione memoria\n");

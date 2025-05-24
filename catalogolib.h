@@ -7,27 +7,28 @@
 #include "gioco.h"
 #include "utility.h"
 
-#ifndef PATH
-/**
- * Percorso in cui verrà posizionato il file
- */
-#define PATH "./"
-#endif
-
 #ifndef NOME_FILE
 /**
  * Nome del file del catalogo
  */
-#define NOME_FILE "catalogo"
+#define NOME_FILE "catalogo.dat"
 #endif
-void aggiungiGioco(gioco_t gioco);
+
+unsigned short aggiungiGioco(gioco_t gioco);
 
 void modificaGioco();
 
 void cancellaGioco();
 
-void ricercaSpecifica(long *offset, gioco_t *gioco);
+/**
+ * Ritorna 1 se il gioco è già presente nel catalogo, 0 altrimenti
+ * @param new_gioco
+ * @return Valido
+ */
+unsigned short isAlredyAdded(gioco_t *new_gioco);
 
-long *ricercaGlobale(char query[MAX_CHAR]);
+void ricercaSpecifica(long offset, gioco_t *gioco);
+
+long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
 
 #endif //CATALOGOLIB_H
