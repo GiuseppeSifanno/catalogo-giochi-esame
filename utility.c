@@ -15,35 +15,71 @@ void tolower_str(char *str) {
         str[i] = tolower((unsigned char)str[i]);
     }
 }
+
 gioco_t inserisciGioco() {
     gioco_t gioco;
+    int result;
     char risposta[MAX_CHAR];
+
     printf("Inserisci titolo: ");
     scanf(" %[^\n]", gioco.titolo);
+    tolower_str(gioco.titolo);
 
     printf("Inserisci editore: ");
     scanf(" %[^\n]", gioco.editore);
+    tolower_str(gioco.editore);
 
     printf("Inserisci sviluppatore: ");
     scanf(" %[^\n]", gioco.sviluppatore);
+    tolower_str(gioco.sviluppatore);
 
     printf("Inserisci descrizione: ");
     scanf(" %[^\n]", gioco.descrizione);
+    tolower_str(gioco.descrizione);
 
-    do {
+   /* do {
         printf("Inserisci anno di pubblicazione (%d): ", ANNO_MIN);//ANNO_MAX);
         scanf("%hu", &gioco.anno_pubblicazione);
         if (gioco.anno_pubblicazione < ANNO_MIN ){//|| gioco.anno_pubblicazione > ANNO_MAX) {
             printf("Anno non valido. Riprova.\n");
         }
     } while (gioco.anno_pubblicazione < ANNO_MIN); //|| gioco.anno_pubblicazione > ANNO_MAX);
+    */
 
-    printf("Inserisci numero copie vendute: ");
-    scanf("%lu", &gioco.copie_vendute);
+    do {
+        printf("Inserisci anno di pubblicazione (%d): ", ANNO_MIN);
+        result = scanf("%hu", &gioco.anno_pubblicazione);
+
+        if (result != 1) {
+            printf("Input non valido. Inserisci un numero.\n");
+            // Pulisce il buffer da input errato
+            while (getchar() != '\n');
+        } else if (gioco.anno_pubblicazione < ANNO_MIN) {
+            printf("Anno non valido. Deve essere >= %d.\n", ANNO_MIN);
+            // Anche se input valido, forziamo il ciclo a ripetere
+            result = 0;
+        } else {
+            // Input corretto, puliamo eventuali residui
+            while (getchar() != '\n');
+        }
+    } while (result != 1);
+    result = 0;
+    do {
+        printf("Inserisci numero copie vendute: ");
+        result = scanf("%lu", &gioco.copie_vendute);
+
+        if (result != 1) {
+            printf("Input non valido. Inserisci un numero intero positivo.\n");
+            while (getchar() != '\n'); // pulizia buffer
+        } else {
+            while (getchar() != '\n'); // pulizia buffer residuo
+        }
+    } while (result != 1);;
 
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Inserisci genere %d: ", i + 1);
         scanf(" %[^\n]", gioco.generi[i]);
+        tolower_str(*gioco.generi);
         if (i < MAX_GENERI - 1) {
             while (1) {
                 printf("Vuoi inserire un altro genere? (Si/No): ");
@@ -60,7 +96,6 @@ gioco_t inserisciGioco() {
             }
         }
     }
-
     return gioco;
 }
 
@@ -79,7 +114,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     strncpy(query_copy, query, MAX_CHAR);
     query_copy[MAX_CHAR - 1] = '\0'; // Assicura terminazione
 
-    char *token = strtok(query_copy, ",");
+    char *token = strtok(query_copy, DELIM);
 
     while (token != NULL) {
         char token_copy[MAX_CHAR];
@@ -93,8 +128,19 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
         // Se il token non è vuoto dopo il trimming
         if (len > 0) {
-            //checkMemory(&new_param, &dim, &len, &parametri);
-			if (checkMemory(&num_elementi, &capacita, (len + 1) * sizeof(char), sizeof(char *), (void***)&parametri) == 0) {
+            if (checkMemory(&num_elementi, &capacita, sizeof(char *), sizeof(char *), (void***)&parametri) == 0) {
+                return NULL;
+            }
+
+            // Alloca memoria per la stringa
+            parametri[num_elementi] = malloc((len + 1) * sizeof(char));
+            if (parametri[num_elementi] == NULL) {
+                printf("Errore allocazione memoria per stringa\n");
+                // Libera la memoria già allocata
+                for (unsigned short i = 0; i < num_elementi; i++) {
+                    free(parametri[i]);
+                }
+                free(parametri);
                 return NULL;
             }
 

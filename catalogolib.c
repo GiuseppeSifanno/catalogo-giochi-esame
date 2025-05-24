@@ -12,7 +12,7 @@
 #include "gioco.h"
 #include "utility.h"
 
-void aggiungiGioco(const gioco_t *gioco) {
+void aggiungiGioco(gioco_t gioco) {
     //apro il file in modalità scrittura
     FILE *file = fopen(NOME_FILE, "wb");
 
@@ -22,7 +22,7 @@ void aggiungiGioco(const gioco_t *gioco) {
     }
 
     //scrivo il gioco nel file
-    if (fwrite(gioco, sizeof(gioco_t), 1, file) != 1) {
+    if (fwrite(&gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore scrittura file\n");
         fclose(file);
         exit(-1);
@@ -42,7 +42,7 @@ void cancellaGioco() {
 }
 
 //ricerca specifica sul file
-void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco) {
+void ricercaSpecifica(long *offset, gioco_t *gioco) {
     //apro il file in modalità lettura
     FILE *file = fopen(NOME_FILE, "rb");
 
@@ -69,7 +69,7 @@ void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco) {
     fclose(file);
 }
 
-void ricercaGlobale(char query[MAX_CHAR]) {
+long *ricercaGlobale(char query[MAX_CHAR]) {
     unsigned short num_param = 0, valido = 0;
 
     //trasforma la stringa inserita in input dall'utente tutta in minuscolo
@@ -96,7 +96,7 @@ void ricercaGlobale(char query[MAX_CHAR]) {
     ///////////////////////
 
     unsigned short capacita = 1, num_elementi = 0;
-    unsigned short *offset = malloc(sizeof(unsigned short *) * capacita);
+    long *offset = malloc(sizeof(unsigned short *) * capacita);
 
     if (offset == NULL) {
         free(offset);
@@ -112,16 +112,18 @@ void ricercaGlobale(char query[MAX_CHAR]) {
         exit(-1);
     }
 
-    while (fread(&gioco, sizeof(gioco_t), 1, file) != EOF) {
+    while (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
         valido = 0;
         for (unsigned short i = 0; i < num_param; i++) {
             switch (parametri[i][0]) {
                 case TOKEN_1: {
+                    memmove(&parametri[i][0], &parametri[i][0 + 1], strlen(parametri[i]) - 0);
                     if (gioco.anno_pubblicazione != (typeof(gioco.anno_pubblicazione)) *parametri[i]) break;
                     valido = 1;
                 }
                     break;
                 case TOKEN_2 : {
+                    memmove(&parametri[i][0], &parametri[i][0 + 1], strlen(parametri[i]) - 0);
                     for (unsigned short j = 0; j < MAX_GENERI; j++) {
                         if (strstr(gioco.generi[j], parametri[i]) != NULL) {
                             valido = 1;
@@ -138,8 +140,6 @@ void ricercaGlobale(char query[MAX_CHAR]) {
                 }
                     break;
             }
-            if (valido == 0) break;
-
         }
         if (valido == 1) {
             checkMemory(&num_elementi, &capacita, sizeof(unsigned short), sizeof(unsigned short *), (void ***)&offset);
@@ -148,4 +148,5 @@ void ricercaGlobale(char query[MAX_CHAR]) {
             num_elementi++;
         }
     }
+    return offset;
 }

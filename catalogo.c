@@ -4,9 +4,14 @@
 
 int main(void) {
 
-    char query[MAX_CHAR] = "Call of duty,,,, #       Fps   t ,        # Shooter, $2019";
-    inserisciGioco();
-    ricercaGlobale(query);
-
+    char query[MAX_CHAR] = "all of duty, #Fps, #Shooter";
+    //aggiungiGioco(inserisciGioco());
+    long *offset = ricercaGlobale(query);
+        gioco_t gioco;
+    for (int i = 0; i < 10; i++) {
+        printf("%lo\n", offset[i]);
+    }
+    ricercaSpecifica(&offset[0], &gioco);
+    printf("%s", gioco.titolo);
     return 0;
 }

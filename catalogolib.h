@@ -20,16 +20,14 @@
  */
 #define NOME_FILE "catalogo"
 #endif
-void aggiungiGioco(const gioco_t *gioco);
+void aggiungiGioco(gioco_t gioco);
 
 void modificaGioco();
 
 void cancellaGioco();
 
-void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco);
+void ricercaSpecifica(long *offset, gioco_t *gioco);
 
-void ricercaGlobale(char query[MAX_CHAR]);
-
-gioco_t inserisciGioco();
+long *ricercaGlobale(char query[MAX_CHAR]);
 
 #endif //CATALOGOLIB_H

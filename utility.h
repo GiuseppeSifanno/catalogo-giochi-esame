@@ -26,4 +26,6 @@ void trim(char *token);
 int checkMemory(const unsigned short *num_elementi, unsigned short *capacita,
     unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array);
 
+gioco_t inserisciGioco();
+
 #endif //CATALOGO_UTILITY_H
