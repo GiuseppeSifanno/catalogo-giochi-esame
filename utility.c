@@ -10,6 +10,61 @@
 #include <stdlib.h>
 #include <string.h>
 
+void tolower_str(char *str) {
+    for (int i = 0; str[i]; i++) {
+        str[i] = tolower((unsigned char)str[i]);
+    }
+}
+gioco_t inserisciGioco() {
+    gioco_t gioco;
+    char risposta[MAX_CHAR];
+    printf("Inserisci titolo: ");
+    scanf(" %[^\n]", gioco.titolo);
+
+    printf("Inserisci editore: ");
+    scanf(" %[^\n]", gioco.editore);
+
+    printf("Inserisci sviluppatore: ");
+    scanf(" %[^\n]", gioco.sviluppatore);
+
+    printf("Inserisci descrizione: ");
+    scanf(" %[^\n]", gioco.descrizione);
+
+    do {
+        printf("Inserisci anno di pubblicazione (%d): ", ANNO_MIN);//ANNO_MAX);
+        scanf("%hu", &gioco.anno_pubblicazione);
+        if (gioco.anno_pubblicazione < ANNO_MIN ){//|| gioco.anno_pubblicazione > ANNO_MAX) {
+            printf("Anno non valido. Riprova.\n");
+        }
+    } while (gioco.anno_pubblicazione < ANNO_MIN); //|| gioco.anno_pubblicazione > ANNO_MAX);
+
+    printf("Inserisci numero copie vendute: ");
+    scanf("%lu", &gioco.copie_vendute);
+
+    for (int i = 0; i < MAX_GENERI; i++) {
+        printf("Inserisci genere %d: ", i + 1);
+        scanf(" %[^\n]", gioco.generi[i]);
+        if (i < MAX_GENERI - 1) {
+            while (1) {
+                printf("Vuoi inserire un altro genere? (Si/No): ");
+                scanf(" %[^\n]", risposta);
+                tolower_str(risposta);
+                if (strcmp(risposta, "si") == 0) {
+                    break; // continua il ciclo
+                } else if (strcmp(risposta, "no") == 0) {
+                    i = MAX_GENERI; // forza uscita dal ciclo
+                    break;
+                } else {
+                    printf("Risposta non valida. Scrivi 'Si' o 'No'.\n");
+                }
+            }
+        }
+    }
+
+    return gioco;
+}
+
+
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     unsigned short capacita = 1, num_elementi = *param;
     char **parametri = malloc(sizeof(char *) * capacita);

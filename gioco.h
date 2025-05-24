@@ -15,6 +15,9 @@
 #define MAX_GENERI 10
 #endif
 
+#define ANNO_MIN 1950
+//#define ANNO_MAX 2025
+
 typedef struct recensioni {
     char nome_utente[MAX_CHAR];
     uint8_t valutazione;

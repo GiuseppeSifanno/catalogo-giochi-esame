@@ -72,6 +72,11 @@ void ricercaSpecifica(const unsigned short *offset, gioco_t *gioco) {
 void ricercaGlobale(char query[MAX_CHAR]) {
     unsigned short num_param = 0, valido = 0;
 
+    //trasforma la stringa inserita in input dall'utente tutta in minuscolo
+    for (int i = 0; query[i]; i++) {
+        query[i] = tolower((unsigned char)query[i]);
+    }
+
     gioco_t gioco;
     //parametri recuperati durante l'analisi della query in input dell'utente
     char **parametri = analisiQuery(query, &num_param);
