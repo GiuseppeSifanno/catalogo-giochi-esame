@@ -175,17 +175,6 @@ void trim(char *token) {
     }
 }
 
-/**
- * Gestisce l'allocazione dinamica della memoria per array di elementi generici.
- * Verifica se è necessario espandere un array e alloca memoria per un nuovo elemento.
- * 
- * @param num_elementi Puntatore al numero attuale di elementi nell'array
- * @param capacita Puntatore alla capacità attuale dell'array (verrà incrementata se necessario)
- * @param dimensione_elemento Dimensione in byte del nuovo elemento da allocare
- * @param dimensione_puntatore Dimensione in byte di ciascun puntatore nell'array (es. sizeof(int*))
- * @param array Puntatore triplo all'array da gestire
- * @return 1 se l'allocazione è avvenuta con successo, 0 in caso di errore
- */
 int checkMemory(const unsigned short *num_elementi, unsigned short *capacita, 
                 unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array) {
     // Verifica se è necessario espandere l'array
