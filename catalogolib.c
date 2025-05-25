@@ -4,33 +4,13 @@
 
 #include "catalogolib.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include "gioco.h"
-#include "utility.h"
-
 unsigned short aggiungiGioco(gioco_t gioco) {
 
     //controlliamo se il gioco è già presente nel catalogo
-    if (isAlredyAdded(&gioco) == 1) return 1;
+    //if (isAlredyAdded(&gioco) == 1) return 1;
 
     //apro il file in modalità scrittura
-    FILE *file = fopen(NOME_FILE, "wb+");
-
-    //rimuovere terminata la fase di sviluppo del programma
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("\nDirectory attuale: %s\n", cwd);
-    ///////////////////////
-
-    if (file == NULL) {
-        fprintf(stderr, "Errore apertura file\n");
-        exit(-1);
-    }
+    FILE *file = apriCatalogo("ab");
 
     //scrivo il gioco nel file
     if (fwrite(&gioco, sizeof(gioco_t), 1, file) != 1) {
@@ -49,62 +29,55 @@ void modificaGioco() {
 
 }
 
-void cancellaGioco() {
+void cancellaGioco(long offset) {
+    FILE *file = apriCatalogo("rb");
 
 }
 
 unsigned short isAlredyAdded(gioco_t *new_gioco) {
     gioco_t gioco;
     //apro il file in modalità lettura
-    FILE *file = fopen(NOME_FILE, "rb");
-
-    //rimuovere terminata la fase di sviluppo del programma
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("\nDirectory attuale: %s\n", cwd);
-    ///////////////////////
-
-    if (file == NULL) {
-        fprintf(stderr, "Errore apertura file\n");
-        exit(-1);
-    }
+    FILE *file = apriCatalogo("rb");
 
     //valido: 0 non presente nel catalogo (valido), 1 altrimenti
     unsigned short int valido = 0;
 
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
-        valido = gioco.anno_pubblicazione == new_gioco->anno_pubblicazione  &&
-                 gioco.copie_vendute == new_gioco->copie_vendute            &&
-                 strcmp(gioco.titolo, new_gioco->titolo) == 0               &&
-                 strcmp(gioco.descrizione, new_gioco->descrizione) == 0     &&
-                 strcmp(gioco.editore, new_gioco->editore) == 0             &&
-                 strcmp(gioco.sviluppatore, new_gioco->sviluppatore) == 0 ? 1 : 0;
-
-        for (unsigned short i = 0; i < MAX_GENERI; i++) {
-            valido = strcmp(gioco.generi[i], new_gioco->generi[i]) == 0 ? 1 : 0;
+        // Controllo sui campi principali
+        if (gioco.anno_pubblicazione == new_gioco->anno_pubblicazione &&
+            gioco.copie_vendute == new_gioco->copie_vendute &&
+            strcmp(gioco.titolo, new_gioco->titolo) == 0 &&
+            strcmp(gioco.descrizione, new_gioco->descrizione) == 0 &&
+            strcmp(gioco.editore, new_gioco->editore) == 0 &&
+            strcmp(gioco.sviluppatore, new_gioco->sviluppatore) == 0) {
+            
+            // Se i campi principali corrispondono, controlla i generi
+            valido = 1; // Presupponiamo che sia lo stesso gioco
+            
+            // Se almeno un genere è diverso, allora non è lo stesso gioco
+            for (unsigned short i = 0; i < MAX_GENERI; i++) {
+                if (strcmp(gioco.generi[i], new_gioco->generi[i]) != 0) {
+                    valido = 0;
+                    break;
+                }
+            }
+            
+            if (valido == 1) {
+                fclose(file);
+                return 1; // Gioco già presente
+            }
         }
-
-        if (valido == 1) break;
     }
-    return valido;
+    
+    fclose(file);
+    return 0; // Gioco non presente
 }
 
 
 //ricerca specifica sul file
 void ricercaSpecifica(long offset, gioco_t *gioco) {
     //apro il file in modalità lettura
-    FILE *file = fopen(NOME_FILE, "rb");
-
-    //rimuovere terminata la fase di sviluppo del programma
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("\nDirectory attuale: %s\n", cwd);
-    ///////////////////////
-
-    if (file == NULL) {
-        fprintf(stderr, "Errore apertura file\n");
-        exit(-1);
-    }
+    FILE *file = apriCatalogo("rb");
 
     //mi posizione in una posizione specifica
     if (fseek(file, offset, SEEK_SET) != 0) {
@@ -129,7 +102,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
 
     //trasforma la stringa inserita in input dall'utente tutta in minuscolo
     for (int i = 0; query[i]; i++) {
-        query[i] = tolower((unsigned char)query[i]);
+        query[i] = (char) tolower(query[i]);
     }
 
     gioco_t gioco;
@@ -160,46 +133,44 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     }
 
     //apro il file in modalità lettura
-    FILE *file = fopen(NOME_FILE, "rb");
-
-    //rimuovere terminata la fase di sviluppo del programma
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("\nDirectory attuale: %s\n", cwd);
-    ///////////////////////
-
-    if (file == NULL) {
-        fprintf(stderr, "Errore apertura file\n");
-        exit(-1);
-    }
+    FILE *file = apriCatalogo("rb");
 
     long pos = ftello(file);
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         valido = 0;
         for (unsigned short i = 0; i < num_param; i++) {
-            switch (parametri[i][0]) {
-                case TOKEN_1: {
-                    memmove(&parametri[i][0], &parametri[i][0 + 1], strlen(parametri[i]) - 0);
-                    if (gioco.anno_pubblicazione == (typeof(gioco.anno_pubblicazione)) *parametri[i])
+            // Crea una copia del parametro per non modificare l'originale
+            char param_copy[MAX_CHAR];
+            strncpy(param_copy, parametri[i], MAX_CHAR);
+            param_copy[MAX_CHAR - 1] = '\0'; // Assicura terminazione
+
+            switch (param_copy[0]) {
+                case TOKEN_1: { // $ - Anno di pubblicazione
+                    // Rimuovi il token iniziale
+                    char* value_str = param_copy + 1;
+                    // Converti la stringa in numero
+                    unsigned short anno = (unsigned short)strtol(value_str, NULL, 10);
+                    if (gioco.anno_pubblicazione == anno)
                         valido = 1;
                 }
-                    break;
-                case TOKEN_2 : {
-                    memmove(&parametri[i][0], &parametri[i][0 + 1], strlen(parametri[i]) - 0);
+                break;
+                case TOKEN_2: { // # - Genere
+                    // Rimuovi il token iniziale
+                    char* genere = param_copy + 1;
                     for (unsigned short j = 0; j < MAX_GENERI; j++) {
-                        if (strstr(gioco.generi[j], parametri[i]) != NULL) {
+                        if (strstr(gioco.generi[j], genere) != NULL) {
                             valido = 1;
                             break;
                         }
                     }
                 }
-                    break;
-                default: {
-                    if (strstr(gioco.titolo , parametri[i]) != NULL) valido = 1;
-                    if (strstr(gioco.editore , parametri[i]) != NULL) valido = 1;
-                    if (strstr(gioco.sviluppatore , parametri[i]) != NULL) valido = 1;
+                break;
+                default: { // Ricerca generale
+                    if (strstr(gioco.titolo, parametri[i]) != NULL) valido = 1;
+                    if (strstr(gioco.editore, parametri[i]) != NULL) valido = 1;
+                    if (strstr(gioco.sviluppatore, parametri[i]) != NULL) valido = 1;
                 }
-                    break;
+                break;
             }
             if (valido == 1) break;
         }
@@ -207,8 +178,16 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
             checkMemory(num_elementi, &capacita, sizeof(long), sizeof(typeof(offset)), (void ***)&offset);
             offset[*num_elementi] = pos;
             (*num_elementi)++;
-            pos = ftello(file);
         }
+        pos = ftello(file);
     }
+
+    // Libera la memoria allocata per i parametri
+    for (unsigned short i = 0; i < num_param; i++) {
+        free(parametri[i]);
+    }
+    free(parametri);
+
+    fclose(file);
     return offset;
 }
