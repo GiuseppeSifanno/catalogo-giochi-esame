@@ -3,12 +3,6 @@
 //
 
 #include "utility.h"
-#include "gioco.h"
-
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void tolower_str(char *str) {
     for (int i = 0; str[i]; i++) {
@@ -20,6 +14,9 @@ gioco_t inserisciGioco() {
     gioco_t gioco;
     int result;
     char risposta[MAX_CHAR];
+    
+    // Inizializza tutti i campi a zero/vuoto
+    memset(&gioco, 0, sizeof(gioco_t));
 
     printf("Inserisci titolo: ");
     scanf(" %[^\n]", gioco.titolo);
@@ -70,7 +67,7 @@ gioco_t inserisciGioco() {
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Inserisci genere %d: ", i + 1);
         scanf(" %[^\n]", gioco.generi[i]);
-        tolower_str(*gioco.generi);
+        tolower_str(gioco.generi[i]);
         if (i < MAX_GENERI - 1) {
             while (1) {
                 printf("Vuoi inserire un altro genere? (Si/No): ");
@@ -92,7 +89,7 @@ gioco_t inserisciGioco() {
 
 
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
-    unsigned short capacita = 1, num_elementi = *param;
+    unsigned short capacita = 1, num_elementi = 0;
     char **parametri = calloc(capacita,sizeof(char *));
 
     if (parametri == NULL) {
@@ -228,4 +225,21 @@ int checkMemory(const unsigned short *num_elementi, unsigned short *capacita,
     }
     
     return 1; // Segnala successo
+}
+
+FILE *apriCatalogo(char mode[3]) {
+    FILE *file = fopen(NOME_FILE, mode);
+
+    //rimuovere terminata la fase di sviluppo del programma
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("\nDirectory attuale: %s\n", cwd);
+    ///////////////////////
+
+    if (file == NULL) {
+        fprintf(stderr, "Errore apertura file\n");
+        exit(-1);
+    }
+
+    return file;
 }

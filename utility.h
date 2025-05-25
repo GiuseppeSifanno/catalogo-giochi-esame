@@ -5,7 +5,8 @@
 #ifndef CATALOGO_UTILITY_H
 #define CATALOGO_UTILITY_H
 
-#include "gioco.h"
+#include "catalogolib.h"
+#include <stdio.h>
 
 #ifndef DELIM
 #define DELIM ","
@@ -27,5 +28,7 @@ int checkMemory(const unsigned short *num_elementi, unsigned short *capacita,
     unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array);
 
 gioco_t inserisciGioco();
+
+FILE *apriCatalogo(char mode[3]);
 
 #endif //CATALOGO_UTILITY_H
