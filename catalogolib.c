@@ -4,16 +4,16 @@
 
 #include "catalogolib.h"
 
-unsigned short aggiungiGioco(gioco_t gioco) {
+unsigned short aggiungiGioco(const gioco_t *gioco) {
 
     //controlliamo se il gioco è già presente nel catalogo
-    //if (isAlredyAdded(&gioco) == 1) return 1;
+    if (isAlredyAdded(gioco) == 1) return 1;
 
     //apro il file in modalità scrittura
     FILE *file = apriCatalogo("ab");
 
     //scrivo il gioco nel file
-    if (fwrite(&gioco, sizeof(gioco_t), 1, file) != 1) {
+    if (fwrite(gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore scrittura file\n");
         fclose(file);
         exit(-1);
@@ -25,16 +25,47 @@ unsigned short aggiungiGioco(gioco_t gioco) {
     return 0;
 }
 
-void modificaGioco() {
+unsigned short modificaGioco(const long offset, const gioco_t *gioco) {
+    FILE *file = apriCatalogo("rb+");
 
+    if (fseek(file, offset, SEEK_SET) != 0) {
+        fprintf(stderr, "Errore posizione file\n");
+        fclose(file);
+        exit(-1);
+    }
+    if (fwrite(gioco, sizeof(gioco_t), 1, file) != 1) {
+        fprintf(stderr, "Errore aggiornamento del file\n");
+        fclose(file);
+        return 0;
+    }
+    fclose(file);
+    return 1;
 }
 
-void cancellaGioco(long offset) {
+unsigned short cancellaGioco(long offset) {
     FILE *file = apriCatalogo("rb");
-
+    FILE *new_file = fopen("new_catalogo.dat", "wb");
+    gioco_t gioco;
+    long pos = ftell(file);
+    while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        if (offset != pos) {
+            if (fwrite(&gioco, sizeof(gioco_t), 1, new_file) != 1) {
+                fprintf(stderr, "Errore scrittura nel nuovo file\n");
+                fclose(file);
+                fclose(new_file);
+                return 0;
+            }
+            pos = ftell(file);
+        }
+    }
+    fclose(file);
+    fclose(new_file);
+    remove("catalogo.dat");
+    rename("new_catalogo.dat", "catalogo.dat");
+    return 1;
 }
 
-unsigned short isAlredyAdded(gioco_t *new_gioco) {
+unsigned short isAlredyAdded(const gioco_t *new_gioco) {
     gioco_t gioco;
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
@@ -100,13 +131,13 @@ void ricercaSpecifica(long offset, gioco_t *gioco) {
 long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     unsigned short num_param = 0, valido = 0;
 
-    //trasforma la stringa inserita in input dall'utente tutta in minuscolo
+    //trasforma la stringa in ingresso in minuscolo
     for (int i = 0; query[i]; i++) {
         query[i] = (char) tolower(query[i]);
     }
 
     gioco_t gioco;
-    //parametri recuperati durante l'analisi della query in input dell'utente
+    ///parametri recuperati durante l'analisi della query in ingresso dell'utente
     char **parametri = analisiQuery(query, &num_param);
 
     if (parametri == NULL) {

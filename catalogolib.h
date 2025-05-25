@@ -10,30 +10,65 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #ifndef NOME_FILE
 /**
- * Nome del file del catalogo
+ *  @brief Nome del file del catalogo
  */
 #define NOME_FILE "catalogo.dat"
 #endif
 
-unsigned short aggiungiGioco(gioco_t gioco);
-
-void modificaGioco();
-
-void cancellaGioco();
+/**
+ *  @brief Aggiunge un gioco all'interno del catalogo
+ *  @param [in] gioco Istanza del gioco da aggiungere
+ *  @returns
+ *      @return 1 se il gioco è <b>già presente</b>
+ *      @return 0 se il gioco è stato aggiunto
+ */
+unsigned short aggiungiGioco(const gioco_t *gioco);
 
 /**
- * Ritorna 1 se il gioco è già presente nel catalogo, 0 altrimenti
- * @param new_gioco
- * @return Valido
+ *  @brief Modifica il contenuto di un gioco contenuto all'interno del file
+ *  @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ *  @param [in] gioco Istanza del gioco contenente le nuove informazioni
+ *  @returns
+ *      @return 1 se il gioco è stato modificato
+ *      @return 0 se il gioco <b>non</b> è stato modificato
+ *
  */
-unsigned short isAlredyAdded(gioco_t *new_gioco);
+unsigned short modificaGioco(long offset, const gioco_t *gioco);
 
+/**
+ * @brief Cancella un record all'interno del file
+ * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ * @returns
+ *      @return 1 se il gioco è stato cancellato
+ *      @return 0 se il gioco <b>non</b> è stato cancellato o si è verificato qualche problema
+ */
+unsigned short cancellaGioco(long offset);
+
+/**
+ *  @brief Controlla se un gioco è già presente o no nel file
+ *  @param [in] new_gioco Istanza del nuovo gioco da inserire
+ *  @returns
+ *      @return 1 se il gioco è già presente nel catalogo
+ *      @return 0 se il gioco <b>non</b> è presente nel catalogo
+ */
+unsigned short isAlredyAdded(const gioco_t *new_gioco);
+
+/**
+ * @brief Ricerca un gioco specifico
+ * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ * @param [out] gioco Istanza in cui verrà salvato il gioco recuperato
+ */
 void ricercaSpecifica(long offset, gioco_t *gioco);
 
+/**
+ * @brief Effettua una ricerca su tutto il file in base ai parametri inseriti in ingresso dall'utente
+ * @param [in] query Stringa utilizzata per la ricerca
+ * @param [out] num_elementi Numero degli elementi recuperati
+ * @return Lista con la posizione di ogni gioco
+ */
 long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
 
 #endif //CATALOGOLIB_H
