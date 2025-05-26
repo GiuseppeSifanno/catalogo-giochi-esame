@@ -104,9 +104,7 @@ unsigned short isAlredyAdded(gioco_t new_gioco) {
     return 0; // Gioco non presente
 }
 
-
-//ricerca specifica sul file
-void ricercaSpecifica(long offset, gioco_t *gioco) {
+gioco_t ricercaSpecifica(long offset) {
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
 
@@ -117,8 +115,9 @@ void ricercaSpecifica(long offset, gioco_t *gioco) {
         exit(-1);
     }
 
+    gioco_t gioco;
     //leggo il dato dal catalogo e lo salvo
-    if (fread(gioco, sizeof(gioco_t), 1, file) != 1) {
+    if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore lettura file\n");
         fclose(file);
         exit(-1);
@@ -126,6 +125,7 @@ void ricercaSpecifica(long offset, gioco_t *gioco) {
 
     //chiudo il file
     fclose(file);
+    return gioco;
 }
 
 long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
@@ -155,10 +155,15 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     ///////////////////////
 
     unsigned short capacita = 1;
+    *num_elementi = 0; // Inizializza a 0
     long *offset = calloc(capacita, sizeof(long));
 
     if (offset == NULL) {
-        free(offset);
+        // Libera la memoria allocata per i parametri
+        for (unsigned short i = 0; i < num_param; i++) {
+            free(parametri[i]);
+        }
+        free(parametri);
         printf("Errore di allocazione memoria\n");
         exit(-1);
     }
@@ -209,7 +214,23 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
             if (valido == 1) break;
         }
         if (valido == 1) {
-            checkMemory(num_elementi, &capacita, sizeof(long), sizeof(typeof(offset)), (void ***)&offset);
+            // Quando trovo un risultato, incremento la capacità e rialloco manualmente
+            if (*num_elementi >= capacita) {
+                capacita++;
+                long *nuovo_offset = realloc(offset, capacita * sizeof(long));
+                if (nuovo_offset == NULL) {
+                    // In caso di errore, libera la memoria e termina
+                    for (unsigned short i = 0; i < num_param; i++) {
+                        free(parametri[i]);
+                    }
+                    free(parametri);
+                    free(offset);
+                    fclose(file);
+                    return NULL;
+                }
+                offset = nuovo_offset;
+            }
+            
             offset[*num_elementi] = pos;
             (*num_elementi)++;
         }
@@ -244,7 +265,7 @@ unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recen
     }
 
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
-        if (strlen(gioco.recensioni[i].nome_utente) == 0 || gioco.recensioni[i].nome_utente == '\0') {
+        if (strlen(gioco.recensioni[i].nome_utente) == 0 || gioco.recensioni[i].nome_utente[0] == '\0') {
             gioco.recensioni[i] = *recensione;
             printf("\nRecensione inserita correttamente\n");
             fclose(file);
@@ -256,17 +277,112 @@ unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recen
     return 0;
 }
 
-long *visualizzaRecensioni(long offset) {
-    FILE *file = apriCatalogo("rb+");
+recensioni_t *visualizzaRecensioni(long offset) {
+    //recupero il gioco dal catalogo tramite l'offset
+    gioco_t gioco = ricercaSpecifica(offset);
 
-    unsigned short capacita = 1, num_elementi = 0;
-    long **recensioni = calloc(capacita,sizeof(long *));
-
+    unsigned short num_recensioni = 0, capacita = 1;
+    // Crea un puntatore a una lista di recensioni
+    recensioni_t *recensioni = calloc(capacita, sizeof(recensioni_t));
+    
     if (recensioni == NULL) {
-        printf("Errore di allocazione memoria\n");
-        exit(-1);
+        fprintf(stderr, "Errore di allocazione memoria\n");
+        return NULL;
     }
 
+    for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
+        //cerco le recensioni non vuote
+        if (gioco.recensioni[i].nome_utente[0] != '\0') {
+            // Quando trovo una recensione, verifico se è necessario espandere l'array
+            if (num_recensioni >= capacita) {
+                void **ptr = (void**)&recensioni;
+                if (checkMemory(&num_recensioni, &capacita, sizeof(recensioni_t), sizeof(recensioni_t*), &ptr) == 0) {
+                    return NULL; // checkMemory ha già liberato la memoria
+                }
+                recensioni = (recensioni_t*)(*ptr);
+            } else {
+                // Se non è necessario espandere l'array, incremento manualmente num_recensioni
+                num_recensioni++;
+            }
 
+            //copio la recensione all'interno della lista
+            memcpy(&recensioni[num_recensioni-1], &gioco.recensioni[i], sizeof(recensioni_t));
+        }
+    }
 
+    //sono state trovare recensioni quindi ritorno il puntatore
+    if (num_recensioni > 0) return recensioni;
+
+    //libero l'area di memoria allocata
+    free(recensioni);
+    return NULL;
+}
+
+float calcolaStatistiche(unsigned short mode, long offset) {
+    gioco_t gioco = ricercaSpecifica(offset);
+    if (mode == 1) return (float) gioco.copie_vendute;
+
+    float media = 0, num_recensioni = 0;
+    for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
+        if (gioco.recensioni[i].nome_utente[0] != '\0') {
+            media += (float) gioco.recensioni[i].valutazione;
+            num_recensioni++;
+        }
+    }
+    return media / num_recensioni;
+}
+
+gioco_t *ordinaStatistiche(unsigned short mode) {
+    FILE *file = apriCatalogo("rb");
+    
+    // Ottieni la dimensione del file
+    if (fseek(file, 0, SEEK_END) != 0) {
+        fprintf(stderr, "Errore posizione file\n");
+        fclose(file);
+        return NULL;
+    }
+    
+    long file_size = ftell(file);
+    unsigned int num_elementi = 0;
+    
+    // Verifica che il file non sia vuoto
+    if (file_size > 0) {
+        num_elementi = file_size / sizeof(gioco_t);
+    } else {
+        // File vuoto, restituisci NULL
+        fclose(file);
+        return NULL;
+    }
+    
+    // Alloca memoria per i giochi
+    gioco_t *giochi = NULL;
+    if (num_elementi > 0) {
+        giochi = calloc(num_elementi, sizeof(gioco_t));
+        if (giochi == NULL) {
+            fprintf(stderr, "Errore di allocazione memoria\n");
+            fclose(file);
+            return NULL;
+        }
+        
+        // Torna all'inizio del file
+        fseek(file, 0, SEEK_SET);
+        
+        // Leggi tutti i giochi
+        for (unsigned int i = 0; i < num_elementi; i++) {
+            if(fread(&giochi[i], sizeof(gioco_t), 1, file) != 1){
+                fprintf(stderr, "Errore lettura file\n");
+                fclose(file);
+                free(giochi);
+                return NULL;
+            }
+        }
+        
+        // Ordina i giochi
+        if (num_elementi > 1) {
+            ShellSort(giochi, num_elementi, mode);
+        }
+    }
+    
+    fclose(file);
+    return giochi;
 }
