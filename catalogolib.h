@@ -25,7 +25,7 @@
  *      @return 1 se il gioco è <b>già presente</b>
  *      @return 0 se il gioco è stato aggiunto
  */
-unsigned short aggiungiGioco(const gioco_t *gioco);
+unsigned short aggiungiGioco(gioco_t gioco);
 
 /**
  *  @brief Modifica il contenuto di un gioco contenuto all'interno del file
@@ -54,7 +54,7 @@ unsigned short cancellaGioco(long offset);
  *      @return 1 se il gioco è già presente nel catalogo
  *      @return 0 se il gioco <b>non</b> è presente nel catalogo
  */
-unsigned short isAlredyAdded(const gioco_t *new_gioco);
+unsigned short isAlredyAdded(gioco_t new_gioco);
 
 /**
  * @brief Ricerca un gioco specifico
@@ -70,5 +70,23 @@ void ricercaSpecifica(long offset, gioco_t *gioco);
  * @return Lista con la posizione di ogni gioco
  */
 long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
+
+/**
+ * @brief La funzione inserisce una recensione per un gioco nel file
+ * @param username Nome utente di chi recensisce il gioco
+ * @param recensione Recensione inserita dall'utente
+ * @param offset Posizione del blocco nel file in cui si trova il gioco
+ * @returns
+ *  @return 1 se la recensione è stata inserita correttamente
+ *  @return 0 se la recensione <b>non</b> è stata inserita
+ */
+unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recensione, long *offset);
+
+/**
+ * @brief Recupera le recensioni di un gioco specifico
+ * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ * @return Lista con le recensioni
+ */
+long *visualizzaRecensioni(long offset);
 
 #endif //CATALOGOLIB_H

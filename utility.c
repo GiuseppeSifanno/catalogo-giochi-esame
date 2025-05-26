@@ -6,7 +6,7 @@
 
 void tolower_str(char *str) {
     for (int i = 0; str[i]; i++) {
-        str[i] = tolower((unsigned char)str[i]);
+        str[i] = (char) tolower(str[i]);
     }
 }
 
@@ -219,7 +219,6 @@ int checkMemory(const unsigned short *num_elementi, unsigned short *capacita,
 FILE *apriCatalogo(char mode[3]) {
     FILE *file = fopen(NOME_FILE, mode);
 
-    //rimuovere terminata la fase di sviluppo del programma
     char cwd[1024];
     getcwd(cwd, sizeof(cwd));
     printf("\nDirectory attuale: %s\n", cwd);

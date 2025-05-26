@@ -21,6 +21,13 @@
 #define MAX_GENERI 10
 #endif
 
+#ifndef MAX_RECENSIONI
+/**
+ * @brief Numero massimo di recensioni
+ */
+#define MAX_RECENSIONI 10
+#endif
+
 #ifndef ANNO_MIN
 /**
  * @brief Anno minimo di pubblicazione
@@ -88,14 +95,14 @@ typedef struct recensioni {
  * Rifarsi a @c
  */
 typedef struct gioco {
+    unsigned long copie_vendute;
+    unsigned short anno_pubblicazione;
+    recensioni_t recensioni[MAX_RECENSIONI];
     char titolo [MAX_CHAR];
     char editore [MAX_CHAR];
     char sviluppatore [MAX_CHAR];
     char descrizione [MAX_CHAR];
-    unsigned short anno_pubblicazione;
-    unsigned long copie_vendute;
     char generi[MAX_GENERI][MAX_CHAR];
-    recensioni_t recensioni;
 }gioco_t;
 
 #endif //GIOCO_H

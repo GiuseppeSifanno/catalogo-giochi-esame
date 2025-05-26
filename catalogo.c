@@ -4,12 +4,12 @@
 
 int main(void) {
 
-    char query[MAX_CHAR] = "FIFA, #sport,,,, $2020";
-/*
-    for (int i = 0; i < 5; i++) {
+    char query[MAX_CHAR] = "#fps";
+
+    for (int i = 0; i < 3; i++) {
         aggiungiGioco(inserisciGioco());
     }
-*/
+
     unsigned short num_elementi = 0;
     long* offset = ricercaGlobale(query, &num_elementi);
     gioco_t gioco;

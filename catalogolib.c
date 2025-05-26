@@ -4,7 +4,7 @@
 
 #include "catalogolib.h"
 
-unsigned short aggiungiGioco(const gioco_t *gioco) {
+unsigned short aggiungiGioco(gioco_t gioco) {
 
     //controlliamo se il gioco è già presente nel catalogo
     if (isAlredyAdded(gioco) == 1) return 1;
@@ -13,7 +13,7 @@ unsigned short aggiungiGioco(const gioco_t *gioco) {
     FILE *file = apriCatalogo("ab");
 
     //scrivo il gioco nel file
-    if (fwrite(gioco, sizeof(gioco_t), 1, file) != 1) {
+    if (fwrite(&gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore scrittura file\n");
         fclose(file);
         exit(-1);
@@ -65,7 +65,7 @@ unsigned short cancellaGioco(long offset) {
     return 1;
 }
 
-unsigned short isAlredyAdded(const gioco_t *new_gioco) {
+unsigned short isAlredyAdded(gioco_t new_gioco) {
     gioco_t gioco;
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
@@ -75,19 +75,19 @@ unsigned short isAlredyAdded(const gioco_t *new_gioco) {
 
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         // Controllo sui campi principali
-        if (gioco.anno_pubblicazione == new_gioco->anno_pubblicazione &&
-            gioco.copie_vendute == new_gioco->copie_vendute &&
-            strcmp(gioco.titolo, new_gioco->titolo) == 0 &&
-            strcmp(gioco.descrizione, new_gioco->descrizione) == 0 &&
-            strcmp(gioco.editore, new_gioco->editore) == 0 &&
-            strcmp(gioco.sviluppatore, new_gioco->sviluppatore) == 0) {
+        if (gioco.anno_pubblicazione == new_gioco.anno_pubblicazione &&
+            gioco.copie_vendute == new_gioco.copie_vendute &&
+            strcmp(gioco.titolo, new_gioco.titolo) == 0 &&
+            strcmp(gioco.descrizione, new_gioco.descrizione) == 0 &&
+            strcmp(gioco.editore, new_gioco.editore) == 0 &&
+            strcmp(gioco.sviluppatore, new_gioco.sviluppatore) == 0) {
             
             // Se i campi principali corrispondono, controlla i generi
             valido = 1; // Presupponiamo che sia lo stesso gioco
             
             // Se almeno un genere è diverso, allora non è lo stesso gioco
             for (unsigned short i = 0; i < MAX_GENERI; i++) {
-                if (strcmp(gioco.generi[i], new_gioco->generi[i]) != 0) {
+                if (strcmp(gioco.generi[i], new_gioco.generi[i]) != 0) {
                     valido = 0;
                     break;
                 }
@@ -165,9 +165,12 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
 
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
-
+    // Verifica lettura record
     long pos = ftello(file);
+    int recordLetti = 0;
+    
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        recordLetti++;
         valido = 0;
         for (unsigned short i = 0; i < num_param; i++) {
             // Crea una copia del parametro per non modificare l'originale
@@ -212,6 +215,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
         }
         pos = ftello(file);
     }
+    printf("Numero di record letti: %d\n", recordLetti);
 
     // Libera la memoria allocata per i parametri
     for (unsigned short i = 0; i < num_param; i++) {
@@ -221,4 +225,48 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
 
     fclose(file);
     return offset;
+}
+
+unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recensione, long *offset) {
+    FILE *file = apriCatalogo("rb+");
+    gioco_t gioco;
+
+    if (fseek(file, *offset, SEEK_SET) != 0) {
+        fprintf(stderr, "Errore posizione file\n");
+        fclose(file);
+        exit(-1);
+    }
+
+    if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
+        fprintf(stderr, "Errore lettura file\n");
+        fclose(file);
+        exit(-1);
+    }
+
+    for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
+        if (strlen(gioco.recensioni[i].nome_utente) == 0 || gioco.recensioni[i].nome_utente == '\0') {
+            gioco.recensioni[i] = *recensione;
+            printf("\nRecensione inserita correttamente\n");
+            fclose(file);
+            return 1;
+        }
+    }
+    fprintf(stderr, "Recensione non inserita. Trovato il limite massimo di recensioni per un gioco.\n");
+    fclose(file);
+    return 0;
+}
+
+long *visualizzaRecensioni(long offset) {
+    FILE *file = apriCatalogo("rb+");
+
+    unsigned short capacita = 1, num_elementi = 0;
+    long **recensioni = calloc(capacita,sizeof(long *));
+
+    if (recensioni == NULL) {
+        printf("Errore di allocazione memoria\n");
+        exit(-1);
+    }
+
+
+
 }
