@@ -57,7 +57,7 @@ void trim(char *token);
  *  @return 1 se l'allocazione è avvenuta con successo
  *  @return 0 in caso di errore
  */
-int checkMemory(const unsigned short *num_elementi, unsigned short *capacita,
+int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
     unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array);
 
 /**
@@ -72,5 +72,15 @@ gioco_t inserisciGioco();
  * @return Puntatore al file appena aperto
  */
 FILE *apriCatalogo(char mode[3]);
+
+/**
+ * @brief Algoritmo di ordinamento per copie vendute o per media valutazione
+ *
+ * @param [in, out] giochi Array di giochi da ordinare
+ * @param [in] dim Dimensione dell'array
+ * @param [in] mode Modalità di ordinamento (copie vendute o media valutazione)
+ *
+ */
+void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode);
 
 #endif //CATALOGO_UTILITY_H
