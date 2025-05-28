@@ -21,19 +21,19 @@ gioco_t inserisciGioco() {
     printf("Inserisci titolo: ");
     scanf(" %[^\n]", gioco.titolo);
     tolower_str(gioco.titolo);
-
+    fflush(stdin);
     printf("Inserisci editore: ");
     scanf(" %[^\n]", gioco.editore);
     tolower_str(gioco.editore);
-
+    fflush(stdin);
     printf("Inserisci sviluppatore: ");
     scanf(" %[^\n]", gioco.sviluppatore);
     tolower_str(gioco.sviluppatore);
-
+    fflush(stdin);
     printf("Inserisci descrizione: ");
     scanf(" %[^\n]", gioco.descrizione);
     tolower_str(gioco.descrizione);
-
+    fflush(stdin);
     do {
         printf("Inserisci anno di pubblicazione (>= %d): ", ANNO_MIN);
         result = scanf("%hu", &gioco.anno_pubblicazione);
@@ -51,6 +51,7 @@ gioco_t inserisciGioco() {
             while (getchar() != '\n');
         }
     } while (result != 1);
+    fflush(stdin);
     result = 0;
     do {
         printf("Inserisci numero copie vendute: ");
@@ -63,6 +64,7 @@ gioco_t inserisciGioco() {
             while (getchar() != '\n'); // pulizia buffer residuo
         }
     } while (result != 1);;
+    fflush(stdin);
 
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Inserisci genere %d: ", i + 1);
@@ -84,6 +86,7 @@ gioco_t inserisciGioco() {
             }
         }
     }
+    fflush(stdin);
     return gioco;
 }
 
