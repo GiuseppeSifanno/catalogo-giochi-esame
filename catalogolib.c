@@ -318,14 +318,13 @@ recensioni_t *visualizzaRecensioni(long offset) {
     return NULL;
 }
 
-float calcolaStatistiche(unsigned short mode, long offset) {
-    gioco_t gioco = ricercaSpecifica(offset);
-    if (mode == 1) return (float) gioco.copie_vendute;
+float calcolaStatistiche(unsigned short mode, gioco_t *gioco) {
+    if (mode == 1) return (float) gioco -> copie_vendute;
 
     float media = 0, num_recensioni = 0;
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
-        if (gioco.recensioni[i].nome_utente[0] != '\0') {
-            media += (float) gioco.recensioni[i].valutazione;
+        if (gioco -> recensioni[i].nome_utente[0] != '\0') {
+            media += (float) gioco -> recensioni[i].valutazione;
             num_recensioni++;
         }
     }

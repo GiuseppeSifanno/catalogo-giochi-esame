@@ -97,12 +97,12 @@ recensioni_t *visualizzaRecensioni(long offset);
  * @param [in] mode Modalità di visualizzazione delle statistiche (copie vendute o media valutazione).
  * 1 per le copie vendute
  * 2 per la media valutazione
+ * @param [in] gioco Istanza del gioco da passare in input
  *
- * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
  * @returns
  *  @return Valore delle statistiche di un gioco
  */
-float calcolaStatistiche(unsigned short mode, long offset);
+float calcolaStatistiche(unsigned short mode, gioco_t *gioco);
 
 gioco_t *ordinaStatistiche(unsigned short mode);
 

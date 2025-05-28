@@ -14,7 +14,7 @@ gioco_t inserisciGioco() {
     gioco_t gioco;
     int result;
     char risposta[MAX_CHAR];
-    
+
     // Inizializza tutti i campi a zero/vuoto
     memset(&gioco, 0, sizeof(gioco_t));
 
@@ -92,7 +92,7 @@ gioco_t inserisciGioco() {
 
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     unsigned short capacita = 1, num_elementi = 0;
-    char **parametri = calloc(capacita,sizeof(char *));
+    char **parametri = calloc(capacita, sizeof(char *));
 
     if (parametri == NULL) {
         printf("Errore di allocazione memoria\n");
@@ -118,7 +118,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
         // Se il token non è vuoto dopo il trimming
         if (len > 0) {
-            if (checkMemory(&num_elementi, &capacita, sizeof(char *), sizeof(char *), (void***)&parametri) == 0) {
+            if (checkMemory(&num_elementi, &capacita, sizeof(char *), sizeof(char *), (void ***) &parametri) == 0) {
                 return NULL;
             }
 
@@ -150,7 +150,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 void trim(char *token) {
     char *start = token;
     // Rimuove spazi iniziali
-    while (isspace((unsigned char)*start)) start++;
+    while (isspace((unsigned char) *start)) start++;
 
     // Se la stringa è vuota dopo il trimming iniziale
     if (*start == '\0') {
@@ -160,7 +160,7 @@ void trim(char *token) {
 
     // Rimuove spazi finali
     char *end = start + strlen(start) - 1;
-    while (end > start && isspace((unsigned char)*end)) end--;
+    while (end > start && isspace((unsigned char) *end)) end--;
     *(end + 1) = '\0';
 
     // Sposta la stringa trimmata all'inizio del buffer
@@ -170,7 +170,7 @@ void trim(char *token) {
 
     if (token[0] == TOKEN_1 || token[0] == TOKEN_2) {
         unsigned short j = 1;
-        while (isspace((unsigned char)token[j])) {
+        while (isspace((unsigned char) token[j])) {
             j++;
         }
         memmove(&token[1], &token[j], strlen(&token[j]) + 1);
@@ -183,10 +183,10 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
     if (*num_elementi >= *capacita) {
         // Incrementa la capacità
         unsigned short nuova_capacita = (*capacita) + 1;
-        
+
         // Esegue il realloc usando dimensione_puntatore
         void **nuovo_array = realloc(*array, nuova_capacita * dimensione_puntatore);
-        
+
         if (nuovo_array == NULL) {
             printf("Errore nell'espansione dell'array: memoria insufficiente\n");
             // Libera la memoria già allocata
@@ -196,15 +196,15 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
             free(*array);
             return 0; // Segnala fallimento
         }
-        
+
         // Aggiorna il puntatore e la capacità
         *array = nuovo_array;
         *capacita = nuova_capacita;
     }
-    
+
     // Alloca memoria per il nuovo elemento
     (*array)[*num_elementi] = malloc(dimensione_elemento);
-    
+
     if ((*array)[*num_elementi] == NULL) {
         printf("Errore nell'allocazione del nuovo elemento: memoria insufficiente\n");
         // Libera la memoria già allocata
@@ -214,7 +214,7 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
         free(*array);
         return 0; // Segnala fallimento
     }
-    
+
     return 1; // Segnala successo
 }
 
@@ -255,11 +255,11 @@ void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode) {
     // Se c'è solo un elemento o nessuno, non c'è nulla da ordinare
     if (dim <= 1) return;
 
-    int i, j, k, gap;  // Cambiato j da unsigned short a int
+    int i, j, k, gap; // Cambiato j da unsigned short a int
     gioco_t x;
-    unsigned short a[5] = {9,5,3,2,1}; // a = vettore dei gap
+    unsigned short a[5] = {9, 5, 3, 2, 1}; // a = vettore dei gap
 
-    for (k = 0; k < sizeof(a)/sizeof(a[0]); k++) {
+    for (k = 0; k < sizeof(a) / sizeof(a[0]); k++) {
         // ciclo ripetuto per tutti i gap
         gap = a[k];
         // Se il gap è maggiore o uguale alla dimensione, passa al gap successivo
@@ -273,36 +273,14 @@ void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode) {
                     giochi[j + gap] = giochi[j];
                 }
                 giochi[j + gap] = x;
-            }
-            else {
+            } else {
                 // Per la modalità 2 (media valutazione)
-                float media_x = 0;
-                int count_x = 0;
-
-                // Calcola media recensioni per x
-                for (int r = 0; r < MAX_RECENSIONI; r++) {
-                    if (x.recensioni[r].nome_utente[0] != '\0') {
-                        media_x += (float) x.recensioni[r].valutazione;
-                        count_x++;
-                    }
-                }
-                if (count_x > 0) media_x /= (float) count_x;
 
                 for (j = i - gap; j >= 0; j -= gap) {
-                    float media_j = 0;
-                    int count_j = 0;
-
-                    // Calcola media recensioni per j
-                    for (int r = 0; r < MAX_RECENSIONI; r++) {
-                        if (giochi[j].recensioni[r].nome_utente[0] != '\0') {
-                            media_j += (float) giochi[j].recensioni[r].valutazione;
-                            count_j++;
-                        }
-                    }
-                    if (count_j > 0) media_j /= (float) count_j;
-
-                    if (media_x < media_j) giochi[j + gap] = giochi[j];
-                    else break;
+                    if (calcolaStatistiche(2, &giochi[i]) < calcolaStatistiche(2, &giochi[j]))
+                        giochi[j + gap] = giochi[j];
+                    else
+                        break;
                 }
                 giochi[j + gap] = x;
             }
