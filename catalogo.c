@@ -6,7 +6,7 @@ int main(void) {
 
     char query[MAX_CHAR] = "#fps";
 /*
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
         aggiungiGioco(inserisciGioco());
     }
 */
@@ -23,8 +23,8 @@ int main(void) {
     gioco_t *gioco = ordinaStatistiche(1);
     int len = sizeof(*gioco)/sizeof(gioco[0]);
     printf("%d\n", len);
-    printf("%u",gioco[0].copie_vendute);
-    printf("\n%u",gioco[1].copie_vendute);
+    printf("Copie %u",gioco[0].copie_vendute);
+    printf("\nCopie gioco 1 %u",gioco[1].copie_vendute);
 
     return 0;
 }
