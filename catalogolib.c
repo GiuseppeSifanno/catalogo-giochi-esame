@@ -22,7 +22,7 @@ unsigned short aggiungiGioco(gioco_t gioco) {
 }
 
 unsigned short modificaGioco(const long offset, const gioco_t *gioco) {
-    FILE *file = apriCatalogo("rb+");
+    FILE *file = apriCatalogo("wb+");
 
     if (fseek(file, offset, SEEK_SET) != 0) {
         fprintf(stderr, "Errore posizione file\n");

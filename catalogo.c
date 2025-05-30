@@ -86,6 +86,7 @@ long ricercaGioco() {
     printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
     printf("es: #fps, #multiplayer -- (tutti i giochi che hanno il genero fps e/o multiplayer)\n");
     printf("Inserisci query: ");
+    fflush(stdin);
     fgets(query, MAX_CHAR, stdin);
     fflush(stdin);
     long *posizione = ricercaGlobale(query, &num_elementi);
@@ -100,7 +101,7 @@ long ricercaGioco() {
         do {
             printf("\nInserisci il codice\n");
             scanf("%d", &codice);
-        } while (codice <= 0);
+        } while (codice <= 0 || codice > num_elementi);
     }
     return codice;
 }
