@@ -81,7 +81,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
  *  @return 1 se la recensione è stata inserita correttamente
  *  @return 0 se la recensione <b>non</b> è stata inserita
  */
-unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recensione, long *offset);
+unsigned short inserisciRecensione(recensioni_t *recensione, long *offset);
 
 /**
  * @brief Recupera le recensioni di un gioco specifico

@@ -43,27 +43,50 @@ int main(void) {
                         printf("Gioco aggiunto \n");
                     break;
                 case 2:
-                    printf("Inserisci la query sapendo che le informazioni del gioco vanni separate con una %s \n",DELIM);
-                           printf("Le informazioni riguardanti i generi sono preceduti da %c e le informazioni riguardanti l'anno sono precedute da un %c\n", TOKEN_2, TOKEN_1);
+                    printf("Inserisci la query sapendo che le informazioni del gioco vanni separate con una %s \n",
+                           DELIM);
+                    printf(
+                        "Le informazioni riguardanti i generi sono preceduti da %c e le informazioni riguardanti l'anno sono precedute da un %c\n",
+                        TOKEN_2, TOKEN_1);
 
                     printf("es: Call of duty, blizard, #azione, #tct, $2019");
-                    fflush(stdin);
+                    printf("Inserisci query: ");
                     fgets(query, MAX_CHAR, stdin);
+                    fflush(stdin);
                     long *offset = ricercaGlobale(query, &num_elementi);
                     for (unsigned short i = 0; i < num_elementi; i++) {
                         gioco = ricercaSpecifica(offset[i]);
-                        printf("CODICE GIOCO %hu\n",(i+1));
-                        printf("Titolo: %s\tEditore: %s\tGenere: %s\tAnno di pubblicazione:%hu\n", gioco.titolo, gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
+                        printf("CODICE GIOCO %hu\n", (i + 1));
+                        printf("Titolo: %s\tEditore: %s\tGenere: %s\tAnno di pubblicazione:%hu\n", gioco.titolo,
+                               gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
                     }
                     printf("Inserisci il codice");
                     scanf("%d", &codice);
 
                 //inserisci il codice , cerchi il codice  con un for
                     gioco = inserisciGioco();
-                    if (modificaGioco((codice - 1),&gioco) == 1)
+                    if (modificaGioco((codice - 1), &gioco) == 1)
                         printf("\n Gioco modificato\n");
                     break;
                 case 3:
+                    //cancella gioco
+                    printf("Inserisci la query sapendo che le informazioni del gioco vanni separate con una %s \n",DELIM);
+                    printf(
+                    "Le informazioni riguardanti i generi sono preceduti da %c e le informazioni riguardanti l'anno sono precedute da un %c\n",TOKEN_2, TOKEN_1);
+                    printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
+                    printf("Inserisci query: ");
+                    fgets(query, MAX_CHAR, stdin);
+                    fflush(stdin);
+                    long *posizione = ricercaGlobale(query, &num_elementi);
+                    for (unsigned short i = 0; i < num_elementi; i++) {
+                        gioco = ricercaSpecifica(posizione[i]);
+                        printf("CODICE GIOCO %hu\n", (i + 1));
+                        printf("Titolo: %s\tEditore: %s\tGenere: %s\tAnno di pubblicazione:%hu\n", gioco.titolo,
+                               gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
+                    }
+                    printf("\nInserisci il codice\n");
+                    scanf("%d", &codice);
+                    if (cancellaGioco((codice-1)) == 1) printf("\nGioco cancellato \n");
                     break;
                 default:
                     printf("Scelta non valida. Riprova.\n");
@@ -84,6 +107,21 @@ int main(void) {
                     printf("Uscita...\n");
                     break;
                 case 1:
+                    // CERCA UN GIOCO
+                    printf("Inserisci la query sapendo che le informazioni del gioco vanni separate con una %s \n",DELIM);
+                    printf(
+                    "Le informazioni riguardanti i generi sono preceduti da %c e le informazioni riguardanti l'anno sono precedute da un %c\n",TOKEN_2, TOKEN_1);
+                    printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
+                    printf("Inserisci query: ");
+                    fgets(query, MAX_CHAR, stdin);
+                    fflush(stdin);
+                    long *posizione = ricercaGlobale(query, &num_elementi);
+                    for (unsigned short i = 0; i < num_elementi; i++) {
+                        gioco = ricercaSpecifica(posizione[i]);
+                        printf("CODICE GIOCO %hu\n", (i + 1));
+                        printf("Titolo: %s\tEditore: %s\tGenere: %s\tAnno di pubblicazione:%hu\n", gioco.titolo,
+                               gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
+                    }
                     break;
                 case 2:
                     break;

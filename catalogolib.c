@@ -248,7 +248,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     return offset;
 }
 
-unsigned short inserisciRecensione(char *username[MAX_CHAR], recensioni_t *recensione, long *offset) {
+unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
     FILE *file = apriCatalogo("rb+");
     gioco_t gioco;
 
