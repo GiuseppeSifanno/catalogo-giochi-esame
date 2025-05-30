@@ -90,7 +90,7 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset);
  *  @return Puntatore alla lista con le recensioni
  *  @return NULL se non ci sono recensioni per il gioco o si è verificato qualche problema
  */
-recensioni_t *visualizzaRecensioni(long offset);
+recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni);
 
 /**
  * @brief Calcola le statistiche del gioco selezionato
@@ -111,7 +111,7 @@ float calcolaStatistiche(unsigned short mode, gioco_t *gioco);
  * 2 per la media valutazione
  * @return Puntatore alla lista con i giochi ordinati
  */
-gioco_t *ordinaStatistiche(unsigned short mode);
+gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi);
 
 /**
  * @brief Acquista il gioco e incrementa il numero delle @ref gioco_t::copie_vendute "copie_vendute"

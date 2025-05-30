@@ -277,11 +277,11 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
     return 0;
 }
 
-recensioni_t *visualizzaRecensioni(long offset) {
+recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) {
     //recupero il gioco dal catalogo tramite l'offset
     gioco_t gioco = ricercaSpecifica(offset);
 
-    unsigned short num_recensioni = 0, capacita = 1;
+    unsigned short capacita = 1;
     // Crea un puntatore a una lista di recensioni
     recensioni_t *recensioni = calloc(capacita, sizeof(recensioni_t));
     
@@ -294,24 +294,24 @@ recensioni_t *visualizzaRecensioni(long offset) {
         //cerco le recensioni non vuote
         if (gioco.recensioni[i].nome_utente[0] != '\0') {
             // Quando trovo una recensione, verifico se è necessario espandere l'array
-            if (num_recensioni >= capacita) {
+            if (*num_recensioni >= capacita) {
                 void **ptr = (void**)&recensioni;
-                if (checkMemory(&num_recensioni, &capacita, sizeof(recensioni_t), sizeof(recensioni_t*), &ptr) == 0) {
+                if (checkMemory(num_recensioni, &capacita, sizeof(recensioni_t), sizeof(recensioni_t*), &ptr) == 0) {
                     return NULL; // checkMemory ha già liberato la memoria
                 }
                 recensioni = (recensioni_t*)(*ptr);
             } else {
                 // Se non è necessario espandere l'array, incremento manualmente num_recensioni
-                num_recensioni++;
+                (*num_recensioni)++;
             }
 
             //copio la recensione all'interno della lista
-            memcpy(&recensioni[num_recensioni-1], &gioco.recensioni[i], sizeof(recensioni_t));
+            memcpy(&recensioni[(*num_recensioni)-1], &gioco.recensioni[i], sizeof(recensioni_t));
         }
     }
 
     //sono state trovare recensioni quindi ritorno il puntatore
-    if (num_recensioni > 0) return recensioni;
+    if (*num_recensioni > 0) return recensioni;
 
     //libero l'area di memoria allocata
     free(recensioni);
@@ -331,7 +331,7 @@ float calcolaStatistiche(unsigned short mode, gioco_t *gioco) {
     return media / num_recensioni;
 }
 
-gioco_t *ordinaStatistiche(unsigned short mode) {
+gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi) {
     FILE *file = apriCatalogo("rb");
     
     // Ottieni la dimensione del file
@@ -342,11 +342,10 @@ gioco_t *ordinaStatistiche(unsigned short mode) {
     }
     
     long file_size = ftell(file);
-    unsigned int num_elementi = 0;
     
     // Verifica che il file non sia vuoto
     if (file_size > 0) {
-        num_elementi = file_size / sizeof(gioco_t);
+        *num_elementi = file_size / sizeof(gioco_t);
     } else {
         // File vuoto, restituisci NULL
         fclose(file);
@@ -355,8 +354,8 @@ gioco_t *ordinaStatistiche(unsigned short mode) {
     
     // Alloca memoria per i giochi
     gioco_t *giochi = NULL;
-    if (num_elementi > 0) {
-        giochi = calloc(num_elementi, sizeof(gioco_t));
+    if (*num_elementi > 0) {
+        giochi = calloc(*num_elementi, sizeof(gioco_t));
         if (giochi == NULL) {
             fprintf(stderr, "Errore di allocazione memoria\n");
             fclose(file);
@@ -367,7 +366,7 @@ gioco_t *ordinaStatistiche(unsigned short mode) {
         fseek(file, 0, SEEK_SET);
         
         // Leggi tutti i giochi
-        for (unsigned int i = 0; i < num_elementi; i++) {
+        for (unsigned int i = 0; i < *num_elementi; i++) {
             if(fread(&giochi[i], sizeof(gioco_t), 1, file) != 1){
                 fprintf(stderr, "Errore lettura file\n");
                 fclose(file);
@@ -377,7 +376,7 @@ gioco_t *ordinaStatistiche(unsigned short mode) {
         }
         
         // Ordina i giochi
-        if (num_elementi > 1) {
+        if (*num_elementi > 1) {
             ShellSort(giochi, num_elementi, mode);
         }
     }

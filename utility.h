@@ -81,6 +81,6 @@ FILE *apriCatalogo(char mode[3]);
  * @param [in] mode Modalità di ordinamento (copie vendute o media valutazione)
  *
  */
-void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode);
+void ShellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode);
 
 #endif //CATALOGO_UTILITY_H

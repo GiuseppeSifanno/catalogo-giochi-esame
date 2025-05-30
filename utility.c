@@ -251,9 +251,9 @@ FILE *apriCatalogo(char mode[3]) {
     return file;
 }
 
-void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode) {
+void ShellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
     // Se c'è solo un elemento o nessuno, non c'è nulla da ordinare
-    if (dim <= 1) return;
+    if (*dim <= 1) return;
 
     int i, j, k, gap; // Cambiato j da unsigned short a int
     gioco_t x;
@@ -263,9 +263,9 @@ void ShellSort(gioco_t *giochi, unsigned int dim, unsigned short mode) {
         // ciclo ripetuto per tutti i gap
         gap = a[k];
         // Se il gap è maggiore o uguale alla dimensione, passa al gap successivo
-        if (gap >= dim) continue;
+        if (gap >= *dim) continue;
 
-        for (i = gap; i < dim; i++) {
+        for (i = gap; i < *dim; i++) {
             x = giochi[i];
             if (mode == 1) {
                 // Utilizzo del ciclo for con controllo j>=0 come prima condizione
