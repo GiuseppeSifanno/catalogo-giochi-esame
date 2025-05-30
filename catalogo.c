@@ -7,6 +7,8 @@ void Amministratore(long codice);
 
 unsigned short scegliModalita();
 
+void Visitatore(void);
+
 int main(void) {
     short ruolo = -1;
     gioco_t *gioco;
@@ -134,7 +136,7 @@ void Amministratore(long codice) {
             printf("Le recensioni sono : \n");
             for (int i = 0; i < num; i++) {
                 printf("Scritta da %s: \n", recensioni_ptr[i].nome_utente);
-                if (recensioni_ptr->descrizione != '\0')
+                if (recensioni_ptr[i].descrizione[0] != '\0')
                     printf("%s\n", recensioni_ptr[i].descrizione);
                 printf("Valutazione e' : %d", recensioni_ptr[i].valutazione);
             }
@@ -143,7 +145,7 @@ void Amministratore(long codice) {
                 mode = scegliModalita();
             gioco = ricercaSpecifica(codice);
             if (mode == MODE_1)
-                printf("Numero totali copie vendute: %lu \n", calcolaStatistiche(MODE_1, &gioco));
+                printf("Numero totali copie vendute: %lu \n", (unsigned long) calcolaStatistiche(MODE_1, &gioco));
             else
                 printf("La media di valutazione e' : %f \n", calcolaStatistiche(MODE_2, &gioco));
             break;
@@ -164,3 +166,5 @@ unsigned short scegliModalita() {
     return mode;
 
 }
+
+void Visitatore(void){}
