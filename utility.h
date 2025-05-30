@@ -1,7 +1,7 @@
-//
-// Created by Giuseppe on 23/05/2025.
-//
-
+/**
+ * @file utility.h
+ * @brief Libreria con funzioni utili per la gestione del catalogo
+ */
 #ifndef CATALOGO_UTILITY_H
 #define CATALOGO_UTILITY_H
 

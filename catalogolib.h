@@ -1,6 +1,7 @@
-//
-// Created by Graziano Semerano on 22/05/25.
-//
+/**
+ * @file catalogolib.h
+ * @brief Header della libreria di funzioni per il catalogo dei giochi
+ */
 #ifndef CATALOGOLIB_H
 #define CATALOGOLIB_H
 
@@ -17,6 +18,20 @@
  *  @brief Nome del file del catalogo
  */
 #define NOME_FILE "catalogo.dat"
+#endif
+
+#ifndef MODE_1
+/**
+ *  @brief Modalità di visualizzazione delle statistiche per copie vendute.
+ */
+#define MODE_1 1
+#endif
+
+#ifndef MODE_2
+/**
+ *  @brief Modalità di visualizzazione delle statistiche per media valutazione.
+ */
+#define MODE_2 2
 #endif
 
 /**
@@ -74,7 +89,6 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
 
 /**
  * @brief La funzione inserisce una recensione per un gioco nel file
- * @param [in] username Nome utente di chi recensisce il gioco
  * @param [in] recensione Recensione inserita dall'utente
  * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
  * @returns
@@ -86,6 +100,7 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset);
 /**
  * @brief Recupera le recensioni di un gioco specifico
  * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ * @param [out] num_recensioni  Numero di recensioni del gioco
  * @returns
  *  @return Puntatore alla lista con le recensioni
  *  @return NULL se non ci sono recensioni per il gioco o si è verificato qualche problema
@@ -97,7 +112,7 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni);
  * @param [in] mode Modalità di visualizzazione delle statistiche (copie vendute o media valutazione).
  * 1 per le copie vendute
  * 2 per la media valutazione
- * @param [in] gioco Istanza del gioco da passare in input
+ * @param [in] gioco Istanza del gioco
  *
  * @returns
  *  @return Valore delle statistiche di un gioco
@@ -109,6 +124,7 @@ float calcolaStatistiche(unsigned short mode, gioco_t *gioco);
  * @param [in] mode Modalità di visualizzazione delle statistiche (copie vendute o media valutazione).
  * 1 per le copie vendute
  * 2 per la media valutazione
+ * @param [out] num_elementi Numero di giochi totali recuperati dal catalogo
  * @return Puntatore alla lista con i giochi ordinati
  */
 gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi);

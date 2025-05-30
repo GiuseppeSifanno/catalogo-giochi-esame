@@ -1,7 +1,3 @@
-//
-// Created by Graziano Semerano on 22/05/25.
-//
-
 #include "catalogolib.h"
 
 unsigned short aggiungiGioco(gioco_t gioco) {

@@ -1,7 +1,7 @@
-//
-// Created by Graziano Semerano on 22/05/25.
-//
-
+/**
+ * @file gioco.h
+ * @brief Definizione delle strutture e dei tipi utilizzati per la gestione dei dati di un gioco all'interno del catalogo.
+ */
 #ifndef GIOCO_H
 #define GIOCO_H
 
@@ -36,32 +36,34 @@
 #endif
 
 /**
+ * Questa struttura è utilizzata per memorizzare le recensioni inserite dagli utenti,
+ * includendo il loro nome utente, una descrizione della recensione e infine una valutazione numerica
+ *
  * @struct recensioni
+ *
  * @brief Struttura che memorizza le recensioni degli utenti.
  *
- * Questa struttura è utilizzata per memorizzare le recensioni inserite dagli utenti,
- * includendo il loro nome utente, una descrizione della recensione ed infine una valutazione numerica
- *
  * @typedef recensioni_t
- *
- * @var char recensioni::nome_utente
- * Nome utente di chi ha inserito la recensione
- *
- * @var uint8_t recensioni::valutazione
- * Rappresentazione numerica della valutazione
- *
- * @var char recensioni::descrizione
- * Rappresenta la descrizione fornita dall'utente al momento della recensione
- * Più in particolare contiene commenti e/o feedback. L'inserimento di questo campo è <b>opzionale</b>
  */
 typedef struct recensioni {
+    /**
+     * Nome utente di chi ha inserito la recensione
+     */
     char nome_utente[MAX_CHAR];
+    /**
+     * Rappresentazione numerica della valutazione
+     */
     uint8_t valutazione;
+    /**
+     * Rappresenta la descrizione fornita dall'utente al momento della recensione
+     * Più in particolare contiene commenti e/o feedback. L'inserimento di questo campo è <b>opzionale</b>
+     */
     char descrizione [MAX_CHAR];
 }recensioni_t;
 
 /**
  * @struct gioco
+ *
  * @brief Struttura che memorizza i dati di un gioco.
  *
  * Questa struttura è utilizzata per memorizzare i dati di un gioco,
@@ -69,39 +71,40 @@ typedef struct recensioni {
  * il numero di copie vendute, i generi del gioco e le sue recensioni.
  *
  * @typedef gioco_t
- *
- * @var char gioco::titolo
- * Titolo del gioco
- *
- * @var char gioco::editore
- * Editore del gioco
- *
- * @var char gioco::sviluppatore
- * Sviluppatore del gioco
- *
- * @var char gioco::descrizione
- * Descrizione del gioco
- *
- * @var unsigned short gioco::anno_pubblicazione
- * Anno di pubblicazione del gioco
- *
- * @var unsigned long gioco::copie_vendute
- * Numero di copie vendute del gioco
- *
- * @var char gioco::generi
- * Lista di generi attribuiti al gioco
- *
- * @var recensioni_t recensioni
- * Rifarsi a @c
  */
 typedef struct gioco {
+    /**
+     * Numero di copie vendute del gioco
+     */
     unsigned long copie_vendute;
+    /**
+     * Anno di pubblicazione del gioco
+     */
     unsigned short anno_pubblicazione;
+    /**
+     *Struttura per le recensioni del gioco.
+     * @see recensioni_t
+     */
     recensioni_t recensioni[MAX_RECENSIONI];
+    /**
+     * Titolo del gioco
+     */
     char titolo [MAX_CHAR];
+    /**
+     * Editore del gioco
+     */
     char editore [MAX_CHAR];
+    /**
+     * Sviluppatore del gioco
+     */
     char sviluppatore [MAX_CHAR];
+    /**
+     * Descrizione del gioco
+     */
     char descrizione [MAX_CHAR];
+    /**
+     * Generi del gioco
+     */
     char generi[MAX_GENERI][MAX_CHAR];
 }gioco_t;
 

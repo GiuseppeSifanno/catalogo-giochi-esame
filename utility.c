@@ -267,7 +267,7 @@ void ShellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
 
         for (i = gap; i < *dim; i++) {
             x = giochi[i];
-            if (mode == 1) {
+            if (mode == MODE_1) {
                 // Utilizzo del ciclo for con controllo j>=0 come prima condizione
                 for (j = i - gap; j >= 0 && (x.copie_vendute < giochi[j].copie_vendute); j -= gap) {
                     giochi[j + gap] = giochi[j];
