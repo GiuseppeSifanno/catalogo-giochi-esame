@@ -265,8 +265,8 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
     }
 
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
-        if (strlen(gioco.recensioni[i].nome_utente) == 0 || gioco.recensioni[i].nome_utente[0] == '\0') {
-            gioco.recensioni[i] = *recensione;
+        if (gioco.recensioni[i].nome_utente[0] == '\0') {
+            memcpy(&gioco.recensioni[i], recensione, sizeof(recensioni_t));
             printf("\nRecensione inserita correttamente\n");
             fclose(file);
             return 1;
@@ -384,4 +384,28 @@ gioco_t *ordinaStatistiche(unsigned short mode) {
     
     fclose(file);
     return giochi;
+}
+
+unsigned short acquistaGioco(long offset) {
+    FILE *file = apriCatalogo("rb");
+    gioco_t gioco;
+    if (fseek(file, offset, SEEK_SET) != 0) {
+        fprintf(stderr, "Errore posizione file\n");
+        fclose(file);
+        exit(-1);
+    }
+    if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
+        fprintf(stderr, "Errore lettura file\n");
+        fclose(file);
+        exit(-1);
+    }
+    //chiudo il file poiché non più necessario
+    fclose(file);
+
+    //incremento il numero di copie vendute del gioco
+    gioco.copie_vendute++;
+    //modifico il gioco con le nuove informazioni nel catalogo
+    if (modificaGioco(offset, &gioco) == 1) return 1;
+
+    return 0;
 }

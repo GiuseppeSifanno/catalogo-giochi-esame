@@ -104,6 +104,22 @@ recensioni_t *visualizzaRecensioni(long offset);
  */
 float calcolaStatistiche(unsigned short mode, gioco_t *gioco);
 
+/**
+ * @brief Ordina tutti i giochi all'interno del catalogo, in base alla modalità specificata in ingresso
+ * @param [in] mode Modalità di visualizzazione delle statistiche (copie vendute o media valutazione).
+ * 1 per le copie vendute
+ * 2 per la media valutazione
+ * @return Puntatore alla lista con i giochi ordinati
+ */
 gioco_t *ordinaStatistiche(unsigned short mode);
+
+/**
+ * @brief Acquista il gioco e incrementa il numero delle @ref gioco_t::copie_vendute "copie_vendute"
+ * @param [in] offset Posizione del blocco nel file in cui si trova il gioco
+ * @returns
+ *  @return 1 se l'acquisto è andato a buon fine
+ *  @return 0 se l'acquisto <b>non</b> è andato a buon fine
+ */
+unsigned short acquistaGioco(long offset);
 
 #endif //CATALOGOLIB_H
