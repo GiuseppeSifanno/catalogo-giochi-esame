@@ -19,74 +19,54 @@ gioco_t inserisciGioco() {
     memset(&gioco, 0, sizeof(gioco_t));
 
     printf("Inserisci titolo: ");
-    scanf(" %[^\n]", gioco.titolo);
+    scanf(" %[^\n]s", gioco.titolo);
     tolower_str(gioco.titolo);
     fflush(stdin);
     printf("Inserisci editore: ");
-    scanf(" %[^\n]", gioco.editore);
+    scanf(" %[^\n]s", gioco.editore);
     tolower_str(gioco.editore);
     fflush(stdin);
     printf("Inserisci sviluppatore: ");
-    scanf(" %[^\n]", gioco.sviluppatore);
+    scanf(" %[^\n]s", gioco.sviluppatore);
     tolower_str(gioco.sviluppatore);
     fflush(stdin);
     printf("Inserisci descrizione: ");
-    scanf(" %[^\n]", gioco.descrizione);
+    scanf(" %[^\n]s", gioco.descrizione);
     tolower_str(gioco.descrizione);
     fflush(stdin);
-    do {
-        printf("Inserisci anno di pubblicazione (>= %d): ", ANNO_MIN);
-        result = scanf("%hu", &gioco.anno_pubblicazione);
 
-        if (result != 1) {
-            printf("Input non valido. Inserisci un numero.\n");
-            // Pulisce il buffer da input errato
-            while (getchar() != '\n');
-        } else if (gioco.anno_pubblicazione < ANNO_MIN) {
-            printf("Anno non valido. Deve essere >= %d.\n", ANNO_MIN);
-            // Anche se input valido, forziamo il ciclo a ripetere
-            result = 0;
-        } else {
-            // Input corretto, puliamo eventuali residui
-            while (getchar() != '\n');
-        }
-    } while (result != 1);
-    fflush(stdin);
-    result = 0;
     do {
-        printf("Inserisci numero copie vendute: ");
-        result = scanf("%lu", &gioco.copie_vendute);
+        printf("Inserisci anno di pubblicazione (>= %d):", ANNO_MIN);
+        scanf("%hu", &gioco.anno_pubblicazione);
+    } while (gioco.anno_pubblicazione < ANNO_MIN);
 
-        if (result != 1) {
-            printf("Input non valido. Inserisci un numero intero positivo.\n");
-            while (getchar() != '\n'); // pulizia buffer
-        } else {
-            while (getchar() != '\n'); // pulizia buffer residuo
-        }
-    } while (result != 1);;
-    fflush(stdin);
+    do {
+        printf("Inserisci numero copie vendute (>= 0):");
+        scanf("%lu", &gioco.copie_vendute);
+    } while (gioco.copie_vendute < 0);
 
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Inserisci genere %d: ", i + 1);
-        scanf(" %[^\n]", gioco.generi[i]);
+        scanf(" %[^\n]s", gioco.generi[i]);
+        fflush(stdin);
         tolower_str(gioco.generi[i]);
+
         if (i < MAX_GENERI - 1) {
             while (1) {
                 printf("Vuoi inserire un altro genere? (Si/No): ");
-                scanf(" %[^\n]", risposta);
+                scanf(" %[^\n]s", risposta);
                 tolower_str(risposta);
-                if (strcmp(risposta, "si") == 0) {
+                if (strcmp(risposta, "si") == 0)
                     break; // continua il ciclo
-                } else if (strcmp(risposta, "no") == 0) {
+
+                if (strcmp(risposta, "no") == 0) {
                     i = MAX_GENERI; // forza uscita dal ciclo
                     break;
-                } else {
-                    printf("Risposta non valida. Scrivi 'Si' o 'No'.\n");
                 }
+                printf("Risposta non valida. Scrivi 'Si' o 'No'.\n");
             }
         }
     }
-    fflush(stdin);
     return gioco;
 }
 
@@ -220,10 +200,6 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
 
 FILE *apriCatalogo(char mode[3]) {
     FILE *file = fopen(NOME_FILE, mode);
-
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("\nDirectory attuale: %s\n", cwd);
 
     if (file == NULL) {
         // Se il file non esiste e stiamo cercando di aprirlo in lettura
