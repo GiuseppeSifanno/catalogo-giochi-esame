@@ -68,7 +68,7 @@ int main(void) {
             }
             case 4: {
                 if (ruolo == 1) {
-                    if (aggiungiGioco(inserisciGioco()) == 1) printf("Gioco gia presente.\n");
+                    if (aggiungiGioco(acquisisciGioco()) == 1) printf("Gioco gia presente.\n");
                     else printf("Gioco aggiunto.\n");
                 }
                 break;
@@ -91,9 +91,9 @@ long RicercaGioco() {
     printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
     printf("es: #fps, #multiplayer -- (tutti i giochi che hanno il genere fps e/o multiplayer)\n");
     printf("Inserisci query: ");
-    fflush(stdin);
     fgets(query, MAX_CHAR, stdin);
     fflush(stdin);
+
     long *posizione = ricercaGlobale(query, &num_elementi);
     if (num_elementi == 0) {
         printf("Non ci sono giochi che corrispondono ai parametri inseriti\n");
@@ -115,8 +115,7 @@ long RicercaGioco() {
 }
 
 void MenuAmministratore(long codice) {
-    int scelta;
-    unsigned short num;
+    unsigned short scelta, num;
     gioco_t gioco;
     do {
         printf("Per il gioco selezionato, che operazione vuoi eseguire?\n");
@@ -128,13 +127,13 @@ void MenuAmministratore(long codice) {
         printf("Scelta: ");
 
         do {
-            scanf("%d", &scelta);
+            scanf("%hu", &scelta);
         } while (scelta < 1 || scelta > 5);
 
         switch (scelta) {
             case 1: {
                 printf("Inserisci i dati del nuovo gioco");
-                gioco = inserisciGioco();
+                gioco = acquisisciGioco();
                 if (modificaGioco(codice, &gioco) == 1)
                     printf("\n Gioco modificato\n");
                 break;

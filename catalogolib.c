@@ -1,7 +1,6 @@
 #include "catalogolib.h"
 
 unsigned short aggiungiGioco(gioco_t gioco) {
-
     //controlliamo se il gioco è già presente nel catalogo
     if (isAlredyAdded(gioco) == 1) return 1;
 
@@ -53,7 +52,7 @@ unsigned short cancellaGioco(long offset) {
     gioco_t gioco;
 
     long pos;
-    while (pos = ftell(file), fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+    while (pos = ftello(file), fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         if (pos != offset) {
             if (fwrite(&gioco, sizeof(gioco_t), 1, new_file) != 1) {
                 fprintf(stderr, "Errore scrittura nel nuovo file\n");
@@ -81,34 +80,35 @@ unsigned short cancellaGioco(long offset) {
 }
 
 unsigned short isAlredyAdded(gioco_t new_gioco) {
-    gioco_t gioco;
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
+    gioco_t gioco;
 
-    //valido: 0 non presente nel catalogo (valido), 1 altrimenti
-    unsigned short int valido = 0;
+    //1 non presente nel catalogo, 0 altrimenti
+    unsigned short int valido = 1;
 
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         // Controllo sui campi principali
-        if (gioco.anno_pubblicazione == new_gioco.anno_pubblicazione &&
-            gioco.copie_vendute == new_gioco.copie_vendute &&
-            strcmp(gioco.titolo, new_gioco.titolo) == 0 &&
-            strcmp(gioco.descrizione, new_gioco.descrizione) == 0 &&
-            strcmp(gioco.editore, new_gioco.editore) == 0 &&
+        if (gioco.anno_pubblicazione == new_gioco.anno_pubblicazione    &&
+            gioco.copie_vendute == new_gioco.copie_vendute              &&
+            strcmp(gioco.titolo, new_gioco.titolo) == 0                 &&
+            strcmp(gioco.descrizione, new_gioco.descrizione) == 0       &&
+            strcmp(gioco.editore, new_gioco.editore) == 0               &&
             strcmp(gioco.sviluppatore, new_gioco.sviluppatore) == 0) {
             
-            // Se i campi principali corrispondono, controlla i generi
-            valido = 1; // Presupponiamo che sia lo stesso gioco
+            // Controllo su tutti i generi
+            valido = 0; // Presupponiamo che sia lo stesso gioco
             
             // Se almeno un genere è diverso, allora non è lo stesso gioco
             for (unsigned short i = 0; i < MAX_GENERI; i++) {
                 if (strcmp(gioco.generi[i], new_gioco.generi[i]) != 0) {
-                    valido = 0;
+                    valido = 1;
                     break;
                 }
             }
-            
-            if (valido == 1) {
+
+            //se non è valido, quindi è già presente nel catalogo
+            if (valido == 0) {
                 fclose(file);
                 return 1; // Gioco già presente
             }
@@ -116,7 +116,7 @@ unsigned short isAlredyAdded(gioco_t new_gioco) {
     }
     
     fclose(file);
-    return 0; // Gioco non presente
+    return 0; // Gioco non presente quindi valido = 1
 }
 
 gioco_t ricercaSpecifica(long offset) {
@@ -156,20 +156,11 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     char **parametri = analisiQuery(query, &num_param);
 
     if (parametri == NULL) {
-        printf("Errore di analisi query\n");
+        fprintf(stderr, "Errore di analisi query\n");
         exit(-1);
     }
 
-    ///////////////////////
-    // Rimuovere terminata la fase di sviluppo del programma
-    printf("Numero totale di parametri: %d\n", num_param);
-
-    for (unsigned short i = 0; i < num_param; i++) {
-        printf("Parametro %d: %s\n", i + 1, parametri[i]);
-    }
-    ///////////////////////
-
-    unsigned short capacita = 1;
+    unsigned short capacita = 1; //capacità iniziale
     *num_elementi = 0; // Inizializza a 0
     long *offset = calloc(capacita, sizeof(long));
 
@@ -179,12 +170,13 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
             free(parametri[i]);
         }
         free(parametri);
-        printf("Errore di allocazione memoria\n");
+        fprintf(stderr, "Errore di allocazione memoria\n");
         exit(-1);
     }
 
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
+
     // Verifica lettura record
     long pos = ftello(file);
     int recordLetti = 0;
@@ -200,17 +192,16 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
 
             switch (param_copy[0]) {
                 case TOKEN_1: { // $ - Anno di pubblicazione
-                    // Rimuovi il token iniziale
-                    char* value_str = param_copy + 1;
-                    // Converti la stringa in numero
-                    unsigned short anno = (unsigned short)strtol(value_str, NULL, 10);
+                    char *value_str = param_copy + 1; // Rimuovi il token iniziale
+
+                    unsigned short anno = (unsigned short)strtol(value_str, NULL, 10); // Converti la stringa in numero
                     if (gioco.anno_pubblicazione == anno)
                         valido = 1;
                 }
                 break;
                 case TOKEN_2: { // # - Genere
-                    // Rimuovi il token iniziale
-                    char* genere = param_copy + 1;
+                    char* genere = param_copy + 1; // Rimuovi il token iniziale
+
                     for (unsigned short j = 0; j < MAX_GENERI; j++) {
                         if (strstr(gioco.generi[j], genere) != NULL) {
                             valido = 1;
@@ -251,7 +242,6 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
         }
         pos = ftello(file);
     }
-    printf("Numero di record letti: %d\n", recordLetti);
 
     // Libera la memoria allocata per i parametri
     for (unsigned short i = 0; i < num_param; i++) {
@@ -312,7 +302,8 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) 
                 if (checkMemory(num_recensioni, &capacita, sizeof(recensioni_t), sizeof(recensioni_t*), &ptr) == 0) {
                     return NULL; // checkMemory ha già liberato la memoria
                 }
-                recensioni = (recensioni_t*)(*ptr);
+                //casting
+                recensioni = (recensioni_t*) *ptr;
             } else {
                 // Se non è necessario espandere l'array, incremento manualmente num_recensioni
                 (*num_recensioni)++;
@@ -401,21 +392,25 @@ gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi) {
 unsigned short acquistaGioco(long offset) {
     FILE *file = apriCatalogo("rb");
     gioco_t gioco;
+
     if (fseek(file, offset, SEEK_SET) != 0) {
         fprintf(stderr, "Errore posizione file\n");
         fclose(file);
         exit(-1);
     }
+
     if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore lettura file\n");
         fclose(file);
         exit(-1);
     }
+
     //chiudo il file poiché non più necessario
     fclose(file);
 
     //incremento il numero di copie vendute del gioco
     gioco.copie_vendute++;
+
     //modifico il gioco con le nuove informazioni nel catalogo
     if (modificaGioco(offset, &gioco) == 1) return 1;
 

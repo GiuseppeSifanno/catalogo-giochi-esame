@@ -64,7 +64,7 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
  * @brief Acquisizione dei dati di un nuovo gioco
  * @return Istanza del nuovo gioco inserito
  */
-gioco_t inserisciGioco();
+gioco_t acquisisciGioco();
 
 /**
  * @brief Apre il catalogo ed effettua i controlli necessari

@@ -1,7 +1,3 @@
-//
-// Created by Giuseppe on 23/05/2025.
-//
-
 #include "utility.h"
 
 void tolower_str(char *str) {
@@ -10,30 +6,40 @@ void tolower_str(char *str) {
     }
 }
 
-gioco_t inserisciGioco() {
+gioco_t acquisisciGioco() {
     gioco_t gioco;
-    int result;
     char risposta[MAX_CHAR];
 
     // Inizializza tutti i campi a zero/vuoto
     memset(&gioco, 0, sizeof(gioco_t));
 
-    printf("Inserisci titolo: ");
-    scanf(" %[^\n]s", gioco.titolo);
-    tolower_str(gioco.titolo);
-    fflush(stdin);
-    printf("Inserisci editore: ");
-    scanf(" %[^\n]s", gioco.editore);
-    tolower_str(gioco.editore);
-    fflush(stdin);
-    printf("Inserisci sviluppatore: ");
-    scanf(" %[^\n]s", gioco.sviluppatore);
-    tolower_str(gioco.sviluppatore);
-    fflush(stdin);
-    printf("Inserisci descrizione: ");
-    scanf(" %[^\n]s", gioco.descrizione);
-    tolower_str(gioco.descrizione);
-    fflush(stdin);
+    do {
+        printf("Inserisci titolo: ");
+        fgets(gioco.titolo, MAX_CHAR, stdin);
+        fflush(stdin);
+        tolower_str(gioco.titolo);
+    } while (strlen(gioco.titolo) == 0);
+
+    do {
+        printf("Inserisci editore: ");
+        fgets(gioco.editore, MAX_CHAR, stdin);
+        fflush(stdin);
+        tolower_str(gioco.editore);
+    }while (strlen(gioco.editore) == 0);
+
+    do {
+        printf("Inserisci sviluppatore: ");
+        fgets(gioco.sviluppatore, MAX_CHAR, stdin);
+        tolower_str(gioco.sviluppatore);
+        fflush(stdin);
+    }while (strlen(gioco.sviluppatore) == 0);
+
+    do {
+        printf("Inserisci descrizione: ");
+        fgets(gioco.descrizione, MAX_CHAR, stdin);
+        tolower_str(gioco.descrizione);
+        fflush(stdin);
+    }while (strlen(gioco.descrizione) == 0);
 
     do {
         printf("Inserisci anno di pubblicazione (>= %d):", ANNO_MIN);
@@ -47,15 +53,17 @@ gioco_t inserisciGioco() {
 
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Inserisci genere %d: ", i + 1);
-        scanf(" %[^\n]s", gioco.generi[i]);
+        fgets(gioco.generi[i], MAX_CHAR, stdin);
         fflush(stdin);
         tolower_str(gioco.generi[i]);
 
         if (i < MAX_GENERI - 1) {
             while (1) {
                 printf("Vuoi inserire un altro genere? (Si/No): ");
-                scanf(" %[^\n]s", risposta);
+                fgets(gioco.generi[i], MAX_CHAR, stdin);
+                fflush(stdin);
                 tolower_str(risposta);
+
                 if (strcmp(risposta, "si") == 0)
                     break; // continua il ciclo
 
@@ -63,6 +71,7 @@ gioco_t inserisciGioco() {
                     i = MAX_GENERI; // forza uscita dal ciclo
                     break;
                 }
+
                 printf("Risposta non valida. Scrivi 'Si' o 'No'.\n");
             }
         }
@@ -75,7 +84,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     char **parametri = calloc(capacita, sizeof(char *));
 
     if (parametri == NULL) {
-        printf("Errore di allocazione memoria\n");
+        fprintf(stderr, "Errore di allocazione memoria\n");
         exit(-1);
     }
 
@@ -84,6 +93,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     strncpy(query_copy, query, MAX_CHAR);
     query_copy[MAX_CHAR - 1] = '\0'; // Assicura terminazione
 
+    //variabile contenente i token
     char *token = strtok(query_copy, DELIM);
 
     while (token != NULL) {
@@ -104,8 +114,9 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
             // Alloca memoria per la stringa
             parametri[num_elementi] = malloc((len + 1) * sizeof(char));
+
             if (parametri[num_elementi] == NULL) {
-                printf("Errore allocazione memoria per stringa\n");
+                fprintf(stderr, "Errore allocazione memoria per stringa\n");
                 // Libera la memoria già allocata
                 for (unsigned short i = 0; i < num_elementi; i++) {
                     free(parametri[i]);
@@ -120,9 +131,10 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
             num_elementi++;
         }
-
+        //recupero il prossimo token
         token = strtok(NULL, DELIM);
     }
+    //salvo il numero di parametri, per poterli recuperare in seguito
     *param = num_elementi;
     return parametri;
 }
@@ -148,6 +160,7 @@ void trim(char *token) {
         memmove(token, start, strlen(start) + 1);
     }
 
+    //rimuovo gli spazi tra il simbolo e il resto della stringa
     if (token[0] == TOKEN_1 || token[0] == TOKEN_2) {
         unsigned short j = 1;
         while (isspace((unsigned char) token[j])) {
@@ -159,8 +172,10 @@ void trim(char *token) {
 
 int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
                 unsigned long dimensione_elemento, unsigned long dimensione_puntatore, void ***array) {
+
     // Verifica se è necessario espandere l'array
     if (*num_elementi >= *capacita) {
+
         // Incrementa la capacità
         unsigned short nuova_capacita = (*capacita) + 1;
 
@@ -168,7 +183,8 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
         void **nuovo_array = realloc(*array, nuova_capacita * dimensione_puntatore);
 
         if (nuovo_array == NULL) {
-            printf("Errore nell'espansione dell'array: memoria insufficiente\n");
+            fprintf(stderr, "Errore nell'espansione dell'array: memoria insufficiente\n");
+
             // Libera la memoria già allocata
             for (unsigned short i = 0; i < *num_elementi; i++) {
                 free((*array)[i]);
@@ -186,7 +202,8 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
     (*array)[*num_elementi] = malloc(dimensione_elemento);
 
     if ((*array)[*num_elementi] == NULL) {
-        printf("Errore nell'allocazione del nuovo elemento: memoria insufficiente\n");
+        fprintf(stderr, "Errore nell'allocazione del nuovo elemento: memoria insufficiente\n");
+
         // Libera la memoria già allocata
         for (unsigned short i = 0; i < *num_elementi; i++) {
             free((*array)[i]);
@@ -210,8 +227,8 @@ FILE *apriCatalogo(char mode[3]) {
                 fprintf(stderr, "Errore: impossibile creare il file %s\n", NOME_FILE);
                 exit(-1);
             }
-            printf("File %s creato correttamente\n", NOME_FILE);
             fclose(file);
+
             // Riapri il file nella modalità originale richiesta
             file = fopen(NOME_FILE, mode);
             if (file == NULL) {
@@ -223,7 +240,6 @@ FILE *apriCatalogo(char mode[3]) {
             exit(-1);
         }
     }
-
     return file;
 }
 
@@ -231,27 +247,25 @@ void ShellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
     // Se c'è solo un elemento o nessuno, non c'è nulla da ordinare
     if (*dim <= 1) return;
 
-    int i, j, k, gap; // Cambiato j da unsigned short a int
-    gioco_t x;
+    int j;
     unsigned short a[5] = {9, 5, 3, 2, 1}; // a = vettore dei gap
 
-    for (k = 0; k < sizeof(a) / sizeof(a[0]); k++) {
+    for (int k = 0; k < sizeof(a) / sizeof(a[0]); k++) {
         // ciclo ripetuto per tutti i gap
-        gap = a[k];
+        int gap = a[k];
+
         // Se il gap è maggiore o uguale alla dimensione, passa al gap successivo
         if (gap >= *dim) continue;
 
-        for (i = gap; i < *dim; i++) {
-            x = giochi[i];
+        for (int i = gap; i < *dim; i++) {
+            gioco_t x = giochi[i];
             if (mode == MODE_1) {
-                // Utilizzo del ciclo for con controllo j>=0 come prima condizione
                 for (j = i - gap; j >= 0 && (x.copie_vendute > giochi[j].copie_vendute); j -= gap) {
                     giochi[j + gap] = giochi[j];
                 }
                 giochi[j + gap] = x;
             } else {
                 // Per la modalità 2 (media valutazione)
-
                 for (j = i - gap; j >= 0; j -= gap) {
                     if (calcolaStatistiche(2, &giochi[i]) < calcolaStatistiche(2, &giochi[j]))
                         giochi[j + gap] = giochi[j];
