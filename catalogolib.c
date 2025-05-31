@@ -15,7 +15,6 @@ unsigned short aggiungiGioco(gioco_t gioco) {
         exit(-1);
     }
 
-    printf("\nGioco aggiunto correttamente\n");
     //chiudo il file e salvo le modifiche
     fclose(file);
     return 0;
@@ -40,24 +39,44 @@ unsigned short modificaGioco(const long offset, const gioco_t *gioco) {
 
 unsigned short cancellaGioco(long offset) {
     FILE *file = apriCatalogo("rb");
-    FILE *new_file = fopen("new_catalogo.dat", "wb");
+
+    char temp[20] = "new_";
+    strcat(temp, NOME_FILE);
+    FILE *new_file = fopen(temp, "wb");
+
+    if (new_file == NULL) {
+        fprintf(stderr, "Errore apertura nuovo file\n");
+        fclose(file);
+        return 0;
+    }
+
     gioco_t gioco;
-    long pos = ftell(file);
-    while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
-        if (offset != pos) {
+
+    long pos;
+    while (pos = ftell(file), fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        if (pos != offset) {
             if (fwrite(&gioco, sizeof(gioco_t), 1, new_file) != 1) {
                 fprintf(stderr, "Errore scrittura nel nuovo file\n");
                 fclose(file);
                 fclose(new_file);
                 return 0;
             }
-            pos = ftell(file);
         }
     }
+
     fclose(file);
     fclose(new_file);
-    remove("catalogo.dat");
-    rename("new_catalogo.dat", "catalogo.dat");
+
+    if (remove(NOME_FILE) != 0) {
+        fprintf(stderr, "Errore cancellazione file\n");
+        return 0;
+    }
+
+    if (rename(temp, NOME_FILE) != 0) {
+        fprintf(stderr, "Errore rinominazione file\n");
+        return 0;
+    }
+
     return 1;
 }
 
@@ -263,12 +282,10 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
         if (gioco.recensioni[i].nome_utente[0] == '\0') {
             memcpy(&gioco.recensioni[i], recensione, sizeof(recensioni_t));
-            printf("\nRecensione inserita correttamente\n");
             fclose(file);
             return 1;
         }
     }
-    fprintf(stderr, "Recensione non inserita. Trovato il limite massimo di recensioni per un gioco.\n");
     fclose(file);
     return 0;
 }
