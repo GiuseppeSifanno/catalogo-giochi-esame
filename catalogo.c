@@ -93,6 +93,7 @@ long ricercaGioco() {
     printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
     printf("es: #fps, #multiplayer -- (tutti i giochi che hanno il genere fps e/o multiplayer)\n");
     printf("Inserisci query: ");
+    fflush(stdin);
     fgets(query, MAX_CHAR, stdin);
     fflush(stdin);
 
@@ -109,7 +110,7 @@ long ricercaGioco() {
     }
     do {
         printf("\nInserisci il codice gioco:");
-        scanf("%d", &codice);
+        scanf("%ld", &codice);
     } while (codice <= 0 || codice > num_elementi);
 
     //decrementiamo il valore del codice perchè deve corrispondere all'indice del vettore
@@ -221,7 +222,7 @@ void menuVisitatore(long codice) {
 
                 do {
                     printf("Inserisci la valutazione numerica (da 1 a 5) \n");
-                    scanf("%hu", &recensione.valutazione);
+                    scanf("%hhu", &recensione.valutazione);
                 } while (recensione.valutazione < 1 || recensione.valutazione > 5);
 
                 if (inserisciRecensione(&recensione, &codice) == 1)
@@ -230,20 +231,33 @@ void menuVisitatore(long codice) {
                     fprintf(stderr, "Recensione non inserita. Trovato il limite massimo di recensioni per un gioco.\n");
 
                 break;
-            case 2:
-                recensioni_t *recensioni_ptr = visualizzaRecensioni(codice, &num);
-                if (num == 0) printf("Non ci sono recensioni\n");
-                else {
-                    printf("Le recensioni sono: \n");
-                    for (int i = 0; i < num; i++) {
-                        printf("Scritta da %s\n", recensioni_ptr[i].nome_utente);
-                        printf("Valutazione: %hu\n", recensioni_ptr[i].valutazione);
-
-                        if (recensioni_ptr[i].descrizione[0] != '\0')
-                            printf("Descrizione: %s\n", recensioni_ptr[i].descrizione);
-                    }
-                }
-                break;
+            case 2: {
+    unsigned short num;
+    recensioni_t *recensioni_ptr = NULL;  // Inizializzazione esplicita del puntatore
+    
+    // Chiamata alla funzione e controllo del risultato
+    recensioni_ptr = visualizzaRecensioni(codice, &num);
+    
+    if (recensioni_ptr == NULL || num == 0) {
+        printf("Non ci sono recensioni\n");
+    } else {
+        printf("Le recensioni sono: \n");
+        for (int i = 0; i < num; i++) {
+            printf("Scritta da %s\n", recensioni_ptr[i].nome_utente);
+            printf("Valutazione: %hu\n", recensioni_ptr[i].valutazione);
+            
+            if (recensioni_ptr[i].descrizione[0] != '\0') {
+                printf("Descrizione: %s\n", recensioni_ptr[i].descrizione);
+            }
+            printf("\n"); // Separatore tra le recensioni
+        }
+        
+        // Se la funzione visualizzaRecensioni alloca memoria dinamicamente,
+        // dovremmo liberarla dopo l'uso
+        free(recensioni_ptr);
+    }
+    break;
+}
             case 3:
                 if (acquistaGioco(codice) == 1)
                     printf("Gioco acquistato correttamente\n");
