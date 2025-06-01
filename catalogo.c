@@ -77,6 +77,8 @@ int main(void) {
                 break;
         }
     } while (scelta != 1);
+
+    system("pause");
 }
 
 long RicercaGioco() {
