@@ -381,7 +381,7 @@ gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi) {
         
         // Ordina i giochi
         if (*num_elementi > 1) {
-            ShellSort(giochi, num_elementi, mode);
+            shellSort(giochi, num_elementi, mode);
         }
     }
     

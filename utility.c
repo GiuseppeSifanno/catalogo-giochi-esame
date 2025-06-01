@@ -243,7 +243,7 @@ FILE *apriCatalogo(char mode[3]) {
     return file;
 }
 
-void ShellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
+void shellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
     // Se c'è solo un elemento o nessuno, non c'è nulla da ordinare
     if (*dim <= 1) return;
 

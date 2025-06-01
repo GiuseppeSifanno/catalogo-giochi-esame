@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include "catalogolib.h"
 
-long RicercaGioco();
+long ricercaGioco();
 
-void MenuAmministratore(long codice);
+void menuAmministratore(long codice);
 
-void MenuVisitatore(long codice);
+void menuVisitatore(long codice);
 
-unsigned short ScegliModalita();
+unsigned short scegliModalita();
 
 int main(void) {
     short ruolo = -1;
@@ -49,17 +49,17 @@ int main(void) {
                 break;
             }
             case 2: {
-                long codice = RicercaGioco();
+                long codice = ricercaGioco();
                 if (codice == -1) break;
 
-                if (ruolo == 1) MenuAmministratore(codice);
-                else MenuVisitatore(codice);
+                if (ruolo == 1) menuAmministratore(codice);
+                else menuVisitatore(codice);
 
                 break;
             }
             case 3: {
                 unsigned int num_elementi;
-                gioco_t *giochi = ordinaStatistiche(ScegliModalita(), &num_elementi);
+                gioco_t *giochi = ordinaStatistiche(scegliModalita(), &num_elementi);
                 for (int i = 0; i < num_elementi; i++) {
                     printf("Titolo: %s \n Anno di pubblicazione: %hu \n ", giochi[i].titolo,
                            giochi[i].anno_pubblicazione);
@@ -77,9 +77,11 @@ int main(void) {
                 break;
         }
     } while (scelta != 1);
+
+    system("pause");
 }
 
-long RicercaGioco() {
+long ricercaGioco() {
     char query[MAX_CHAR];
     unsigned short num_elementi;
     long codice;
@@ -114,7 +116,7 @@ long RicercaGioco() {
     return posizione[codice - 1];
 }
 
-void MenuAmministratore(long codice) {
+void menuAmministratore(long codice) {
     unsigned short scelta, num;
     gioco_t gioco;
     do {
@@ -159,7 +161,7 @@ void MenuAmministratore(long codice) {
                 break;
             }
             case 4: {
-                unsigned short mode = ScegliModalita();
+                unsigned short mode = scegliModalita();
                 gioco = ricercaSpecifica(codice);
                 if (mode == MODE_1)
                     printf("Numero totali copie vendute: %lu \n", (unsigned long) calcolaStatistiche(MODE_1, &gioco));
@@ -174,7 +176,7 @@ void MenuAmministratore(long codice) {
     } while (scelta != 5);
 }
 
-unsigned short ScegliModalita() {
+unsigned short scegliModalita() {
     unsigned short mode;
     printf("In che modalità vuoi visualizzare le statistiche? \n");
     do {
@@ -185,7 +187,7 @@ unsigned short ScegliModalita() {
     return mode;
 }
 
-void MenuVisitatore(long codice) {
+void menuVisitatore(long codice) {
     int scelta;
     unsigned short num;
     recensioni_t recensione;
