@@ -15,6 +15,7 @@ gioco_t acquisisciGioco() {
 
     do {
         printf("Inserisci titolo: ");
+        fflush(stdin);
         fgets(gioco.titolo, MAX_CHAR, stdin);
         fflush(stdin);
         tolower_str(gioco.titolo);
@@ -22,6 +23,7 @@ gioco_t acquisisciGioco() {
 
     do {
         printf("Inserisci editore: ");
+        fflush(stdin);
         fgets(gioco.editore, MAX_CHAR, stdin);
         fflush(stdin);
         tolower_str(gioco.editore);
@@ -29,6 +31,7 @@ gioco_t acquisisciGioco() {
 
     do {
         printf("Inserisci sviluppatore: ");
+        fflush(stdin);
         fgets(gioco.sviluppatore, MAX_CHAR, stdin);
         tolower_str(gioco.sviluppatore);
         fflush(stdin);
@@ -36,6 +39,7 @@ gioco_t acquisisciGioco() {
 
     do {
         printf("Inserisci descrizione: ");
+        fflush(stdin);
         fgets(gioco.descrizione, MAX_CHAR, stdin);
         tolower_str(gioco.descrizione);
         fflush(stdin);
