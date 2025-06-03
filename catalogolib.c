@@ -255,19 +255,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
 
 unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
     FILE *file = apriCatalogo("rb+");
-    gioco_t gioco;
-
-    if (fseek(file, *offset, SEEK_SET) != 0) {
-        fprintf(stderr, "Errore posizione file\n");
-        fclose(file);
-        exit(-1);
-    }
-
-    if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
-        fprintf(stderr, "Errore lettura file\n");
-        fclose(file);
-        exit(-1);
-    }
+    gioco_t gioco = ricercaSpecifica(*offset);
 
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
         if (gioco.recensioni[i].nome_utente[0] == '\0') {
