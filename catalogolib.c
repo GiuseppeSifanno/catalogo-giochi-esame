@@ -259,8 +259,10 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset) {
 
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
         if (gioco.recensioni[i].nome_utente[0] == '\0') {
-            memcpy(&gioco.recensioni[i], recensione, sizeof(recensioni_t));
             fclose(file);
+            memcpy(&gioco.recensioni[i], recensione, sizeof(recensioni_t));
+            //modifico le informazioni del gioco con la nuova recensione
+            modificaGioco(*offset, &gioco);
             return 1;
         }
     }
@@ -275,7 +277,8 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) 
     unsigned short capacita = 1;
     // Crea un puntatore a una lista di recensioni
     recensioni_t *recensioni = calloc(capacita, sizeof(recensioni_t));
-    
+    *num_recensioni = 0;
+
     if (recensioni == NULL) {
         fprintf(stderr, "Errore di allocazione memoria\n");
         return NULL;
@@ -292,17 +295,13 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) 
                 }
                 //casting
                 recensioni = (recensioni_t*) *ptr;
-            } else {
-                // Se non è necessario espandere l'array, incremento manualmente num_recensioni
-                (*num_recensioni)++;
             }
-
-            //copio la recensione all'interno della lista
-            memcpy(&recensioni[(*num_recensioni)-1], &gioco.recensioni[i], sizeof(recensioni_t));
+            memcpy(&recensioni[*num_recensioni], &gioco.recensioni[i], sizeof(recensioni_t));
+            (*num_recensioni)++;
         }
     }
 
-    //sono state trovare recensioni quindi ritorno il puntatore
+    //sono state trovate recensioni quindi ritorno il puntatore
     if (*num_recensioni > 0) return recensioni;
 
     //libero l'area di memoria allocata
@@ -310,9 +309,7 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) 
     return NULL;
 }
 
-float calcolaStatistiche(unsigned short mode, gioco_t *gioco) {
-    if (mode == 1) return (float) gioco -> copie_vendute;
-
+float calcolaStatistiche(gioco_t *gioco) {
     float media = 0, num_recensioni = 0;
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
         if (gioco -> recensioni[i].nome_utente[0] != '\0') {
@@ -320,6 +317,8 @@ float calcolaStatistiche(unsigned short mode, gioco_t *gioco) {
             num_recensioni++;
         }
     }
+    if (num_recensioni == 0) return 0;
+
     return media / num_recensioni;
 }
 
