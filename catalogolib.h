@@ -77,14 +77,6 @@ unsigned short modificaGioco(long offset, const gioco_t *gioco);
  */
 unsigned short cancellaGioco(long offset);
 
-/**
- *  @brief Controlla se un gioco è già presente o no nel file
- *  @param [in] new_gioco Istanza del nuovo gioco da inserire
- *  @returns
- *      @return 1 se il gioco è già presente nel catalogo
- *      @return 0 se il gioco <b>non</b> è presente nel catalogo
- */
-unsigned short isAlredyAdded(gioco_t new_gioco);
 
 /**
  * @brief Ricerca un gioco specifico
@@ -139,7 +131,7 @@ float calcolaStatistiche(gioco_t *gioco);
  * @param [out] num_elementi Numero di giochi totali recuperati dal catalogo
  * @return Puntatore alla lista con i giochi ordinati
  */
-gioco_t *ordinaStatistiche(unsigned short mode, unsigned int *num_elementi);
+gioco_t *ordinaStatistiche(unsigned short mode, unsigned long *num_elementi);
 
 /**
  * @brief Acquista il gioco e incrementa il numero delle @ref gioco_t::copie_vendute "copie_vendute"

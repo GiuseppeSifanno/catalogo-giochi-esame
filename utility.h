@@ -67,6 +67,15 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
 gioco_t acquisisciGioco();
 
 /**
+ *  @brief Controlla se un gioco è già presente o no nel file
+ *  @param [in] new_gioco Istanza del nuovo gioco da inserire
+ *  @returns
+ *      @return 1 se il gioco è già presente nel catalogo
+ *      @return 0 se il gioco <b>non</b> è presente nel catalogo
+ */
+unsigned short isAlredyAdded(gioco_t new_gioco);
+
+/**
  * @brief Apre il catalogo ed effettua i controlli necessari
  * @param mode Modalità con cui aprire il file, coerenti ai tipi accettati dalla funzione fopen()
  * @return Puntatore al file appena aperto
@@ -81,6 +90,6 @@ FILE *apriCatalogo(char mode[3]);
  * @param [in] mode Modalità di ordinamento (copie vendute o media valutazione)
  *
  */
-void shellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode);
+void shellSort(gioco_t *giochi, unsigned long *dim, unsigned short mode);
 
 #endif //CATALOGO_UTILITY_H

@@ -89,6 +89,44 @@ gioco_t acquisisciGioco() {
     return gioco;
 }
 
+unsigned short isAlredyAdded(gioco_t new_gioco) {
+    //apro il file in modalità lettura
+    FILE *file = apriCatalogo("rb");
+    gioco_t gioco;
+
+    //1 non presente nel catalogo, 0 altrimenti
+    unsigned short int valido = 1;
+
+    while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        // Controllo sui campi principali
+        if (gioco.anno_pubblicazione == new_gioco.anno_pubblicazione    &&
+            gioco.copie_vendute == new_gioco.copie_vendute              &&
+            strcmp(gioco.titolo, new_gioco.titolo) == 0                 &&
+            strcmp(gioco.descrizione, new_gioco.descrizione) == 0       &&
+            strcmp(gioco.editore, new_gioco.editore) == 0               &&
+            strcmp(gioco.sviluppatore, new_gioco.sviluppatore) == 0) {
+            // Controllo su tutti i generi
+            valido = 0; // Presupponiamo che sia lo stesso gioco
+
+            // Se almeno un genere è diverso, allora non è lo stesso gioco
+            for (unsigned short i = 0; i < MAX_GENERI; i++) {
+                if (strcmp(gioco.generi[i], new_gioco.generi[i]) != 0) {
+                    valido = 1;
+                    break;
+                }
+            }
+
+            //se non è valido, quindi è già presente nel catalogo
+            if (valido == 0) {
+                fclose(file);
+                return 1; // Gioco già presente
+            }
+        }
+    }
+    fclose(file);
+    return 0; // Gioco non presente quindi valido = 1
+}
+
 char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     unsigned short capacita = 1, num_elementi = 0;
     char **parametri = calloc(capacita, sizeof(char *));
@@ -253,7 +291,7 @@ FILE *apriCatalogo(char mode[3]) {
     return file;
 }
 
-void shellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
+void shellSort(gioco_t *giochi, unsigned long *dim, unsigned short mode) {
     // Se c'è solo un elemento o nessuno, non c'è nulla da ordinare
     if (*dim <= 1) return;
 

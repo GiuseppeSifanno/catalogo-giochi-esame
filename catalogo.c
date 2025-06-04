@@ -58,28 +58,29 @@ int main(void) {
                 break;
             }
             case 3: {
-                unsigned int num_elementi = 0;
+                unsigned long num_elementi = 0;
                 unsigned short mode = scegliModalita();
                 gioco_t *giochi = ordinaStatistiche(mode, &num_elementi);
 
                 if (num_elementi == 0) {
-                    printf("\nNon ci sono giochi nel catalogo\n");
+                    fprintf(stderr, "\nNon ci sono giochi nel catalogo\n");
                     break;
                 }
 
-                for (int i = 0; i < num_elementi; i++) {
+                printf("\n");
+                for (unsigned long i = 0; i < num_elementi; i++) {
                     if (mode == MODE_1) {
-                        printf("Titolo:%s\tAnno di pubblicazione:%hu\tCopie vendute:%lu\n", giochi[i].titolo,
+                        printf("%s, %hu\tCopie vendute:%lu\n", giochi[i].titolo,
                            giochi[i].anno_pubblicazione, giochi[i].copie_vendute);
                     }
                     else {
                         float media = calcolaStatistiche(&giochi[i]);
                         if (media == 0) {
-                            printf("Titolo:%s\tAnno di pubblicazione:%hu\tMedia valutazione:N/D\n",
+                            printf("%s, %hu\tMedia valutazione:N/D\n",
                                 giochi[i].titolo, giochi[i].anno_pubblicazione);
                         }
                         else {
-                            printf("Titolo:%s\tAnno di pubblicazione:%hu\tMedia valutazione:%f\n",
+                            printf("%s, %hu\tMedia valutazione:%.2f\n",
                                 giochi[i].titolo, giochi[i].anno_pubblicazione, media);
                         }
                     }
@@ -126,8 +127,14 @@ long ricercaGioco() {
     for (unsigned short i = 0; i < num_elementi; i++) {
         gioco_t gioco = ricercaSpecifica(posizione[i]);
         printf("\nCODICE GIOCO %hu\n", (i + 1));
-        printf("Titolo:%s\tEditore:%s\tGenere:%s\tAnno di pubblicazione:%hu\n", gioco.titolo,
-               gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
+        char generi[MAX_CHAR] = "";
+        for (int i = 0; gioco.generi[i][0] != '\0'; i++) {
+            strcat(generi, gioco.generi[i]);
+            strcat(generi, " ");
+        }
+        printf("Titolo:%s\t\tEditore:%s\t\tAnno di pubblicazione:%hu\n",
+            gioco.titolo, gioco.editore, gioco.anno_pubblicazione);
+        printf("Generi:%s\n", generi);
     }
     do {
         printf("\nInserisci il codice gioco:");
