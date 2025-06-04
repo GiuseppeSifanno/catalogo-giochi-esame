@@ -34,6 +34,20 @@
 #define MODE_2 2
 #endif
 
+#ifndef MIN_VALUTAZIONE
+/**
+ * @brief Valore minimo della valutazione di un gioco
+ */
+#define MIN_VALUTAZIONE 1
+#endif
+
+#ifndef MAX_VALUTAZIONE
+/**
+ * @brief Valore massimo della valutazione di un gioco
+ */
+#define MAX_VALUTAZIONE 5
+#endif
+
 /**
  *  @brief Aggiunge un gioco all'interno del catalogo
  *  @param [in] gioco Istanza del gioco da aggiungere
@@ -108,16 +122,14 @@ unsigned short inserisciRecensione(recensioni_t *recensione, long *offset);
 recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni);
 
 /**
- * @brief Calcola le statistiche del gioco selezionato
- * @param [in] mode Modalità di visualizzazione delle statistiche (copie vendute o media valutazione).
- * 1 per le copie vendute
- * 2 per la media valutazione
+ * @brief Calcola la media delle valutazioni del gioco selezionato
  * @param [in] gioco Istanza del gioco
  *
  * @returns
  *  @return Valore delle statistiche di un gioco
+ *  @return 0 se non ci sono recensioni
  */
-float calcolaStatistiche(unsigned short mode, gioco_t *gioco);
+float calcolaStatistiche(gioco_t *gioco);
 
 /**
  * @brief Ordina tutti i giochi all'interno del catalogo, in base alla modalità specificata in ingresso

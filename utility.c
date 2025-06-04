@@ -14,58 +14,64 @@ gioco_t acquisisciGioco() {
     memset(&gioco, 0, sizeof(gioco_t));
 
     do {
-        printf("Inserisci titolo: ");
+        printf("\nTitolo:");
         fflush(stdin);
         fgets(gioco.titolo, MAX_CHAR, stdin);
+        gioco.titolo[strlen(gioco.titolo) - 1] = '\0';
         fflush(stdin);
         tolower_str(gioco.titolo);
     } while (strlen(gioco.titolo) == 0);
 
     do {
-        printf("Inserisci editore: ");
+        printf("Editore:");
         fflush(stdin);
         fgets(gioco.editore, MAX_CHAR, stdin);
+        gioco.editore[strlen(gioco.editore) - 1] = '\0';
         fflush(stdin);
         tolower_str(gioco.editore);
     }while (strlen(gioco.editore) == 0);
 
     do {
-        printf("Inserisci sviluppatore: ");
+        printf("Sviluppatore:");
         fflush(stdin);
         fgets(gioco.sviluppatore, MAX_CHAR, stdin);
+        gioco.sviluppatore[strlen(gioco.sviluppatore) - 1] = '\0';
         tolower_str(gioco.sviluppatore);
         fflush(stdin);
     }while (strlen(gioco.sviluppatore) == 0);
 
     do {
-        printf("Inserisci descrizione: ");
+        printf("Descrizione:");
         fflush(stdin);
         fgets(gioco.descrizione, MAX_CHAR, stdin);
+        gioco.descrizione[strlen(gioco.descrizione) - 1] = '\0';
         tolower_str(gioco.descrizione);
         fflush(stdin);
     }while (strlen(gioco.descrizione) == 0);
 
     do {
-        printf("Inserisci anno di pubblicazione (>= %d):", ANNO_MIN);
+        printf("Anno di pubblicazione (>= %d):", ANNO_MIN);
         scanf("%hu", &gioco.anno_pubblicazione);
     } while (gioco.anno_pubblicazione < ANNO_MIN);
 
     do {
-        printf("Inserisci numero copie vendute (>= 0):");
+        printf("Numero di copie vendute (>= 0):");
         scanf("%lu", &gioco.copie_vendute);
     } while (gioco.copie_vendute < 0);
 
     for (int i = 0; i < MAX_GENERI; i++) {
-        printf("Inserisci genere %d: ", i + 1);
-        fgets(gioco.generi[i], MAX_CHAR, stdin);
+        printf("Genere n.%d:", (i + 1) );
         fflush(stdin);
+        fgets(gioco.generi[i], MAX_CHAR, stdin);
+        gioco.generi[i][strlen(gioco.generi[i]) - 1] = '\0';
         tolower_str(gioco.generi[i]);
 
         if (i < MAX_GENERI - 1) {
             while (1) {
-                printf("Vuoi inserire un altro genere? (Si/No): ");
-                fgets(gioco.generi[i], MAX_CHAR, stdin);
-                fflush(stdin);
+                printf("Vuoi inserire un altro genere? (Si/No):");
+                fgets(risposta, MAX_CHAR, stdin);
+                //rimuovo il carattere di nuova riga
+                risposta[strlen(risposta) - 1] = '\0';
                 tolower_str(risposta);
 
                 if (strcmp(risposta, "si") == 0)
@@ -76,7 +82,7 @@ gioco_t acquisisciGioco() {
                     break;
                 }
 
-                printf("Risposta non valida. Scrivi 'Si' o 'No'.\n");
+                printf("Risposta non valida. Scrivi 'Si' o 'No' (case insensitive).\n");
             }
         }
     }
@@ -271,7 +277,7 @@ void shellSort(gioco_t *giochi, unsigned int *dim, unsigned short mode) {
             } else {
                 // Per la modalità 2 (media valutazione)
                 for (j = i - gap; j >= 0; j -= gap) {
-                    if (calcolaStatistiche(2, &giochi[i]) < calcolaStatistiche(2, &giochi[j]))
+                    if (calcolaStatistiche(&giochi[i]) < calcolaStatistiche(&giochi[j]))
                         giochi[j + gap] = giochi[j];
                     else
                         break;

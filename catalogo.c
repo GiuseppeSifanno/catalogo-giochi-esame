@@ -23,7 +23,7 @@ int main(void) {
 
     int scelta;
     do {
-        printf("Che operazione vuoi eseguire?\n");
+        printf("\nChe operazione vuoi eseguire?\n");
         if (ruolo == 1) {
             do {
                 printf("1. Esci\n");
@@ -58,11 +58,31 @@ int main(void) {
                 break;
             }
             case 3: {
-                unsigned int num_elementi;
-                gioco_t *giochi = ordinaStatistiche(scegliModalita(), &num_elementi);
+                unsigned int num_elementi = 0;
+                unsigned short mode = scegliModalita();
+                gioco_t *giochi = ordinaStatistiche(mode, &num_elementi);
+
+                if (num_elementi == 0) {
+                    printf("\nNon ci sono giochi nel catalogo\n");
+                    break;
+                }
+
                 for (int i = 0; i < num_elementi; i++) {
-                    printf("Titolo: %s \n Anno di pubblicazione: %hu \n ", giochi[i].titolo,
-                           giochi[i].anno_pubblicazione);
+                    if (mode == MODE_1) {
+                        printf("Titolo:%s\tAnno di pubblicazione:%hu\tCopie vendute:%lu\n", giochi[i].titolo,
+                           giochi[i].anno_pubblicazione, giochi[i].copie_vendute);
+                    }
+                    else {
+                        float media = calcolaStatistiche(&giochi[i]);
+                        if (media == 0) {
+                            printf("Titolo:%s\tAnno di pubblicazione:%hu\tMedia valutazione:N/D\n",
+                                giochi[i].titolo, giochi[i].anno_pubblicazione);
+                        }
+                        else {
+                            printf("Titolo:%s\tAnno di pubblicazione:%hu\tMedia valutazione:%f\n",
+                                giochi[i].titolo, giochi[i].anno_pubblicazione, media);
+                        }
+                    }
                 }
                 break;
             }
@@ -92,20 +112,21 @@ long ricercaGioco() {
         TOKEN_2, TOKEN_1);
     printf("es: Call of duty, blizzard, #azione, #tct, $2019\n");
     printf("es: #fps, #multiplayer -- (tutti i giochi che hanno il genere fps e/o multiplayer)\n");
-    printf("Inserisci query: ");
+    printf("Inserisci query:");
     fflush(stdin);
     fgets(query, MAX_CHAR, stdin);
-    fflush(stdin);
+    //rimuovo il carattere di nuova riga alla fine
+    query[strlen(query) - 1] = '\0';
 
     long *posizione = ricercaGlobale(query, &num_elementi);
     if (num_elementi == 0) {
-        printf("Non ci sono giochi che corrispondono ai parametri inseriti\n");
+        printf("\nNon ci sono giochi che corrispondono ai parametri inseriti\n");
         return -1;
     }
     for (unsigned short i = 0; i < num_elementi; i++) {
         gioco_t gioco = ricercaSpecifica(posizione[i]);
-        printf("CODICE GIOCO %hu\n", (i + 1));
-        printf("Titolo: %s\tEditore: %s\tGenere: %s\tAnno di pubblicazione:%hu\n", gioco.titolo,
+        printf("\nCODICE GIOCO %hu\n", (i + 1));
+        printf("Titolo:%s\tEditore:%s\tGenere:%s\tAnno di pubblicazione:%hu\n", gioco.titolo,
                gioco.editore, gioco.generi[0], gioco.anno_pubblicazione);
     }
     do {
@@ -121,13 +142,14 @@ void menuAmministratore(long codice) {
     unsigned short scelta, num;
     gioco_t gioco;
     do {
-        printf("Per il gioco selezionato, che operazione vuoi eseguire?\n");
+        printf("\n---MENU AMMINISTRATORE---\n");
+        printf("\nPer il gioco selezionato, che operazione vuoi eseguire?\n");
         printf("1. Modifica gioco\n");
         printf("2. Elimina gioco\n");
         printf("3: Visualizza recensioni\n");
         printf("4: Visualizza statistiche\n");
         printf("5: Torna al menu principale\n");
-        printf("Scelta: ");
+        printf("Scelta:");
 
         do {
             scanf("%hu", &scelta);
@@ -135,40 +157,44 @@ void menuAmministratore(long codice) {
 
         switch (scelta) {
             case 1: {
-                printf("Inserisci i dati del nuovo gioco");
+                printf("Inserisci i dati del nuovo gioco\n");
                 gioco = acquisisciGioco();
                 if (modificaGioco(codice, &gioco) == 1)
-                    printf("\n Gioco modificato\n");
+                    printf("\nGioco modificato\n");
                 break;
             }
             case 2: {
                 if (cancellaGioco(codice) == 1) {
-                    printf("\nGioco cancellato \n");
+                    printf("\nGioco cancellato\n");
                     return;
                 }
                 break;
             }
             case 3: {
                 recensioni_t *recensioni_ptr = visualizzaRecensioni(codice, &num);
-                if (num == 0) printf("Non ci sono recensioni\n");
-                printf("Le recensioni sono : \n");
-                for (int i = 0; i < num; i++) {
-                    printf("Scritta da %s: \n", recensioni_ptr[i].nome_utente);
-                    if (recensioni_ptr[i].descrizione[0] != '\0')
-                        printf("%s\n", recensioni_ptr[i].descrizione);
-                    printf("Valutazione e' : %d", recensioni_ptr[i].valutazione);
-                }
+                if (num == 0) printf("\nNon ci sono recensioni\n");
+                else {
+                    printf("\nLe recensioni sono:\n");
+                    for (int i = 0; i < num; i++) {
+                        printf("Scritta da %s:\n", recensioni_ptr[i].nome_utente);
 
+                        printf("Valutazione e':%d", recensioni_ptr[i].valutazione);
+
+                        if (recensioni_ptr[i].descrizione[0] != '\0') printf("%s\n", recensioni_ptr[i].descrizione);
+                    }
+                }
                 break;
             }
             case 4: {
                 unsigned short mode = scegliModalita();
                 gioco = ricercaSpecifica(codice);
                 if (mode == MODE_1)
-                    printf("Numero totali copie vendute: %lu \n", (unsigned long) calcolaStatistiche(MODE_1, &gioco));
-                else
-                    printf("La media di valutazione e' : %f \n", calcolaStatistiche(MODE_2, &gioco));
-
+                    printf("\nNumero totali copie vendute:%lu\n", gioco.copie_vendute);
+                else {
+                    float media = calcolaStatistiche(&gioco);
+                    if (media == 0) printf("\nNon ci sono valutazioni per questo gioco.\n");
+                    else printf("\nLa media di valutazione e':%f\n", media);
+                }
                 break;
             }
             default:
@@ -179,10 +205,11 @@ void menuAmministratore(long codice) {
 
 unsigned short scegliModalita() {
     unsigned short mode;
-    printf("In che modalità vuoi visualizzare le statistiche? \n");
+    printf("\nIn che modalita' vuoi visualizzare le statistiche?\n");
     do {
-        printf("1. Copie vendute\n");
-        printf("2. Media valutazione\n");
+        printf("%hu. Copie vendute\n", MODE_1);
+        printf("%hu. Media valutazione\n", MODE_2);
+        printf("Scelta:");
         scanf("%hu", &mode);
     } while (mode < MODE_1 || mode > MODE_2);
     return mode;
@@ -190,40 +217,45 @@ unsigned short scegliModalita() {
 
 void menuVisitatore(long codice) {
     int scelta;
-    unsigned short num;
     recensioni_t recensione;
+
     printf("Inserisci il tuo nome utente:");
     fflush(stdin);
     fgets(recensione.nome_utente, MAX_CHAR, stdin);
-    fflush(stdin);
+    //rimuovo il carattere di nuova riga alla fine
+    recensione.nome_utente[strlen(recensione.nome_utente)-1] = '\0';
+
     do {
         printf("\n---MENU UTENTE---\n");
-        printf("Che operazione vuoi eseguire?\n");
+        printf("\nChe operazione vuoi eseguire?\n");
         printf("1. Inserisci una recensione\n");
         printf("2. Visualizza le recensioni\n");
         printf("3. Acquista il gioco\n");
         printf("4. Torna al menu principale\n");
         do {
-            printf("Scelta: ");
+            printf("Scelta:");
             scanf("%d", &scelta);
         } while (scelta < 1 || scelta > 4);
+
         switch (scelta) {
             case 1:
                 do {
-                    printf("Vuoi inserire una descrizione? 1 - Si\t2 - No\nRisposta: ");
+                    printf("Vuoi inserire una descrizione? 1 - Si\t2 - No\nRisposta:");
                     scanf("%d", &scelta);
                 }while (scelta < 1 || scelta > 2);
 
                 if (scelta == 1) {
-                    printf("Inserisci la descrizione \n");
-                    scanf("%[^\n]s", recensione.descrizione);
+                    printf("Inserisci la descrizione:");
                     fflush(stdin);
+                    fgets(recensione.descrizione, MAX_CHAR, stdin);
+                    //rimuovo il carattere di nuova riga alla fine
+                    recensione.descrizione[strlen(recensione.descrizione) - 1] = '\0';
                 }
 
                 do {
-                    printf("Inserisci la valutazione numerica (da 1 a 5) \n");
+                    printf("Inserisci la valutazione numerica (da %hu a %hu):", MIN_VALUTAZIONE, MAX_VALUTAZIONE);
                     scanf("%hhu", &recensione.valutazione);
-                } while (recensione.valutazione < 1 || recensione.valutazione > 5);
+                } while (recensione.valutazione < MIN_VALUTAZIONE || recensione.valutazione > MAX_VALUTAZIONE);
 
                 if (inserisciRecensione(&recensione, &codice) == 1)
                     printf("\nRecensione inserita correttamente\n");
@@ -232,32 +264,32 @@ void menuVisitatore(long codice) {
 
                 break;
             case 2: {
-    unsigned short num;
-    recensioni_t *recensioni_ptr = NULL;  // Inizializzazione esplicita del puntatore
-    
-    // Chiamata alla funzione e controllo del risultato
-    recensioni_ptr = visualizzaRecensioni(codice, &num);
-    
-    if (recensioni_ptr == NULL || num == 0) {
-        printf("Non ci sono recensioni\n");
-    } else {
-        printf("Le recensioni sono: \n");
-        for (int i = 0; i < num; i++) {
-            printf("Scritta da %s\n", recensioni_ptr[i].nome_utente);
-            printf("Valutazione: %hu\n", recensioni_ptr[i].valutazione);
-            
-            if (recensioni_ptr[i].descrizione[0] != '\0') {
-                printf("Descrizione: %s\n", recensioni_ptr[i].descrizione);
+                unsigned short num;
+                recensioni_t *recensioni_ptr = NULL;  // Inizializzazione esplicita del puntatore
+
+                // Chiamata alla funzione e controllo del risultato
+                recensioni_ptr = visualizzaRecensioni(codice, &num);
+
+                if (recensioni_ptr == NULL || num == 0) {
+                    printf("\nNon ci sono recensioni\n");
+                } else {
+                    printf("Le recensioni sono:\n");
+                    for (int i = 0; i < num; i++) {
+                        printf("Scritta da %s\n", recensioni_ptr[i].nome_utente);
+                        printf("Valutazione:%hu\n", recensioni_ptr[i].valutazione);
+
+                        if (recensioni_ptr[i].descrizione[0] != '\0') {
+                            printf("Descrizione:%s\n", recensioni_ptr[i].descrizione);
+                        }
+                        printf("\n"); // Separatore tra le recensioni
+                    }
+
+                    // Se la funzione visualizzaRecensioni alloca memoria dinamicamente,
+                    // dovremmo liberarla dopo l'uso
+                    free(recensioni_ptr);
+                }
+                break;
             }
-            printf("\n"); // Separatore tra le recensioni
-        }
-        
-        // Se la funzione visualizzaRecensioni alloca memoria dinamicamente,
-        // dovremmo liberarla dopo l'uso
-        free(recensioni_ptr);
-    }
-    break;
-}
             case 3:
                 if (acquistaGioco(codice) == 1)
                     printf("Gioco acquistato correttamente\n");
