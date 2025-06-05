@@ -20,13 +20,17 @@ unsigned short aggiungiGioco(gioco_t gioco) {
 }
 
 unsigned short modificaGioco(const long offset, const gioco_t *gioco) {
-    FILE *file = apriCatalogo("wb+");
+    //necessario rb+ per poter modificare il file
+    FILE *file = apriCatalogo("rb+");
 
+    //posizione il puntatore nel file in cui si trova il gioco
     if (fseek(file, offset, SEEK_SET) != 0) {
         fprintf(stderr, "Errore posizione file\n");
         fclose(file);
         exit(-1);
     }
+
+    //sovrascrivo i dati del gioco nel file
     if (fwrite(gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore aggiornamento del file\n");
         fclose(file);
@@ -39,8 +43,11 @@ unsigned short modificaGioco(const long offset, const gioco_t *gioco) {
 unsigned short cancellaGioco(long offset) {
     FILE *file = apriCatalogo("rb");
 
+    //variabile usata per creare il nome del nuovo file
     char temp[20] = "new_";
     strcat(temp, NOME_FILE);
+
+    //apro il nuovo file in modalità scrittura
     FILE *new_file = fopen(temp, "wb");
 
     if (new_file == NULL) {
@@ -50,9 +57,10 @@ unsigned short cancellaGioco(long offset) {
     }
 
     gioco_t gioco;
-
-    long pos;
+    long pos; //posizione del file
+    //leggo tutti i giochi dal file e li scrivo nel nuovo file
     while (pos = ftello(file), fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
+        //scrivo solo i giochi che non corrispondono all'offset
         if (pos != offset) {
             if (fwrite(&gioco, sizeof(gioco_t), 1, new_file) != 1) {
                 fprintf(stderr, "Errore scrittura nel nuovo file\n");
@@ -62,15 +70,17 @@ unsigned short cancellaGioco(long offset) {
             }
         }
     }
-
+    //chiudo i file per salvare le modifiche
     fclose(file);
     fclose(new_file);
 
+    //elimino il file originale
     if (remove(NOME_FILE) != 0) {
         fprintf(stderr, "Errore cancellazione file\n");
         return 0;
     }
 
+    //rinomino il nuovo file con il nome di quello originale
     if (rename(temp, NOME_FILE) != 0) {
         fprintf(stderr, "Errore rinominazione file\n");
         return 0;
@@ -83,7 +93,7 @@ gioco_t ricercaSpecifica(long offset) {
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
 
-    //mi posizione in una posizione specifica
+    //posizione il puntatore nel file in cui si trova il gioco
     if (fseek(file, offset, SEEK_SET) != 0) {
         fprintf(stderr, "Errore posizione file\n");
         fclose(file);
@@ -91,7 +101,7 @@ gioco_t ricercaSpecifica(long offset) {
     }
 
     gioco_t gioco;
-    //leggo il dato dal catalogo e lo salvo
+    //leggo il gioco dal catalogo e lo salvo
     if (fread(&gioco, sizeof(gioco_t), 1, file) != 1) {
         fprintf(stderr, "Errore lettura file\n");
         fclose(file);
@@ -112,7 +122,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     }
 
     gioco_t gioco;
-    ///parametri recuperati durante l'analisi della query in ingresso dell'utente
+    ///array per i dati recuperati durante l'analisi della query
     char **parametri = analisiQuery(query, &num_param);
 
     if (parametri == NULL) {
@@ -121,7 +131,8 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     }
 
     unsigned short capacita = 1; //capacità iniziale
-    *num_elementi = 0; // Inizializza a 0
+    *num_elementi = 0; // numero di elementi trovati
+    //array per le posizioni dei giochi trovati
     long *offset = calloc(capacita, sizeof(long));
 
     if (offset == NULL) {
@@ -137,24 +148,23 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
     //apro il file in modalità lettura
     FILE *file = apriCatalogo("rb");
 
-    // Verifica lettura record
-    long pos = ftello(file);
-    int recordLetti = 0;
-    
+    long pos = ftello(file); //salvo la posizione del file corrente
+
+    //leggo tutti i giochi dal file
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
-        recordLetti++;
         valido = 0;
         for (unsigned short i = 0; i < num_param; i++) {
             // Crea una copia del parametro per non modificare l'originale
             char param_copy[MAX_CHAR];
             strncpy(param_copy, parametri[i], MAX_CHAR);
-            param_copy[MAX_CHAR - 1] = '\0'; // Assicura terminazione
+            param_copy[MAX_CHAR - 1] = '\0'; // Assicuro la terminazione della stringa
 
             switch (param_copy[0]) {
                 case TOKEN_1: { // $ - Anno di pubblicazione
                     char *value_str = param_copy + 1; // Rimuovi il token iniziale
 
-                    unsigned short anno = (unsigned short)strtol(value_str, NULL, 10); // Converti la stringa in numero
+                    // Conversione della stringa in numero
+                    unsigned short anno = (unsigned short)strtol(value_str, NULL, 10);
                     if (gioco.anno_pubblicazione == anno)
                         valido = 1;
                 }
@@ -162,8 +172,10 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
                 case TOKEN_2: { // # - Genere
                     char* genere = param_copy + 1; // Rimuovi il token iniziale
 
+                    //Comparo il genere in input con quelli presenti nel gioco
                     for (unsigned short j = 0; j < MAX_GENERI; j++) {
                         if (strstr(gioco.generi[j], genere) != NULL) {
+                            //se trovo un match, allora il gioco è valido
                             valido = 1;
                             break;
                         }
@@ -171,6 +183,7 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
                 }
                 break;
                 default: { // Ricerca generale
+                    // Ricerca in tutti i campi del gioco
                     if (strstr(gioco.titolo, parametri[i]) != NULL) valido = 1;
                     if (strstr(gioco.editore, parametri[i]) != NULL) valido = 1;
                     if (strstr(gioco.sviluppatore, parametri[i]) != NULL) valido = 1;
@@ -179,22 +192,17 @@ long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi) {
             }
             if (valido == 1) break;
         }
+
         if (valido == 1) {
-            // Quando trovo un risultato, incremento la capacità e rialloco manualmente
-            if (*num_elementi >= capacita) {
-                capacita++;
-                long *nuovo_offset = realloc(offset, capacita * sizeof(long));
-                if (nuovo_offset == NULL) {
-                    // In caso di errore, libera la memoria e termina
-                    for (unsigned short i = 0; i < num_param; i++) {
-                        free(parametri[i]);
-                    }
-                    free(parametri);
-                    free(offset);
-                    fclose(file);
-                    return NULL;
+            if (checkMemory(num_elementi, &capacita, sizeof(long), sizeof(long*), (void ***)&offset) == 0) {
+                // In caso di errore, libera la memoria e termina
+                for (unsigned short i = 0; i < num_param; i++) {
+                    free(parametri[i]);
                 }
-                offset = nuovo_offset;
+                free(parametri);
+                free(offset);
+                fclose(file);
+                return NULL;
             }
             
             offset[*num_elementi] = pos;
@@ -272,6 +280,7 @@ recensioni_t *visualizzaRecensioni(long offset, unsigned short *num_recensioni) 
 float calcolaStatistiche(gioco_t *gioco) {
     float media = 0, num_recensioni = 0;
     for (unsigned short i = 0; i < MAX_RECENSIONI; i++) {
+        //cerco le recensioni non vuote
         if (gioco -> recensioni[i].nome_utente[0] != '\0') {
             media += (float) gioco -> recensioni[i].valutazione;
             num_recensioni++;
