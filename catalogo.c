@@ -13,6 +13,10 @@ void mostraRecensioni(long codice);
 
 int main(void) {
     short ruolo = -1;
+
+    // Carica i giochi dal catalogo
+    caricaGiochi();
+
     // Validazione input utente per determinare il ruolo
     do {
         printf("Inserisci il tuo ruolo (1 = Amministratore, 0 = Visitatore):");
@@ -140,7 +144,7 @@ long ricercaGioco() {
             strcat(generi, gioco.generi[i]);
             if (gioco.generi[i + 1][0] != '\0') strcat(generi, ", ");
         }
-        printf("%-40s%-40s%-40s%-10hu\n",
+        printf("%-38s%-38s%-38s%hu\n",
             gioco.titolo, gioco.editore, gioco.sviluppatore, gioco.anno_pubblicazione);
         printf("%s\n", generi);
         printf("Descrizione: %s\n", gioco.descrizione);

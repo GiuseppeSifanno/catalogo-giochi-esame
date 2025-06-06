@@ -108,4 +108,9 @@ typedef struct gioco {
     char generi[MAX_GENERI][MAX_CHAR];
 }gioco_t;
 
+/**
+ *
+ */
+void caricaGiochi();
+
 #endif //GIOCO_H
