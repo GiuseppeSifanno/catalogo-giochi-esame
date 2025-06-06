@@ -109,7 +109,8 @@ typedef struct gioco {
 }gioco_t;
 
 /**
- *
+ * Funzione che parte all'inizio di ogni esecuzione, riempie il file con 20 giochi.
+ * Se il file è già presente vengono aggiunti solo i giochi che mancano, se ce ne sono
  */
 void caricaGiochi();
 

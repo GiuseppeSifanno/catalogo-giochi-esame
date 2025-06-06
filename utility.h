@@ -9,6 +9,10 @@
 #include <stdio.h>
 
 #ifndef CLEAR_INPUT_BUFFER
+/**
+ * @brief Macro per pulire il buffer dopo ogni scanf
+ * Non è necessario utilizzarla dopo fgets() poiché è sicura
+ */
 #define CLEAR_INPUT_BUFFER() while (getchar() != '\n' && getchar() != EOF)
 #endif
 

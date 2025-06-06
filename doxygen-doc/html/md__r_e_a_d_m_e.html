@@ -117,6 +117,15 @@ Informazioni generali</h1>
 <li><b>Blocco</b>: struttura fissa che rappresenta un gioco.</li>
 <li><b>Parametro specifico</b>: identificato da un simbolo speciale (<code>#</code> o <code>$</code>).</li>
 </ul>
+<blockquote class="doxtable">
+<p><b>fflush(stdin)</b> è sostituito dalla macro <b>CLEAR_INPUT_BUFFER()</b> poiché non funziona come dovrebbe su tutti i SO (ad esempio MAC) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>Ad ogni avvio del programma parte una funzione che inserisce in maniera automatica 20 giochi all'interno del file, grazie ad altre funzioni il file viene creato se non esiste, se quest'ultimo invece esiste già allora si verifica che quei giochi siano già presenti, in caso lo siano non si procede nella sovrascrittura, altrimenti verranno aggiunti in append </p>
+</blockquote>
+<blockquote class="doxtable">
+<p><b>Nota per le recensioni:</b> Per quest'ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc... </p>
+</blockquote>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Definizione dei campi di un gioco</h1>
 <p>Il gioco è rappresentato da una <em>struttura</em> dati di tipo <b>gioco_t</b>, i campi di quest'ultima sono:</p>
@@ -145,35 +154,28 @@ Ruoli presenti nel progetto</h1>
 <blockquote class="doxtable">
 <p><b>Nota</b>: Quest'ultimi non hanno un'importanza molto significativa, infatti non sono presenti meccanismi di sicurezza per l'accesso ad ognuno dei due ruoli, è presente una semplice scelta all'avvio del programma e l'inserimento di un nome utente per l'utente. </p>
 </blockquote>
-<blockquote class="doxtable">
-<p><b>Nota per le recensioni:</b> Per quest'ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc... </p>
-</blockquote>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Amministratore</h2>
 <p>Funzionalità di un'amministratore:</p><ol type="1">
 <li>Aggiunta di un gioco</li>
-<li>Ricerca di un gioco</li>
-</ol>
-<ul>
+<li>Ricerca di un gioco<ul>
 <li>Modifica di un gioco</li>
 <li>Cancellazione di un gioco</li>
 <li>Visualizzazione delle recensioni</li>
 <li>Visualizzazione delle statistiche</li>
 </ul>
-<ol type="1">
+</li>
 <li>Ordinamento dei giochi</li>
 </ol>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Visitatore</h2>
 <p>Funzionalità disponibili:</p><ol type="1">
-<li>Ricerca di un gioco</li>
-</ol>
-<ul>
+<li>Ricerca di un gioco<ul>
 <li>Inserimento di una recensione</li>
 <li>Visualizzazione delle recensioni</li>
 <li>Acquisto di un gioco</li>
 </ul>
-<ol type="1">
+</li>
 <li>Ordinamento dei giochi</li>
 </ol>
 <h1><a class="anchor" id="autotoc_md6"></a>

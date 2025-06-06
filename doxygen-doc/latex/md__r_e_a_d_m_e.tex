@@ -13,7 +13,19 @@ ll caso di studio deve simulare una parte delle funzionalità di una piattaforma
 \item {\bfseries{Offset}}\+: posizione in byte all\textquotesingle{}interno del file binario.
 \item {\bfseries{Blocco}}\+: struttura fissa che rappresenta un gioco.
 \item {\bfseries{Parametro specifico}}\+: identificato da un simbolo speciale ({\ttfamily \#} o {\ttfamily \$}).
-\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{\texorpdfstring{Definizione dei campi di un gioco}{Definizione dei campi di un gioco}}\label{md__r_e_a_d_m_e_autotoc_md2}
+\end{DoxyItemize}
+
+\begin{quote}
+{\bfseries{fflush(stdin)}} è sostituito dalla macro {\bfseries{CLEAR\+\_\+\+INPUT\+\_\+\+BUFFER()}} poiché non funziona come dovrebbe su tutti i SO (ad esempio MAC) \end{quote}
+
+
+\begin{quote}
+Ad ogni avvio del programma parte una funzione che inserisce in maniera automatica 20 giochi all\textquotesingle{}interno del file, grazie ad altre funzioni il file viene creato se non esiste, se quest\textquotesingle{}ultimo invece esiste già allora si verifica che quei giochi siano già presenti, in caso lo siano non si procede nella sovrascrittura, altrimenti verranno aggiunti in append \end{quote}
+
+
+\begin{quote}
+{\bfseries{Nota per le recensioni\+:}} Per quest\textquotesingle{}ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc... \end{quote}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{\texorpdfstring{Definizione dei campi di un gioco}{Definizione dei campi di un gioco}}\label{md__r_e_a_d_m_e_autotoc_md2}
 Il gioco è rappresentato da una {\itshape struttura} dati di tipo {\bfseries{gioco\+\_\+t}}, i campi di quest\textquotesingle{}ultima sono\+:
 
 
@@ -42,35 +54,27 @@ All\textquotesingle{}interno del progetto ci sono due ruoli\+:
 
 \begin{quote}
 {\bfseries{Nota}}\+: Quest\textquotesingle{}ultimi non hanno un\textquotesingle{}importanza molto significativa, infatti non sono presenti meccanismi di sicurezza per l\textquotesingle{}accesso ad ognuno dei due ruoli, è presente una semplice scelta all\textquotesingle{}avvio del programma e l\textquotesingle{}inserimento di un nome utente per l\textquotesingle{}utente. \end{quote}
-
-
-\begin{quote}
-{\bfseries{Nota per le recensioni\+:}} Per quest\textquotesingle{}ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc... \end{quote}
 \hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{\texorpdfstring{Amministratore}{Amministratore}}\label{md__r_e_a_d_m_e_autotoc_md4}
 Funzionalità di un\textquotesingle{}amministratore\+:
 \begin{DoxyEnumerate}
 \item Aggiunta di un gioco
 \item Ricerca di un gioco
-\end{DoxyEnumerate}
 \begin{DoxyItemize}
 \item Modifica di un gioco
 \item Cancellazione di un gioco
 \item Visualizzazione delle recensioni
 \item Visualizzazione delle statistiche
 \end{DoxyItemize}
-\begin{DoxyEnumerate}
 \item Ordinamento dei giochi
 \end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{\texorpdfstring{Visitatore}{Visitatore}}\label{md__r_e_a_d_m_e_autotoc_md5}
 Funzionalità disponibili\+:
 \begin{DoxyEnumerate}
 \item Ricerca di un gioco
-\end{DoxyEnumerate}
 \begin{DoxyItemize}
 \item Inserimento di una recensione
 \item Visualizzazione delle recensioni
 \item Acquisto di un gioco
 \end{DoxyItemize}
-\begin{DoxyEnumerate}
 \item Ordinamento dei giochi
 \end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysection{\texorpdfstring{Funzionionalità del sistema}{Funzionionalità del sistema}}\label{md__r_e_a_d_m_e_autotoc_md6}
 \hypertarget{md__r_e_a_d_m_e_autotoc_md7}{}\doxysubsection{\texorpdfstring{Funzione di ricerca}{Funzione di ricerca}}\label{md__r_e_a_d_m_e_autotoc_md7}

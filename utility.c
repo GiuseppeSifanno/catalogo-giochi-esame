@@ -313,7 +313,7 @@ void shellSort(gioco_t *giochi, unsigned long *dim, unsigned short mode) {
             } else {
                 // Per la modalità 2 (media valutazione)
                 for (j = i - gap; j >= 0; j -= gap) {
-                    if (calcolaStatistiche(&giochi[i]) < calcolaStatistiche(&giochi[j]))
+                    if (calcolaStatistiche(&giochi[i]) > calcolaStatistiche(&giochi[j]))
                         giochi[j + gap] = giochi[j];
                     else
                         break;
