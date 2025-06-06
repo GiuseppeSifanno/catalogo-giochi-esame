@@ -1,0 +1,378 @@
+\doxysection{catalogolib.\+c}
+\hypertarget{catalogolib_8c_source}{}\label{catalogolib_8c_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{catalogolib_8h}{catalogolib.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00003}\mbox{\hyperlink{catalogolib_8h_a7bf1fb2c6ec605b4902b522cd8bf5cca}{00003}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ aggiungiGioco(gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00004}00004\ \ \ \ \ \textcolor{comment}{//\ Controlliamo\ se\ il\ gioco\ è\ già\ presente\ nel\ catalogo}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00005}00005\ \ \ \ \ \textcolor{keywordflow}{if}\ (isAlredyAdded(\mbox{\hyperlink{structgioco}{gioco}})\ ==\ 1)\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00007}00007\ \ \ \ \ \textcolor{comment}{//\ Apro\ il\ file\ in\ modalità\ scrittura}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00008}00008\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}ab"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00010}00010\ \ \ \ \ \textcolor{comment}{//\ Scrivo\ il\ gioco\ nel\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00011}00011\ \ \ \ \ \textcolor{keywordflow}{if}\ (fwrite(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ !=\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00012}00012\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ scrittura\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00013}00013\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00014}00014\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00015}00015\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00017}00017\ \ \ \ \ \textcolor{comment}{//\ Chiudo\ il\ file\ e\ salvo\ le\ modifiche}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00018}00018\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00019}00019\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00020}00020\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00022}\mbox{\hyperlink{catalogolib_8h_ab106300a9d3d443f4738f754528d1a6b}{00022}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ modificaGioco(\textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ offset,\ \textcolor{keyword}{const}\ gioco\_t\ *\mbox{\hyperlink{structgioco}{gioco}})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//Necessario\ rb+\ per\ poter\ modificare\ il\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00024}00024\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb+"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00026}00026\ \ \ \ \ \textcolor{comment}{//\ Posizione\ il\ puntatore\ nel\ file\ in\ cui\ si\ trova\ il\ gioco}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00027}00027\ \ \ \ \ \textcolor{keywordflow}{if}\ (fseek(file,\ offset,\ SEEK\_SET)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ posizione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00031}00031\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//\ Sovrascrivo\ i\ dati\ del\ gioco\ nel\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{if}\ (fwrite(\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ !=\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00035}00035\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ aggiornamento\ del\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00038}00038\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00039}00039\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00040}00040\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00041}00041\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00043}\mbox{\hyperlink{catalogolib_8h_ad52d7a31ba85a790f9899807dce0657f}{00043}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ cancellaGioco(\textcolor{keywordtype}{long}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00044}00044\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00046}00046\ \ \ \ \ \textcolor{comment}{//\ Variabile\ usata\ per\ creare\ il\ nome\ del\ nuovo\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00047}00047\ \ \ \ \ \textcolor{keywordtype}{char}\ temp[20]\ =\ \textcolor{stringliteral}{"{}new\_"{}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00048}00048\ \ \ \ \ strcat(temp,\ NOME\_FILE);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00050}00050\ \ \ \ \ \textcolor{comment}{//\ Apro\ il\ nuovo\ file\ in\ modalità\ scrittura}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00051}00051\ \ \ \ \ FILE\ *new\_file\ =\ fopen(temp,\ \textcolor{stringliteral}{"{}wb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_file\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ apertura\ nuovo\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00059}00059\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00060}00060\ \ \ \ \ \textcolor{keywordtype}{long}\ pos;\ \textcolor{comment}{//\ Posizione\ del\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00061}00061\ \ \ \ \ \textcolor{comment}{//\ Leggo\ tutti\ i\ giochi\ dal\ file\ e\ li\ scrivo\ nel\ nuovo\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00062}00062\ \ \ \ \ \textcolor{keywordflow}{while}\ (pos\ =\ ftello(file),\ fread(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ ==\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scrivo\ solo\ i\ giochi\ che\ non\ corrispondono\ all'offset}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ !=\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (fwrite(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ new\_file)\ !=\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ scrittura\ nel\ nuovo\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fclose(new\_file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00072}00072\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//\ Chiudo\ i\ file\ per\ salvare\ le\ modifiche}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00074}00074\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00075}00075\ \ \ \ \ fclose(new\_file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00077}00077\ \ \ \ \ \textcolor{comment}{//\ Elimino\ il\ file\ originale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00078}00078\ \ \ \ \ \textcolor{keywordflow}{if}\ (remove(NOME\_FILE)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00079}00079\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ cancellazione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00080}00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00081}00081\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00083}00083\ \ \ \ \ \textcolor{comment}{//\ Rinomino\ il\ nuovo\ file\ con\ il\ nome\ di\ quello\ originale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{if}\ (rename(temp,\ NOME\_FILE)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00085}00085\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ rinominazione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00087}00087\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00089}00089\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00090}00090\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00092}\mbox{\hyperlink{catalogolib_8h_a000845e013ca6ed91a76892c601ee71a}{00092}}\ gioco\_t\ ricercaSpecifica(\textcolor{keywordtype}{long}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00093}00093\ \ \ \ \ \textcolor{comment}{//\ Apro\ il\ file\ in\ modalità\ lettura}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00094}00094\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00096}00096\ \ \ \ \ \textcolor{comment}{//\ Posizione\ il\ puntatore\ nel\ file\ in\ cui\ si\ trova\ il\ gioco}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{if}\ (fseek(file,\ offset,\ SEEK\_SET)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ posizione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00100}00100\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00101}00101\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00103}00103\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00104}00104\ \ \ \ \ \textcolor{comment}{//\ Leggo\ il\ gioco\ dal\ catalogo\ e\ lo\ salvo}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00105}00105\ \ \ \ \ \textcolor{keywordflow}{if}\ (fread(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ !=\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00106}00106\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ lettura\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00108}00108\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00109}00109\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00111}00111\ \ \ \ \ \textcolor{comment}{//\ Chiudo\ il\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00112}00112\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00113}00113\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structgioco}{gioco}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00114}00114\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00116}\mbox{\hyperlink{catalogolib_8h_a55e4ab7f9cf0dee22e16bb2c72776421}{00116}}\ \textcolor{keywordtype}{long}\ *ricercaGlobale(\textcolor{keywordtype}{char}\ query[\mbox{\hyperlink{gioco_8h_a82acb32225c05e9aa4c524c40bc5852a}{MAX\_CHAR}}],\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ *num\_elementi)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00117}00117\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ num\_param\ =\ 0,\ valido\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00119}00119\ \ \ \ \ \textcolor{comment}{//\ Trasforma\ la\ stringa\ in\ ingresso\ in\ minuscolo}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00120}00120\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ query[i];\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ query[i]\ =\ (char)\ tolower(query[i]);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00122}00122\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00124}00124\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00125}00125\ \ \ \ \ \textcolor{comment}{//\ Array\ per\ i\ dati\ recuperati\ durante\ l'analisi\ della\ query}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00126}00126\ \ \ \ \ \textcolor{keywordtype}{char}\ **parametri\ =\ analisiQuery(query,\ \&num\_param);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (parametri\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00129}00129\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ di\ analisi\ query\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00131}00131\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00133}00133\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ capacita\ =\ 1;\ \textcolor{comment}{//\ Capacità\ iniziale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00134}00134\ \ \ \ \ *num\_elementi\ =\ 0;\ \textcolor{comment}{//\ Numero\ di\ elementi\ trovati}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00135}00135\ \ \ \ \ \textcolor{comment}{//\ Array\ per\ le\ posizioni\ dei\ giochi\ trovati}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00136}00136\ \ \ \ \ \textcolor{keywordtype}{long}\ *offset\ =\ calloc(capacita,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{long}));}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00138}00138\ \ \ \ \ \textcolor{keywordflow}{if}\ (offset\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Libera\ la\ memoria\ allocata\ per\ i\ parametri}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ num\_param;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ free(parametri[i]);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00142}00142\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00143}00143\ \ \ \ \ \ \ \ \ free(parametri);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00144}00144\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ di\ allocazione\ memoria\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00145}00145\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00146}00146\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00148}00148\ \ \ \ \ \textcolor{comment}{//\ Apri\ il\ file\ in\ modalità\ lettura}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00149}00149\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00151}00151\ \ \ \ \ \textcolor{keywordtype}{long}\ pos\ =\ ftello(file);\ \textcolor{comment}{//\ Salva\ la\ posizione\ del\ file\ corrente}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00153}00153\ \ \ \ \ \textcolor{comment}{//\ Leggi\ tutti\ i\ giochi\ dal\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00154}00154\ \ \ \ \ \textcolor{keywordflow}{while}\ (fread(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ ==\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00155}00155\ \ \ \ \ \ \ \ \ valido\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00156}00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ num\_param;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Crea\ una\ copia\ del\ parametro\ per\ non\ modificare\ l'originale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ param\_copy[\mbox{\hyperlink{gioco_8h_a82acb32225c05e9aa4c524c40bc5852a}{MAX\_CHAR}}];}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ strncpy(param\_copy,\ parametri[i],\ \mbox{\hyperlink{gioco_8h_a82acb32225c05e9aa4c524c40bc5852a}{MAX\_CHAR}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ param\_copy[\mbox{\hyperlink{gioco_8h_a82acb32225c05e9aa4c524c40bc5852a}{MAX\_CHAR}}\ -\/\ 1]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};\ \textcolor{comment}{//\ Assicura\ la\ terminazione\ della\ stringa}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (param\_copy[0])\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_1:\ \{\ \textcolor{comment}{//\ \$\ -\/\ Anno\ di\ pubblicazione}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *value\_str\ =\ param\_copy\ +\ 1;\ \textcolor{comment}{//\ Rimuovi\ il\ token\ iniziale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Conversione\ della\ stringa\ in\ numero}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ anno\ =\ (\textcolor{keywordtype}{unsigned}\ short)strtol(value\_str,\ NULL,\ 10);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a044fae09f4001e7f223e4efcd7bbe5c6}{anno\_pubblicazione}}\ ==\ anno)}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ valido\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_2:\ \{\ \textcolor{comment}{//\ \#\ -\/\ Genere}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ genere\ =\ param\_copy\ +\ 1;\ \textcolor{comment}{//\ Rimuovi\ il\ token\ iniziale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Compara\ il\ genere\ in\ input\ con\ quelli\ presenti\ nel\ gioco}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ j\ =\ 0;\ j\ <\ \mbox{\hyperlink{gioco_8h_a2b67e9557711337c2994fbf5d53efc70}{MAX\_GENERI}};\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strstr(\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a454fe64356cc642b5a7f156bf8c469fb}{generi}}[j],\ genere)\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Se\ trovi\ un\ match,\ allora\ il\ gioco\ è\ valido}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ valido\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \{\ \textcolor{comment}{//\ Ricerca\ generale}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ricerca\ in\ tutti\ i\ campi\ del\ gioco}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strstr(\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a531b9ba25c59b479bbec9eca56efbd10}{titolo}},\ parametri[i])\ !=\ NULL)\ valido\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strstr(\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a6550af586037ae3b9ce3683aaa22d80d}{editore}},\ parametri[i])\ !=\ NULL)\ valido\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strstr(\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_aa30c0934e6686673eab24900a45cf639}{sviluppatore}},\ parametri[i])\ !=\ NULL)\ valido\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (valido\ ==\ 1)\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00194}00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (valido\ ==\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (checkMemory(num\_elementi,\ \&capacita,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{long}),\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{long}*),\ (\textcolor{keywordtype}{void}\ ***)\&offset)\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ In\ caso\ di\ errore,\ libera\ la\ memoria\ e\ termina}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ num\_param;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(parametri[i]);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(parametri);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(offset);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ offset[*num\_elementi]\ =\ pos;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ (*num\_elementi)++;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00211}00211\ \ \ \ \ \ \ \ \ pos\ =\ ftello(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00212}00212\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00214}00214\ \ \ \ \ \textcolor{comment}{//\ Libera\ la\ memoria\ allocata\ per\ i\ parametri}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00215}00215\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ num\_param;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00216}00216\ \ \ \ \ \ \ \ \ free(parametri[i]);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00217}00217\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00218}00218\ \ \ \ \ free(parametri);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00220}00220\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00221}00221\ \ \ \ \ \textcolor{keywordflow}{return}\ offset;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00222}00222\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00224}\mbox{\hyperlink{catalogolib_8h_a7957ea353b1dee02172d9870a40963f6}{00224}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ inserisciRecensione(recensioni\_t\ *recensione,\ \textcolor{keywordtype}{long}\ *offset)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00225}00225\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb+"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00226}00226\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}}\ =\ ricercaSpecifica(*offset);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00228}00228\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gioco_8h_af8ea342a53c750844ac95c177d5251b3}{MAX\_RECENSIONI}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00229}00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a0c032607ca44d19ec4885637b5efd445}{recensioni}}[i].\mbox{\hyperlink{structrecensioni_a32d0e8dd0efb30a8153b6d5f34b31d07}{nome\_utente}}[0]\ ==\ \textcolor{charliteral}{'\(\backslash\)0'})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ memcpy(\&\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a0c032607ca44d19ec4885637b5efd445}{recensioni}}[i],\ recensione,\ \textcolor{keyword}{sizeof}(recensioni\_t));}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Modifica\ le\ informazioni\ del\ gioco\ con\ la\ nuova\ recensione}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ modificaGioco(*offset,\ \&\mbox{\hyperlink{structgioco}{gioco}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00234}00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00235}00235\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00236}00236\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00237}00237\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00238}00238\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00239}00239\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00241}\mbox{\hyperlink{catalogolib_8h_a48d5bc1c12331104cd2ef7249dc34f73}{00241}}\ recensioni\_t\ *visualizzaRecensioni(\textcolor{keywordtype}{long}\ offset,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ *num\_recensioni)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00242}00242\ \ \ \ \ \textcolor{comment}{//\ Recupera\ il\ gioco\ dal\ catalogo\ tramite\ l'offset}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00243}00243\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}}\ =\ ricercaSpecifica(offset);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00245}00245\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ capacita\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00246}00246\ \ \ \ \ recensioni\_t\ *\mbox{\hyperlink{structrecensioni}{recensioni}}\ =\ calloc(capacita,\ \textcolor{keyword}{sizeof}(recensioni\_t));}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00247}00247\ \ \ \ \ *num\_recensioni\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structrecensioni}{recensioni}}\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ di\ allocazione\ memoria\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00252}00252\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00254}00254\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gioco_8h_af8ea342a53c750844ac95c177d5251b3}{MAX\_RECENSIONI}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a0c032607ca44d19ec4885637b5efd445}{recensioni}}[i].\mbox{\hyperlink{structrecensioni_a32d0e8dd0efb30a8153b6d5f34b31d07}{nome\_utente}}[0]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Espandi\ array\ se\ serve}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*num\_recensioni\ >=\ capacita)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capacita++;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ recensioni\_t\ *temp\ =\ realloc(\mbox{\hyperlink{structrecensioni}{recensioni}},\ capacita\ *\ \textcolor{keyword}{sizeof}(recensioni\_t));}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (temp\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ realloc\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structrecensioni}{recensioni}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structrecensioni}{recensioni}}\ =\ temp;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00267}00267\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copia\ la\ recensione}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structrecensioni}{recensioni}}[*num\_recensioni]\ =\ \mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_a0c032607ca44d19ec4885637b5efd445}{recensioni}}[i];}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ (*num\_recensioni)++;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00271}00271\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00272}00272\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00274}00274\ \ \ \ \ \textcolor{keywordflow}{if}\ (*num\_recensioni\ >\ 0)\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structrecensioni}{recensioni}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00275}00275\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00276}00276\ \ \ \ \ free(\mbox{\hyperlink{structrecensioni}{recensioni}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00277}00277\ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00278}00278\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00280}\mbox{\hyperlink{catalogolib_8h_ab4a3b23b861bd79f3d03483e7b45c284}{00280}}\ \textcolor{keywordtype}{float}\ calcolaStatistiche(gioco\_t\ *\mbox{\hyperlink{structgioco}{gioco}})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00281}00281\ \ \ \ \ \textcolor{keywordtype}{float}\ media\ =\ 0,\ num\_recensioni\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gioco_8h_af8ea342a53c750844ac95c177d5251b3}{MAX\_RECENSIONI}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00283}00283\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Cerca\ le\ recensioni\ non\ vuote}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00284}00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structgioco}{gioco}}\ -\/>\ \mbox{\hyperlink{structrecensioni}{recensioni}}[i].nome\_utente[0]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'})\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ media\ +=\ (float)\ \mbox{\hyperlink{structgioco}{gioco}}\ -\/>\ \mbox{\hyperlink{structrecensioni}{recensioni}}[i].valutazione;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ num\_recensioni++;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00288}00288\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00289}00289\ \ \ \ \ \textcolor{keywordflow}{if}\ (num\_recensioni\ ==\ 0)\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00290}00290\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00291}00291\ \ \ \ \ \textcolor{keywordflow}{return}\ media\ /\ num\_recensioni;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00292}00292\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00294}\mbox{\hyperlink{catalogolib_8h_a86f4ca1357238918e9ff6039a83440aa}{00294}}\ gioco\_t\ *ordinaStatistiche(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ mode,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ *num\_elementi)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00295}00295\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00296}00296\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00297}00297\ \ \ \ \ \textcolor{comment}{//\ Partendo\ dalla\ fine\ ho\ la\ dimensione\ in\ byte\ del\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00298}00298\ \ \ \ \ \textcolor{keywordflow}{if}\ (fseek(file,\ 0,\ SEEK\_END)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00299}00299\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ posizione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00300}00300\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00301}00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00302}00302\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00303}00303\ \ \ \ \ \textcolor{keywordtype}{long}\ file\_size\ =\ ftell(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00304}00304\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00305}00305\ \ \ \ \ \textcolor{comment}{//\ Verifica\ che\ il\ file\ non\ sia\ vuoto}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00306}00306\ \ \ \ \ \textcolor{keywordflow}{if}\ (file\_size\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ *num\_elementi\ =\ file\_size\ /\ \textcolor{keyword}{sizeof}(gioco\_t);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00308}00308\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00309}00309\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ File\ vuoto,\ restituisci\ NULL}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00310}00310\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00311}00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00312}00312\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00313}00313\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00314}00314\ \ \ \ \ \textcolor{comment}{//\ Alloca\ memoria\ per\ i\ giochi}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00315}00315\ \ \ \ \ gioco\_t\ *giochi\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00316}00316\ \ \ \ \ \textcolor{keywordflow}{if}\ (*num\_elementi\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00317}00317\ \ \ \ \ \ \ \ \ giochi\ =\ calloc(*num\_elementi,\ \textcolor{keyword}{sizeof}(gioco\_t));}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00318}00318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (giochi\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ di\ allocazione\ memoria\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00323}00323\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00324}00324\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Torna\ all'inizio\ del\ file}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00325}00325\ \ \ \ \ \ \ \ \ fseek(file,\ 0,\ SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00326}00326\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00327}00327\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Leggi\ tutti\ i\ giochi}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00328}00328\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ *num\_elementi;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(fread(\&giochi[i],\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ !=\ 1)\{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ lettura\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(giochi);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00335}00335\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00336}00336\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00337}00337\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00338}00338\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ordina\ i\ giochi}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00339}00339\ \ \ \ \ \ \ \ \ shellSort(giochi,\ num\_elementi,\ mode);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00340}00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ giochi;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00341}00341\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00342}00342\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00343}00343\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00344}00344\ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00345}00345\ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00346}00346\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00347}\mbox{\hyperlink{catalogolib_8h_a938c0e415afc7e876489a484bbe39d79}{00347}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ acquistaGioco(\textcolor{keywordtype}{long}\ offset)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00348}00348\ \ \ \ \ FILE\ *file\ =\ apriCatalogo(\textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00349}00349\ \ \ \ \ gioco\_t\ \mbox{\hyperlink{structgioco}{gioco}};}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00351}00351\ \ \ \ \ \textcolor{keywordflow}{if}\ (fseek(file,\ offset,\ SEEK\_SET)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00352}00352\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ posizione\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00353}00353\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00354}00354\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00355}00355\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00356}00356\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00357}00357\ \ \ \ \ \textcolor{keywordflow}{if}\ (fread(\&\mbox{\hyperlink{structgioco}{gioco}},\ \textcolor{keyword}{sizeof}(gioco\_t),\ 1,\ file)\ !=\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00358}00358\ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Errore\ lettura\ file\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00359}00359\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00360}00360\ \ \ \ \ \ \ \ \ exit(-\/1);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00361}00361\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00362}00362\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00363}00363\ \ \ \ \ \textcolor{comment}{//\ Chiudi\ il\ file\ poiché\ non\ più\ necessario}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00364}00364\ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00365}00365\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00366}00366\ \ \ \ \ \textcolor{comment}{//\ Incrementa\ il\ numero\ di\ copie\ vendute\ del\ gioco}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00367}00367\ \ \ \ \ \mbox{\hyperlink{structgioco}{gioco}}.\mbox{\hyperlink{structgioco_adbc1dcbce1025f5350fe14ad7f818a15}{copie\_vendute}}++;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00368}00368\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00369}00369\ \ \ \ \ \textcolor{comment}{//\ Modifica\ il\ gioco\ con\ le\ nuove\ informazioni\ nel\ catalogo}}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00370}00370\ \ \ \ \ \textcolor{keywordflow}{if}\ (modificaGioco(offset,\ \&\mbox{\hyperlink{structgioco}{gioco}})\ ==\ 1)\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00372}00372\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{catalogolib_8c_source_l00373}00373\ \}}
+
+\end{DoxyCode}
