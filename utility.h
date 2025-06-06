@@ -8,6 +8,10 @@
 #include "catalogolib.h"
 #include <stdio.h>
 
+#ifndef CLEAR_INPUT_BUFFER
+#define CLEAR_INPUT_BUFFER() while (getchar() != '\n' && getchar() != EOF)
+#endif
+
 #ifndef DELIM
 /**
  * @brief Delimitatore usato per separare i parametri inseriti all'interno della query

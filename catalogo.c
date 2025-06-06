@@ -21,7 +21,7 @@ int main(void) {
     do {
         printf("Inserisci il tuo ruolo (1 = Amministratore, 0 = Visitatore):");
         scanf("%hd", &ruolo);
-
+        CLEAR_INPUT_BUFFER()
         if (ruolo != 0 && ruolo != 1) {
             printf("Ruolo non valido. Riprova.\n");
         }
@@ -38,6 +38,7 @@ int main(void) {
                 printf("4. Inserisci un nuovo gioco\n");
                 printf("Scelta:");
                 scanf("%d", &scelta);
+                CLEAR_INPUT_BUFFER();
             } while (scelta < 1 || scelta > 4);
         } else {
             do {
@@ -46,12 +47,12 @@ int main(void) {
                 printf("3. Ordina statistiche \n");
                 printf("Scelta:");
                 scanf("%d", &scelta);
+                CLEAR_INPUT_BUFFER();
             } while (scelta < 1 || scelta > 3);
         }
 
         switch (scelta) {
             case 1: {
-                printf("Uscita...\n");
                 break;
             }
             case 2: {
@@ -109,11 +110,12 @@ int main(void) {
         }
     } while (scelta != 1);
 
-    system("pause");
+    printf("Premi Invio per uscire...");
+    getchar();
 }
 
 long ricercaGioco() {
-    char query[MAX_CHAR];
+    char query[MAX_CHAR] = "";
     unsigned short num_elementi;
     long codice;
     printf("\nInserisci la query per la ricerca sapendo che le informazioni vanno separate con una %s \n",
@@ -124,7 +126,6 @@ long ricercaGioco() {
     printf("Es: Call of duty, blizzard, #azione, #tct, $2019\n");
     printf("Es: #fps, #multiplayer -- (tutti i giochi che hanno il genere fps e/o multiplayer)\n");
     printf("Inserisci query:");
-    fflush(stdin);
     fgets(query, MAX_CHAR, stdin);
     // Rimuovi il carattere di nuova riga alla fine
     query[strlen(query) - 1] = '\0';
@@ -152,6 +153,7 @@ long ricercaGioco() {
     do {
         printf("\nInserisci il codice gioco:");
         scanf("%ld", &codice);
+        CLEAR_INPUT_BUFFER();
     } while (codice <= 0 || codice > num_elementi);
 
     // Decrementa il valore del codice perchè deve corrispondere all'indice del vettore
@@ -173,6 +175,7 @@ void menuAmministratore(long codice) {
 
         do {
             scanf("%hu", &scelta);
+            CLEAR_INPUT_BUFFER();
         } while (scelta < 1 || scelta > 5);
 
         switch (scelta) {
@@ -222,6 +225,7 @@ unsigned short scegliModalita() {
         printf("%hu. Media valutazione\n", MODE_2);
         printf("Scelta:");
         scanf("%hu", &mode);
+        CLEAR_INPUT_BUFFER();
     } while (mode < MODE_1 || mode > MODE_2);
     return mode;
 }
@@ -231,7 +235,6 @@ void menuVisitatore(long codice) {
     recensioni_t recensione;
 
     printf("Inserisci il tuo nome utente:");
-    fflush(stdin);
     fgets(recensione.nome_utente, MAX_CHAR, stdin);
     // Rimuovi il carattere di nuova riga alla fine
     recensione.nome_utente[strlen(recensione.nome_utente)-1] = '\0';
@@ -246,6 +249,7 @@ void menuVisitatore(long codice) {
         do {
             printf("Scelta:");
             scanf("%d", &scelta);
+            CLEAR_INPUT_BUFFER();
         } while (scelta < 1 || scelta > 4);
 
         switch (scelta) {
@@ -253,11 +257,11 @@ void menuVisitatore(long codice) {
                 do {
                     printf("Vuoi inserire una descrizione? 1 - Si\t2 - No\nRisposta:");
                     scanf("%d", &scelta);
+                    CLEAR_INPUT_BUFFER();
                 }while (scelta < 1 || scelta > 2);
 
                 if (scelta == 1) {
                     printf("Inserisci la descrizione:");
-                    fflush(stdin);
                     fgets(recensione.descrizione, MAX_CHAR, stdin);
                     // Rimuovi il carattere di nuova riga alla fine
                     recensione.descrizione[strlen(recensione.descrizione) - 1] = '\0';
@@ -266,6 +270,7 @@ void menuVisitatore(long codice) {
                 do {
                     printf("Inserisci la valutazione numerica (da %hu a %hu):", MIN_VALUTAZIONE, MAX_VALUTAZIONE);
                     scanf("%hhu", &recensione.valutazione);
+                    CLEAR_INPUT_BUFFER();
                 } while (recensione.valutazione < MIN_VALUTAZIONE || recensione.valutazione > MAX_VALUTAZIONE);
 
                 if (inserisciRecensione(&recensione, &codice) == 1)

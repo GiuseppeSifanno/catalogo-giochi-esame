@@ -15,57 +15,50 @@ gioco_t acquisisciGioco() {
 
     do {
         printf("\nTitolo:");
-        fflush(stdin);
         fgets(gioco.titolo, MAX_CHAR, stdin);
         // Rimuovi il carattere di nuova riga
         gioco.titolo[strlen(gioco.titolo) - 1] = '\0';
-        fflush(stdin);
         tolower_str(gioco.titolo);
     } while (strlen(gioco.titolo) == 0);
 
     do {
         printf("Editore:");
-        fflush(stdin);
         fgets(gioco.editore, MAX_CHAR, stdin);
         // Rimuovi il carattere di nuova riga
         gioco.editore[strlen(gioco.editore) - 1] = '\0';
-        fflush(stdin);
         tolower_str(gioco.editore);
     }while (strlen(gioco.editore) == 0);
 
     do {
         printf("Sviluppatore:");
-        fflush(stdin);
         fgets(gioco.sviluppatore, MAX_CHAR, stdin);
         // Rimuovi il carattere di nuova riga
         gioco.sviluppatore[strlen(gioco.sviluppatore) - 1] = '\0';
         tolower_str(gioco.sviluppatore);
-        fflush(stdin);
     }while (strlen(gioco.sviluppatore) == 0);
 
     do {
         printf("Descrizione:");
-        fflush(stdin);
         fgets(gioco.descrizione, MAX_CHAR, stdin);
         // Rimuovi il carattere di nuova riga
         gioco.descrizione[strlen(gioco.descrizione) - 1] = '\0';
         tolower_str(gioco.descrizione);
-        fflush(stdin);
     }while (strlen(gioco.descrizione) == 0);
 
     do {
         printf("Anno di pubblicazione (>= %d):", ANNO_MIN);
         scanf("%hu", &gioco.anno_pubblicazione);
+        CLEAR_INPUT_BUFFER();
     } while (gioco.anno_pubblicazione < ANNO_MIN);
 
     do {
         printf("Numero di copie vendute (>= 0):");
         scanf("%lu", &gioco.copie_vendute);
+        CLEAR_INPUT_BUFFER();
     } while (gioco.copie_vendute < 0);
 
     for (int i = 0; i < MAX_GENERI; i++) {
         printf("Genere n.%d:", (i + 1) );
-        fflush(stdin);
         fgets(gioco.generi[i], MAX_CHAR, stdin);
         // Rimuovi il carattere di nuova riga
         gioco.generi[i][strlen(gioco.generi[i]) - 1] = '\0';
