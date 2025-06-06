@@ -11,6 +11,12 @@ ll caso di studio deve simulare una parte delle funzionalità di una piattaforma
 - **Blocco**: struttura fissa che rappresenta un gioco.
 - **Parametro specifico**: identificato da un simbolo speciale (`#` o `$`).
 
+> **fflush(stdin)** è sostituito dalla macro **CLEAR_INPUT_BUFFER()** poiché non funziona come dovrebbe su tutti i SO (ad esempio MAC)
+
+> Ad ogni avvio del programma parte una funzione che inserisce in maniera automatica 20 giochi all'interno del file, grazie ad altre funzioni il file viene creato se non esiste, se quest'ultimo invece esiste già allora si verifica che quei giochi siano già presenti, in caso lo siano non si procede nella sovrascrittura, altrimenti verranno aggiunti in append
+
+> **Nota per le recensioni:** Per quest'ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc...
+
 ## Definizione dei campi di un gioco
 
 Il gioco è rappresentato da una *struttura* dati di tipo **gioco_t**, i campi di quest'ultima sono:
@@ -36,26 +42,24 @@ All'interno del progetto ci sono due ruoli:
 
 > **Nota**: Quest'ultimi non hanno un'importanza molto significativa, infatti non sono presenti meccanismi di sicurezza per l'accesso ad ognuno dei due ruoli, è presente una semplice scelta all'avvio del programma e l'inserimento di un nome utente per l'utente.
 
-> **Nota per le recensioni:** Per quest'ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc...
-
 ### Amministratore
 
 Funzionalità di un'amministratore:
 1. [Aggiunta di un gioco](#funzione-di-aggiunta)
 2. [Ricerca di un gioco](#funzione-di-ricerca)
-\* [Modifica di un gioco](#funzione-di-modifica)
-\* [Cancellazione di un gioco](#funzione-di-cancellazione)
-\* [Visualizzazione delle recensioni](#funzione-di-visualizzazione-delle-recensioni)
-\* [Visualizzazione delle statistiche](#visualizzare-le-statistiche)
+    -  [Modifica di un gioco](#funzione-di-modifica)
+    -  [Cancellazione di un gioco](#funzione-di-cancellazione)
+    -  [Visualizzazione delle recensioni](#funzione-di-visualizzazione-delle-recensioni)
+    -  [Visualizzazione delle statistiche](#visualizzare-le-statistiche)
 3. [Ordinamento dei giochi](#funzione-di-ordinamento-giochi)
 
 ### Visitatore
 
 Funzionalità disponibili:
 1. [Ricerca di un gioco](#funzione-di-ricerca)
-\* [Inserimento di una recensione](#funzione-di-inserimento-recensione)
-\* [Visualizzazione delle recensioni](#funzione-di-visualizzazione-delle-recensioni)
-\* [Acquisto di un gioco](#funzione-di-acquisto)
+    -  [Inserimento di una recensione](#funzione-di-inserimento-recensione)
+    -  [Visualizzazione delle recensioni](#funzione-di-visualizzazione-delle-recensioni)
+    -  [Acquisto di un gioco](#funzione-di-acquisto)
 2. [Ordinamento dei giochi](#funzione-di-ordinamento-giochi)
 
 # Funzionionalità del sistema
