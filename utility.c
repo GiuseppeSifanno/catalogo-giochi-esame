@@ -17,6 +17,7 @@ gioco_t acquisisciGioco() {
         printf("\nTitolo:");
         fflush(stdin);
         fgets(gioco.titolo, MAX_CHAR, stdin);
+        // Rimuovi il carattere di nuova riga
         gioco.titolo[strlen(gioco.titolo) - 1] = '\0';
         fflush(stdin);
         tolower_str(gioco.titolo);
@@ -26,6 +27,7 @@ gioco_t acquisisciGioco() {
         printf("Editore:");
         fflush(stdin);
         fgets(gioco.editore, MAX_CHAR, stdin);
+        // Rimuovi il carattere di nuova riga
         gioco.editore[strlen(gioco.editore) - 1] = '\0';
         fflush(stdin);
         tolower_str(gioco.editore);
@@ -35,6 +37,7 @@ gioco_t acquisisciGioco() {
         printf("Sviluppatore:");
         fflush(stdin);
         fgets(gioco.sviluppatore, MAX_CHAR, stdin);
+        // Rimuovi il carattere di nuova riga
         gioco.sviluppatore[strlen(gioco.sviluppatore) - 1] = '\0';
         tolower_str(gioco.sviluppatore);
         fflush(stdin);
@@ -44,6 +47,7 @@ gioco_t acquisisciGioco() {
         printf("Descrizione:");
         fflush(stdin);
         fgets(gioco.descrizione, MAX_CHAR, stdin);
+        // Rimuovi il carattere di nuova riga
         gioco.descrizione[strlen(gioco.descrizione) - 1] = '\0';
         tolower_str(gioco.descrizione);
         fflush(stdin);
@@ -63,6 +67,7 @@ gioco_t acquisisciGioco() {
         printf("Genere n.%d:", (i + 1) );
         fflush(stdin);
         fgets(gioco.generi[i], MAX_CHAR, stdin);
+        // Rimuovi il carattere di nuova riga
         gioco.generi[i][strlen(gioco.generi[i]) - 1] = '\0';
         tolower_str(gioco.generi[i]);
 
@@ -70,7 +75,7 @@ gioco_t acquisisciGioco() {
             while (1) {
                 printf("Vuoi inserire un altro genere? (Si/No):");
                 fgets(risposta, MAX_CHAR, stdin);
-                //rimuovo il carattere di nuova riga
+                // Rimuovi il carattere di nuova riga
                 risposta[strlen(risposta) - 1] = '\0';
                 tolower_str(risposta);
 
@@ -90,12 +95,12 @@ gioco_t acquisisciGioco() {
 }
 
 unsigned short isAlredyAdded(gioco_t new_gioco) {
-    //apro il file in modalità lettura
+    // Apri il file in modalità lettura
     FILE *file = apriCatalogo("rb");
     gioco_t gioco;
 
-    //1 non presente nel catalogo, 0 altrimenti
-    unsigned short int valido = 1;
+    // 1 non presente nel catalogo, 0 altrimenti
+    unsigned short int valido;
 
     while (fread(&gioco, sizeof(gioco_t), 1, file) == 1) {
         // Controllo sui campi principali
@@ -105,8 +110,8 @@ unsigned short isAlredyAdded(gioco_t new_gioco) {
             strcmp(gioco.descrizione, new_gioco.descrizione) == 0       &&
             strcmp(gioco.editore, new_gioco.editore) == 0               &&
             strcmp(gioco.sviluppatore, new_gioco.sviluppatore) == 0) {
-            // Controllo su tutti i generi
-            valido = 0; // Presupponiamo che sia lo stesso gioco
+
+            valido = 0; // Presupponi che sia lo stesso gioco
 
             // Se almeno un genere è diverso, allora non è lo stesso gioco
             for (unsigned short i = 0; i < MAX_GENERI; i++) {
@@ -116,7 +121,7 @@ unsigned short isAlredyAdded(gioco_t new_gioco) {
                 }
             }
 
-            //se non è valido, quindi è già presente nel catalogo
+            // Se non è valido, è già presente nel catalogo
             if (valido == 0) {
                 fclose(file);
                 return 1; // Gioco già presente
@@ -141,7 +146,7 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
     strncpy(query_copy, query, MAX_CHAR);
     query_copy[MAX_CHAR - 1] = '\0'; // Assicura terminazione
 
-    //variabile contenente i token
+    // Variabile contenente i token
     char *token = strtok(query_copy, DELIM);
 
     while (token != NULL) {
@@ -179,17 +184,17 @@ char **analisiQuery(char query[MAX_CHAR], unsigned short *param) {
 
             num_elementi++;
         }
-        //recupero il prossimo token
+        // Recupera il prossimo token
         token = strtok(NULL, DELIM);
     }
-    //salvo il numero di parametri, per poterli recuperare in seguito
+    // Salva il numero di parametri, per poterli recuperare in seguito
     *param = num_elementi;
     return parametri;
 }
 
 void trim(char *token) {
     char *start = token;
-    // Rimuove spazi iniziali
+    // Rimuovi spazi iniziali
     while (isspace((unsigned char) *start)) start++;
 
     // Se la stringa è vuota dopo il trimming iniziale
@@ -198,7 +203,7 @@ void trim(char *token) {
         return;
     }
 
-    // Rimuove spazi finali
+    // Rimuovi spazi finali
     char *end = start + strlen(start) - 1;
     while (end > start && isspace((unsigned char) *end)) end--;
     *(end + 1) = '\0';
@@ -208,7 +213,7 @@ void trim(char *token) {
         memmove(token, start, strlen(start) + 1);
     }
 
-    //rimuovo gli spazi tra il simbolo e il resto della stringa
+    // Rimuovi gli spazi tra il simbolo e il resto della stringa
     if (token[0] == TOKEN_1 || token[0] == TOKEN_2) {
         unsigned short j = 1;
         while (isspace((unsigned char) token[j])) {
@@ -227,7 +232,7 @@ int checkMemory(unsigned short *num_elementi, unsigned short *capacita,
         // Incrementa la capacità
         unsigned short nuova_capacita = (*capacita) + 1;
 
-        // Esegue il realloc usando dimensione_puntatore
+        // Esegui il realloc usando dimensione_puntatore
         void **nuovo_array = realloc(*array, nuova_capacita * dimensione_puntatore);
 
         if (nuovo_array == NULL) {

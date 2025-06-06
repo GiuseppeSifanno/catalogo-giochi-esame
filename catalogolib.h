@@ -64,7 +64,6 @@ unsigned short aggiungiGioco(gioco_t gioco);
  *  @returns
  *      @return 1 se il gioco è stato modificato
  *      @return 0 se il gioco <b>non</b> è stato modificato
- *
  */
 unsigned short modificaGioco(long offset, const gioco_t *gioco);
 
@@ -88,7 +87,7 @@ gioco_t ricercaSpecifica(long offset);
 /**
  * @brief Effettua una ricerca su tutto il file in base ai parametri inseriti in ingresso dall'utente
  * @param [in] query Stringa utilizzata per la ricerca
- * @param [out] num_elementi Numero degli elementi recuperati
+ * @param [in, out] num_elementi Numero degli elementi recuperati
  * @return Puntatore alla lista con la posizione di ogni gioco
  */
 long *ricercaGlobale(char query[MAX_CHAR], unsigned short *num_elementi);
