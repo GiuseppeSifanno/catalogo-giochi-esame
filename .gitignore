@@ -12,8 +12,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
-/cmake-build-debug/
-!/cmake-build-debug/catalogo.dat
+!cmake-build-debug/catalogo.dat
 
 #xml
 /.idea
