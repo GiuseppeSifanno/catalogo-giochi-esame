@@ -9,4 +9,18 @@ add_executable(catalogo_giochi_esame catalogo.c
         gioco.h
         utility.c
         utility.h
-        gioco.c)
+        gioco.c
+)
+
+add_executable(test_unity
+        tunity_catalogo.c
+        Unity-2.6.1/src/unity.h
+        Unity-2.6.1/src/unity_internals.h
+        Unity-2.6.1/src/unity.c
+        catalogolib.h
+        catalogolib.c
+        gioco.h
+        gioco.c
+        utility.h
+        utility.c
+)
