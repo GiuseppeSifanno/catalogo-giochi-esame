@@ -3,6 +3,8 @@ project(catalogo_giochi_esame C)
 
 set(CMAKE_C_STANDARD 11)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 add_executable(catalogo_giochi_esame catalogo.c
         catalogolib.c
         catalogolib.h
