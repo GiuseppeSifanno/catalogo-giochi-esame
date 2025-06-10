@@ -24,7 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "Catalogo-giochi-esame", "index.html", [
+  [ "catalogo_giochi_esame", "index.html", [
     [ "Gestione catalogo online di videogiochi", "md__r_e_a_d_m_e.html", [
       [ "Informazioni generali", "md__r_e_a_d_m_e.html#autotoc_md1", null ],
       [ "Definizione dei campi di un gioco", "md__r_e_a_d_m_e.html#autotoc_md2", null ],
@@ -71,7 +71,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"_c_make_c_compiler_id_8c_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

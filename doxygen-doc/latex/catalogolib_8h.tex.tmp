@@ -1,0 +1,311 @@
+\doxysection{catalogolib.\+h File Reference}
+\hypertarget{catalogolib_8h}{}\label{catalogolib_8h}\index{catalogolib.h@{catalogolib.h}}
+
+
+Header della libreria di funzioni per il catalogo dei giochi.  
+
+
+{\ttfamily \#include "{}gioco.\+h"{}}\newline
+{\ttfamily \#include "{}utility.\+h"{}}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for catalogolib.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned short \mbox{\hyperlink{catalogolib_8h_a7bf1fb2c6ec605b4902b522cd8bf5cca}{aggiungi\+Gioco}} (\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \mbox{\hyperlink{structgioco}{gioco}})
+\begin{DoxyCompactList}\small\item\em Aggiunge un gioco all\textquotesingle{}interno del catalogo. \end{DoxyCompactList}\item 
+unsigned short \mbox{\hyperlink{catalogolib_8h_ab106300a9d3d443f4738f754528d1a6b}{modifica\+Gioco}} (long offset, const \mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structgioco}{gioco}})
+\begin{DoxyCompactList}\small\item\em Modifica il contenuto di un gioco contenuto all\textquotesingle{}interno del file. \end{DoxyCompactList}\item 
+unsigned short \mbox{\hyperlink{catalogolib_8h_ad52d7a31ba85a790f9899807dce0657f}{cancella\+Gioco}} (long offset)
+\begin{DoxyCompactList}\small\item\em Cancella un record all\textquotesingle{}interno del file. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \mbox{\hyperlink{catalogolib_8h_a000845e013ca6ed91a76892c601ee71a}{ricerca\+Specifica}} (long offset)
+\begin{DoxyCompactList}\small\item\em Ricerca un gioco specifico. \end{DoxyCompactList}\item 
+long \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{catalogolib_8h_a55e4ab7f9cf0dee22e16bb2c72776421}{ricerca\+Globale}} (char query\mbox{[}\mbox{\hyperlink{gioco_8h_a82acb32225c05e9aa4c524c40bc5852a}{MAX\+\_\+\+CHAR}}\mbox{]}, unsigned short \texorpdfstring{$\ast$}{*}num\+\_\+elementi)
+\begin{DoxyCompactList}\small\item\em Effettua una ricerca su tutto il file in base ai parametri inseriti in ingresso dall\textquotesingle{}utente. \end{DoxyCompactList}\item 
+unsigned short \mbox{\hyperlink{catalogolib_8h_a7957ea353b1dee02172d9870a40963f6}{inserisci\+Recensione}} (\mbox{\hyperlink{structrecensioni}{recensioni\+\_\+t}} \texorpdfstring{$\ast$}{*}recensione, long \texorpdfstring{$\ast$}{*}offset)
+\begin{DoxyCompactList}\small\item\em La funzione inserisce una recensione per un gioco nel file. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structrecensioni}{recensioni\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{catalogolib_8h_a48d5bc1c12331104cd2ef7249dc34f73}{visualizza\+Recensioni}} (long offset, unsigned short \texorpdfstring{$\ast$}{*}num\+\_\+recensioni)
+\begin{DoxyCompactList}\small\item\em Recupera le recensioni di un gioco specifico. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{catalogolib_8h_ab4a3b23b861bd79f3d03483e7b45c284}{calcola\+Statistiche}} (\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structgioco}{gioco}})
+\begin{DoxyCompactList}\small\item\em Calcola la media delle valutazioni del gioco selezionato. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{catalogolib_8h_a86f4ca1357238918e9ff6039a83440aa}{ordina\+Statistiche}} (unsigned short mode, unsigned long \texorpdfstring{$\ast$}{*}num\+\_\+elementi)
+\begin{DoxyCompactList}\small\item\em Ordina tutti i giochi all\textquotesingle{}interno del catalogo, in base alla modalità specificata in ingresso. \end{DoxyCompactList}\item 
+unsigned short \mbox{\hyperlink{catalogolib_8h_a938c0e415afc7e876489a484bbe39d79}{acquista\+Gioco}} (long offset)
+\begin{DoxyCompactList}\small\item\em Acquista il gioco e incrementa il numero delle \doxylink{structgioco_adbc1dcbce1025f5350fe14ad7f818a15}{copie\+\_\+vendute}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header della libreria di funzioni per il catalogo dei giochi. 
+
+
+
+Definition in file \mbox{\hyperlink{catalogolib_8h_source}{catalogolib.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{catalogolib_8h_a938c0e415afc7e876489a484bbe39d79}\index{catalogolib.h@{catalogolib.h}!acquistaGioco@{acquistaGioco}}
+\index{acquistaGioco@{acquistaGioco}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{acquistaGioco()}{acquistaGioco()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a938c0e415afc7e876489a484bbe39d79} 
+unsigned short acquista\+Gioco (\begin{DoxyParamCaption}\item[{long}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+Acquista il gioco e incrementa il numero delle \doxylink{structgioco_adbc1dcbce1025f5350fe14ad7f818a15}{copie\+\_\+vendute}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+1 se l\textquotesingle{}acquisto è andato a buon fine 
+
+0 se l\textquotesingle{}acquisto {\bfseries{non}} è andato a buon fine 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00347}{347}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a7bf1fb2c6ec605b4902b522cd8bf5cca}\index{catalogolib.h@{catalogolib.h}!aggiungiGioco@{aggiungiGioco}}
+\index{aggiungiGioco@{aggiungiGioco}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{aggiungiGioco()}{aggiungiGioco()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a7bf1fb2c6ec605b4902b522cd8bf5cca} 
+unsigned short aggiungi\+Gioco (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structgioco}{gioco\+\_\+t}}}]{gioco}{}\end{DoxyParamCaption})}
+
+
+
+Aggiunge un gioco all\textquotesingle{}interno del catalogo. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em gioco} & Istanza del gioco da aggiungere \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+1 se il gioco è {\bfseries{già presente}} 
+
+0 se il gioco è stato aggiunto 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00003}{3}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_ab4a3b23b861bd79f3d03483e7b45c284}\index{catalogolib.h@{catalogolib.h}!calcolaStatistiche@{calcolaStatistiche}}
+\index{calcolaStatistiche@{calcolaStatistiche}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{calcolaStatistiche()}{calcolaStatistiche()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_ab4a3b23b861bd79f3d03483e7b45c284} 
+float calcola\+Statistiche (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{gioco}{}\end{DoxyParamCaption})}
+
+
+
+Calcola la media delle valutazioni del gioco selezionato. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em gioco} & Istanza del gioco\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+Valore delle statistiche di un gioco 
+
+0 se non ci sono recensioni 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00280}{280}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_ad52d7a31ba85a790f9899807dce0657f}\index{catalogolib.h@{catalogolib.h}!cancellaGioco@{cancellaGioco}}
+\index{cancellaGioco@{cancellaGioco}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{cancellaGioco()}{cancellaGioco()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_ad52d7a31ba85a790f9899807dce0657f} 
+unsigned short cancella\+Gioco (\begin{DoxyParamCaption}\item[{long}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+Cancella un record all\textquotesingle{}interno del file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+1 se il gioco è stato cancellato 
+
+0 se il gioco {\bfseries{non}} è stato cancellato o si è verificato qualche problema 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00043}{43}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a7957ea353b1dee02172d9870a40963f6}\index{catalogolib.h@{catalogolib.h}!inserisciRecensione@{inserisciRecensione}}
+\index{inserisciRecensione@{inserisciRecensione}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{inserisciRecensione()}{inserisciRecensione()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a7957ea353b1dee02172d9870a40963f6} 
+unsigned short inserisci\+Recensione (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structrecensioni}{recensioni\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{recensione}{, }\item[{long \texorpdfstring{$\ast$}{*}}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+La funzione inserisce una recensione per un gioco nel file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em recensione} & Recensione inserita dall\textquotesingle{}utente \\
+\hline
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+1 se la recensione è stata inserita correttamente 
+
+0 se la recensione {\bfseries{non}} è stata inserita 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00224}{224}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_ab106300a9d3d443f4738f754528d1a6b}\index{catalogolib.h@{catalogolib.h}!modificaGioco@{modificaGioco}}
+\index{modificaGioco@{modificaGioco}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{modificaGioco()}{modificaGioco()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_ab106300a9d3d443f4738f754528d1a6b} 
+unsigned short modifica\+Gioco (\begin{DoxyParamCaption}\item[{long}]{offset}{, }\item[{const \mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{gioco}{}\end{DoxyParamCaption})}
+
+
+
+Modifica il contenuto di un gioco contenuto all\textquotesingle{}interno del file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\mbox{\texttt{ in}}  & {\em gioco} & Istanza del gioco contenente le nuove informazioni \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+1 se il gioco è stato modificato 
+
+0 se il gioco {\bfseries{non}} è stato modificato 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00022}{22}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a86f4ca1357238918e9ff6039a83440aa}\index{catalogolib.h@{catalogolib.h}!ordinaStatistiche@{ordinaStatistiche}}
+\index{ordinaStatistiche@{ordinaStatistiche}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{ordinaStatistiche()}{ordinaStatistiche()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a86f4ca1357238918e9ff6039a83440aa} 
+\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} \texorpdfstring{$\ast$}{*} ordina\+Statistiche (\begin{DoxyParamCaption}\item[{unsigned short}]{mode}{, }\item[{unsigned long \texorpdfstring{$\ast$}{*}}]{num\+\_\+elementi}{}\end{DoxyParamCaption})}
+
+
+
+Ordina tutti i giochi all\textquotesingle{}interno del catalogo, in base alla modalità specificata in ingresso. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em mode} & Modalità di visualizzazione delle statistiche (copie vendute o media valutazione). 1 per le copie vendute 2 per la media valutazione \\
+\hline
+\mbox{\texttt{ out}}  & {\em num\+\_\+elementi} & Numero di giochi totali recuperati dal catalogo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore alla lista con i giochi ordinati 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00294}{294}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a55e4ab7f9cf0dee22e16bb2c72776421}\index{catalogolib.h@{catalogolib.h}!ricercaGlobale@{ricercaGlobale}}
+\index{ricercaGlobale@{ricercaGlobale}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{ricercaGlobale()}{ricercaGlobale()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a55e4ab7f9cf0dee22e16bb2c72776421} 
+long \texorpdfstring{$\ast$}{*} ricerca\+Globale (\begin{DoxyParamCaption}\item[{char}]{query}{\mbox{[}\+MAX\+\_\+\+CHAR\mbox{]}, }\item[{unsigned short \texorpdfstring{$\ast$}{*}}]{num\+\_\+elementi}{}\end{DoxyParamCaption})}
+
+
+
+Effettua una ricerca su tutto il file in base ai parametri inseriti in ingresso dall\textquotesingle{}utente. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em query} & Stringa utilizzata per la ricerca \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em num\+\_\+elementi} & Numero degli elementi recuperati \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore alla lista con la posizione di ogni gioco 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00116}{116}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a000845e013ca6ed91a76892c601ee71a}\index{catalogolib.h@{catalogolib.h}!ricercaSpecifica@{ricercaSpecifica}}
+\index{ricercaSpecifica@{ricercaSpecifica}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{ricercaSpecifica()}{ricercaSpecifica()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a000845e013ca6ed91a76892c601ee71a} 
+\mbox{\hyperlink{structgioco}{gioco\+\_\+t}} ricerca\+Specifica (\begin{DoxyParamCaption}\item[{long}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+Ricerca un gioco specifico. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Istanza del gioco recuperato 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00092}{92}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+
+\Hypertarget{catalogolib_8h_a48d5bc1c12331104cd2ef7249dc34f73}\index{catalogolib.h@{catalogolib.h}!visualizzaRecensioni@{visualizzaRecensioni}}
+\index{visualizzaRecensioni@{visualizzaRecensioni}!catalogolib.h@{catalogolib.h}}
+\doxysubsubsection{\texorpdfstring{visualizzaRecensioni()}{visualizzaRecensioni()}}
+{\footnotesize\ttfamily \label{catalogolib_8h_a48d5bc1c12331104cd2ef7249dc34f73} 
+\mbox{\hyperlink{structrecensioni}{recensioni\+\_\+t}} \texorpdfstring{$\ast$}{*} visualizza\+Recensioni (\begin{DoxyParamCaption}\item[{long}]{offset}{, }\item[{unsigned short \texorpdfstring{$\ast$}{*}}]{num\+\_\+recensioni}{}\end{DoxyParamCaption})}
+
+
+
+Recupera le recensioni di un gioco specifico. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em offset} & Posizione del blocco nel file in cui si trova il gioco \\
+\hline
+\mbox{\texttt{ out}}  & {\em num\+\_\+recensioni} & Numero di recensioni del gioco \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+Puntatore alla lista con le recensioni 
+
+NULL se non ci sono recensioni per il gioco o si è verificato qualche problema 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{catalogolib_8c_source_l00241}{241}} of file \mbox{\hyperlink{catalogolib_8c_source}{catalogolib.\+c}}.
+

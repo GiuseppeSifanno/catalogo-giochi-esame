@@ -1,0 +1,214 @@
+\doxysection{C\+:/\+Users/\+Giuseppe/\+Desktop/\+COMPITI/\+UNI/catalogo-\/giochi-\/esame Directory Reference}
+\hypertarget{dir_5273672b10fcd82d47208322e49a8668}{}\label{dir_5273672b10fcd82d47208322e49a8668}\index{C:/Users/Giuseppe/Desktop/COMPITI/UNI/catalogo-\/giochi-\/esame Directory Reference@{C:/Users/Giuseppe/Desktop/COMPITI/UNI/catalogo-\/giochi-\/esame Directory Reference}}
+\doxysubsubsection*{Files}
+\begin{DoxyCompactItemize}
+\item 
+file {\bfseries catalogo.\+c}
+\item 
+file {\bfseries catalogolib.\+c}
+\item 
+file \mbox{\hyperlink{catalogolib_8h}{catalogolib.\+h}}
+\begin{DoxyCompactList}\small\item\em Header della libreria di funzioni per il catalogo dei giochi. \end{DoxyCompactList}\item 
+file {\bfseries gioco.\+c}
+\item 
+file \mbox{\hyperlink{gioco_8h}{gioco.\+h}}
+\begin{DoxyCompactList}\small\item\em Definizione delle strutture e dei tipi utilizzati per la gestione dei dati di un gioco all\textquotesingle{}interno del catalogo. \end{DoxyCompactList}\item 
+file {\bfseries tunity\+\_\+catalogo.\+c}
+\item 
+file {\bfseries utility.\+c}
+\item 
+file \mbox{\hyperlink{utility_8h}{utility.\+h}}
+\begin{DoxyCompactList}\small\item\em Libreria con funzioni utili per la gestione del catalogo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+ll caso di studio deve simulare una parte delle funzionalità di una piattaforma online per la catalogazione di videogiochi.\hypertarget{README.md_autotoc_md1}{}\doxysubsection{\texorpdfstring{Informazioni generali}{Informazioni generali}}\label{README.md_autotoc_md1}
+
+\begin{DoxyItemize}
+\item {\bfseries{Nome file del catalogo}} ({\ttfamily NOME\+\_\+\+FILE})\+: {\ttfamily catalogo.\+dat}
+\item {\bfseries{Directory del catalogo}}\+: area di lavoro
+\item {\bfseries{Dimensione massima stringhe}} ({\ttfamily MAX\+\_\+\+CHAR})\+: 255
+\item {\bfseries{Offset}}\+: posizione in byte all\textquotesingle{}interno del file binario.
+\item {\bfseries{Blocco}}\+: struttura fissa che rappresenta un gioco.
+\item {\bfseries{Parametro specifico}}\+: identificato da un simbolo speciale ({\ttfamily \#} o {\ttfamily \$}).
+\end{DoxyItemize}
+
+\begin{quote}
+{\bfseries{fflush(stdin)}} è sostituito dalla macro {\bfseries{CLEAR\+\_\+\+INPUT\+\_\+\+BUFFER()}} poiché non funziona come dovrebbe su tutti i SO (ad esempio MAC) \end{quote}
+
+
+\begin{quote}
+Ad ogni avvio del programma parte una funzione che inserisce in maniera automatica 20 giochi all\textquotesingle{}interno del file, grazie ad altre funzioni il file viene creato se non esiste, se quest\textquotesingle{}ultimo invece esiste già allora si verifica che quei giochi siano già presenti, in caso lo siano non si procede nella sovrascrittura, altrimenti verranno aggiunti in append \end{quote}
+
+
+\begin{quote}
+{\bfseries{Nota per le recensioni\+:}} Per quest\textquotesingle{}ultime non è stato predisposto nessun meccanismo di gestione come eliminazione o modifica ecc... \end{quote}
+\hypertarget{README.md_autotoc_md2}{}\doxysubsection{\texorpdfstring{Definizione dei campi di un gioco}{Definizione dei campi di un gioco}}\label{README.md_autotoc_md2}
+Il gioco è rappresentato da una {\itshape struttura} dati di tipo {\bfseries{gioco\+\_\+t}}, i campi di quest\textquotesingle{}ultima sono\+:
+
+
+\begin{DoxyItemize}
+\item titolo ({\itshape stringa})
+\item editore ({\itshape stringa})
+\item sviluppatore ({\itshape stringa})
+\item breve descrizione testuale del gioco ({\itshape stringa})
+\item anno di pubblicazione ({\itshape unsigned short int})
+\item copie vendute ({\itshape unsigned long})
+\item uno o più generi ({\itshape array di stringhe})
+\item una o più recensioni ({\itshape array di strutture}) con\+:
+\begin{DoxyItemize}
+\item nome utente ({\itshape stringa})
+\item valutazione ({\itshape uint8\+\_\+t}, da 0 a 5)
+\item descrizione ({\itshape stringa}, opzionale)
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{README.md_autotoc_md3}{}\doxysubsection{\texorpdfstring{Ruoli presenti nel progetto}{Ruoli presenti nel progetto}}\label{README.md_autotoc_md3}
+All\textquotesingle{}interno del progetto ci sono due ruoli\+:
+
+
+\begin{DoxyEnumerate}
+\item Amministratore
+\item Visitatore del catalogo
+\end{DoxyEnumerate}
+
+\begin{quote}
+{\bfseries{Nota}}\+: Quest\textquotesingle{}ultimi non hanno un\textquotesingle{}importanza molto significativa, infatti non sono presenti meccanismi di sicurezza per l\textquotesingle{}accesso ad ognuno dei due ruoli, è presente una semplice scelta all\textquotesingle{}avvio del programma e l\textquotesingle{}inserimento di un nome utente per l\textquotesingle{}utente. \end{quote}
+\hypertarget{README.md_autotoc_md4}{}\doxysubsubsection{\texorpdfstring{Amministratore}{Amministratore}}\label{README.md_autotoc_md4}
+Funzionalità di un\textquotesingle{}amministratore\+:
+\begin{DoxyEnumerate}
+\item Aggiunta di un gioco
+\item Ricerca di un gioco
+\begin{DoxyItemize}
+\item Modifica di un gioco
+\item Cancellazione di un gioco
+\item Visualizzazione delle recensioni
+\item Visualizzazione delle statistiche
+\end{DoxyItemize}
+\item Ordinamento dei giochi
+\end{DoxyEnumerate}\hypertarget{README.md_autotoc_md5}{}\doxysubsubsection{\texorpdfstring{Visitatore}{Visitatore}}\label{README.md_autotoc_md5}
+Funzionalità disponibili\+:
+\begin{DoxyEnumerate}
+\item Ricerca di un gioco
+\begin{DoxyItemize}
+\item Inserimento di una recensione
+\item Visualizzazione delle recensioni
+\item Acquisto di un gioco
+\end{DoxyItemize}
+\item Ordinamento dei giochi
+\end{DoxyEnumerate}\hypertarget{README.md_autotoc_md6}{}\doxysubsection{\texorpdfstring{Funzionionalità del sistema}{Funzionionalità del sistema}}\label{README.md_autotoc_md6}
+\hypertarget{README.md_autotoc_md7}{}\doxysubsubsection{\texorpdfstring{Funzione di ricerca}{Funzione di ricerca}}\label{README.md_autotoc_md7}
+La funzione di ricerca è il fulcro, non solo per poter ricercare i giochi ma anche per poter operare su di loro. Quasi tutte le funzioni si basano su quest\textquotesingle{}ultima per poter funzionare in maniera più efficiente e rapida.
+
+Prima di poter operare su un gioco è necessario cercarlo, per farlo l\textquotesingle{}utente dovrà digitare i parametri che a lui interessa utilizzare durante la ricerca. Verrà dunque composta un query contenente i parametri necessari per la ricerca. In alcuni casi la ricerca di un gioco non viene fatta tramite query, detta anche {\itshape globalmente} su tutto il file alla ricerca di qualsiasi gioco che corrisponda ai parametri, ma con l\textquotesingle{}altro metodo di ricerca, quello {\itshape specifico} che si posiziona direttamente al gioco voluto.\hypertarget{README.md_autotoc_md8}{}\doxysubsubsubsection{\texorpdfstring{1° metodo, globale}{1° metodo, globale}}\label{README.md_autotoc_md8}
+\hypertarget{README.md_autotoc_md9}{}\doxysubsubsubsubsection{\texorpdfstring{Com\textquotesingle{}è composta la query}{Com\textquotesingle{}è composta la query}}\label{README.md_autotoc_md9}
+La query, una semplice stringa di caratteri, può essere composta da uno o più parametri. I parametri ({\itshape titolo, editore, generi, ecc...}) {\bfseries{devono}} essere separati tra loro da un delimitatore, una virgola "{} \texorpdfstring{$\ast$}{*},\texorpdfstring{$\ast$}{*} "{}, i parametri {\itshape generici} (titolo, editore, sviluppatore) possono essere scritti liberamente, per i parametri {\itshape specifici} (anno di pubblicazione, genere) è necessario precedere il testo con il simbolo \texorpdfstring{$\ast$}{*}\$\texorpdfstring{$\ast$}{*} per l\textquotesingle{}anno di pubblicazione mentre \texorpdfstring{$\ast$}{*}\#\texorpdfstring{$\ast$}{*} per il genere (è possibile utilizzarli più volte per creare delle combinazioni).
+
+Inserita la query, è necessaria analizzarla così da poterne ricavare i parametri che verranno poi utilizzati nella ricerca
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Simbolo   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Campo associato   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Esempio    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Simbolo   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Campo associato   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Esempio    }\\\cline{1-3}
+\endhead
+\PBS\centering {\ttfamily \$}   &\PBS\centering Anno di pubblicazione   &\PBS\centering {\ttfamily \$2020}    \\\cline{1-3}
+\PBS\centering {\ttfamily \#}   &\PBS\centering Genere del videogioco   &\PBS\centering {\ttfamily \#horror, \#rpg}   \\\cline{1-3}
+\end{longtabu}
+\hypertarget{README.md_autotoc_md10}{}\doxysubsubsubsubsection{\texorpdfstring{Analisi della query}{Analisi della query}}\label{README.md_autotoc_md10}
+Ad occuparsi di questa operazione è la funzione {\itshape analisi\+Query}, inizialmente viene predisposto un array di stringhe, creato e gestito in maniera dinamica, all\textquotesingle{}interno di quest\textquotesingle{}ultimo verranno inseriti tutti i {\bfseries{parametri}}.
+
+Prima di tokenizzare è necessario creare una copia della query sulla quale si opera. La query viene divisa in token, ognuno di questi viene dunque "{}pulito"{} eliminando spazi all\textquotesingle{}inizio e alla fine e rendendola completamente {\itshape lower case}. Terminato la pulizia della stringa, se avrà una lunghezza superiore a 0, dunque è presente almeno un carattere (escluso lo spazio), significa che abbiamo trovato un parametro valido. Prima di inserire il parametro all\textquotesingle{}interno dell\textquotesingle{}array bisogna gestire in maniera opportuna la memoria. Se non ci sono problemi, il parametro potrà essere inserito all\textquotesingle{}interno dell\textquotesingle{}array. Lo stesso procedimento verrà ripetuto per ogni token generato.\hypertarget{README.md_autotoc_md11}{}\doxysubsubsubsubsection{\texorpdfstring{Operazione di ricerca}{Operazione di ricerca}}\label{README.md_autotoc_md11}
+La ricerca viene ottimizzata in base alla tipologia dei parametri inseriti dall\textquotesingle{}utente.
+\begin{DoxyEnumerate}
+\item Parametri {\bfseries{specifici}}
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item Per il campo {\itshape anno di pubblicazione} la ricerca verrà effettuata solo su quest\textquotesingle{}ultimo se e solo se il valore da cercare è {\bfseries{preceduto}} dal simbolo \texorpdfstring{$\ast$}{*}\$\texorpdfstring{$\ast$}{*} (esempio\+: {\itshape \$2024})
+\begin{DoxyItemize}
+\item Per il campo {\itshape genere} la ricerca verrà effettuata solo su quest\textquotesingle{}ultimo se e solo se il valore da cercare è {\bfseries{preceduto}} dal simbolo \texorpdfstring{$\ast$}{*}\#\texorpdfstring{$\ast$}{*} (esempio\+: \texorpdfstring{$\ast$}{*}\#horror\texorpdfstring{$\ast$}{*}, \texorpdfstring{$\ast$}{*}\#fps\texorpdfstring{$\ast$}{*}). Il confronto con il parametro avviene per tutti i generi del gioco fin quando non c\textquotesingle{}è una corrispondenza. La comparazione da esito positivo anche se non c\textquotesingle{}è un match esatto con il genere
+\end{DoxyItemize}
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item Parametri {\bfseries{generici}}
+\begin{DoxyItemize}
+\item Per i campi {\itshape titolo}, {\itshape editore}, {\itshape sviluppatore} non viene applicato nessun tipo di operazione aggiuntiva, il confronto anche in questo caso non necessita di {\bfseries{matching esatto}}. Qualsiasi parametro contenente un qualsiasi valore apparterrà a questa categoria (esempio\+: 2024 può essere considerato come titolo, {\bfseries{non}} verrà considerato come {\itshape anno di pubblicazione} poiché non è preceduto dal simbolo {\itshape \$}, lo stesso medesimo comportamento si verifica anche per il genere).
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+I token dei parametri {\itshape specifici} sono definite come MACRO all\textquotesingle{}interno del programma, TOKEN\+\_\+1 (\$) e TOKEN\+\_\+2 (\#)
+
+Essendo un tipo di ricerca flessibile non viene indicata la tipologia dei parametri {\itshape generici}, per questa ragione il controllo è fatto con tutti i parametri generici. Ciò è dovuto anche da una possibile coincidenza di alcuni campi come editore e sviluppatore.
+
+Se durante la ricerca {\bfseries{almeno}} un campo ha avuto riscontro positivo allora il gioco può essere pertinente alla ricerca dell\textquotesingle{}utente. Anche per questa operazione di ricerca si sfrutta un\textquotesingle{}array che viene ridimensionato in base all\textquotesingle{}evenienza. Ciò che verrà inserito all\textquotesingle{}interno di questo array non è altro che la posizione del blocco in cui è stato trovato il gioco. Dunque la sua posizione effettiva nel file binario, non è necessario utilizzare un contatore per tenere traccia del numero di blocchi letti nel file, infatti è possibile recuperare il dato tramite una funzione specifica {\itshape ftello()}, il valore restituito, detto anche {\bfseries{offset}}, dalla funzione è ciò che andrà a riempire la cella dell\textquotesingle{}array. L\textquotesingle{}array di offset è ciò che verrà restituito al chiamante.\hypertarget{README.md_autotoc_md12}{}\doxysubsubsubsection{\texorpdfstring{2° metodo, specifico}{2° metodo, specifico}}\label{README.md_autotoc_md12}
+In alcuni casi non è necessario dover cercare in tutto il file il gioco che ci interessa dovendo fare controlli su controlli, è possibile cercarlo direttamente tramite il suo {\itshape offset}, ci si posiziona sul blocco corretto tramite una funzione, che accetta l\textquotesingle{}offset come parametro e si legge quest\textquotesingle{}ultimo. Una volta fatto, il gioco verrà poi restituito così da poterlo gestire direttamente con tutti i suoi dati.\hypertarget{README.md_autotoc_md13}{}\doxysubsubsection{\texorpdfstring{Funzione di aggiunta}{Funzione di aggiunta}}\label{README.md_autotoc_md13}
+{\bfseries{DISPONIBILE SOLO PER L\textquotesingle{}AMMINISTRATORE}}
+
+Inizialmente viene creata una nuova istanza di tipo {\itshape gioco} con i propri dati tramite la funzione {\itshape acquisisci\+Gioco}, successivamente si controlla se quel gioco non è già presente all\textquotesingle{}interno del catalogo, la funzione che si occupa di questa operazione è chiamata {\itshape is\+Alredy\+Added}.
+
+Se il gioco inserito in input dall\textquotesingle{}utente è valido allora il gioco verrà inserito all\textquotesingle{}interno del file. \#\# Funzione di modifica
+
+{\bfseries{DISPONIBILE SOLO PER L\textquotesingle{}AMMINISTRATORE}}
+
+La modifica di un gioco può essere effettuata solo dopo aver cercato e selezionato il gioco originale da voler modificare. Selezionato il gioco si potrà procedere nella modifica delle informazioni di quest\textquotesingle{}ultimo.
+
+La funzione sfrutterà {\bfseries{l\textquotesingle{}offeset}} per potersi posizionare direttamente nel blocco del gioco da voler modificare, terminato il posizionamento si potrà procedere con la scrittura dei nuovi dati. \#\# Funzione di cancellazione
+
+{\bfseries{DISPONIBILE SOLO PER L\textquotesingle{}AMMINISTRATORE}}
+
+La funzione si occupa della cancellazione di un gioco all\textquotesingle{}interno del catalogo. La posizione del blocco, quindi del gioco da cancellare è rappresentata dall\textquotesingle{}{\bfseries{offset}}, ottenuto durante la ricerca e selezione del gioco.\hypertarget{README.md_autotoc_md14}{}\doxysubsubsection{\texorpdfstring{Funzione di inserimento recensione}{Funzione di inserimento recensione}}\label{README.md_autotoc_md14}
+{\bfseries{DISPONIBILE SOLO PER IL VISITATORE}}
+
+La funzione si occupa dell\textquotesingle{}inserimento di una recensione all\textquotesingle{}interno del catalogo per un gioco specifico, è necessario cercare e selezionare il gioco desiderato, quindi sfruttare la ricerca specifica per recuperare il gioco e salvarlo in una variabile, si andranno poi a scorrere tutte le celle contenenti le recensioni affinché non se ne trovi una libera (dove non c\textquotesingle{}è un nome utente). La recensione verrà copiata nella prima cella disponibile altrimenti non verrà inserita se non ci sono più celle libere.
+
+{\bfseries{In questo caso non viene sfruttato un meccanismo dinamico per le recensioni poiché per i file binari non esiste un meccanismo automatico che "{}shifta"{} i singoli dati riorganizzando tutti i dati, inoltre rendere la dimensione dei blocchi diversa tra loro comporterebbe numerosi problemi durante la lettura del file da parte di altre funzioni. Ad esempio se per un gioco ci sono 10 recensioni, quest\textquotesingle{}ultimo avrà una sua dimensione all\textquotesingle{}interno del file, differente da un altro gioco che potrebbe averne 0,3,20, ecc... Per questa ragione si è optato per un numero fisso di recensioni, la modifica di quest\textquotesingle{}ultimo dopo aver inserito dei dati all\textquotesingle{}interno del file binario comporterebbe sempre a problemi legati alla dimensione dei blocchi}}\hypertarget{README.md_autotoc_md15}{}\doxysubsubsection{\texorpdfstring{Funzione di visualizzazione delle recensioni}{Funzione di visualizzazione delle recensioni}}\label{README.md_autotoc_md15}
+{\bfseries{DISPONIBILE PER IL VISITATORE E L\textquotesingle{}AMMINISTRATORE}}
+
+La funzione ha il compito di restituire tutte le recensioni di un determinato gioco, per questa ragione bisogna prima cercare il gioco poi, una volta selezionato, sarà possibile utilizzare questa funzione, infatti quest\textquotesingle{}ultima richiede l\textquotesingle{}offset del gioco in maniera tale da poterlo cercare, leggere e inserirlo all\textquotesingle{}interno di una variabile così da poter avere tutti i dati a disposizione. Letto il gioco, si passa a recuperare tutte le recensioni valide, ovvero quelle che hanno un nome utente, infatti ogni recensione {\bfseries{deve}} averne uno. Tutte le recensioni senza un nome utente verranno ignorate, quando viene trovata un recensione valida, quest\textquotesingle{}ultima viene inserita all\textquotesingle{}interno di un\textquotesingle{}array, gestito sempre in maniera dinamica, viene inoltre incrementato un contatore sul numero di recensioni che verrà sfruttato per scorrere l\textquotesingle{}array fino all\textquotesingle{}n-\/esima cella.
+
+Solo in questo case non viene sfruttata la funzione {\itshape check\+Memory} poiché può creare problemi con la gestione di un\textquotesingle{}array di struct.\hypertarget{README.md_autotoc_md16}{}\doxysubsubsection{\texorpdfstring{Visualizzare le statistiche}{Visualizzare le statistiche}}\label{README.md_autotoc_md16}
+{\bfseries{DISPONIBILE PER IL VISITATORE E L\textquotesingle{}AMMINISTRATORE}}
+
+La visualizzazione delle statistiche può avvenire secondo due modalità\+:
+
+
+\begin{DoxyEnumerate}
+\item Per copie vendute
+\item Media valutazione
+\end{DoxyEnumerate}
+
+In questo caso non esiste una funzione che effettua quest\textquotesingle{}operazione ma attraverso l\textquotesingle{}istanza del gioco si mostrano le copie vendute (1 metodo), mentre per il secondo metodo si sfrutta una funzione per il calcolo della media della valutazione di un singolo gioco, per questa ragione la funzione denominata {\itshape calcola\+Statistiche} accetta solo l\textquotesingle{}istanza del gioco.\hypertarget{README.md_autotoc_md17}{}\doxysubsubsection{\texorpdfstring{Funzione di ordinamento giochi}{Funzione di ordinamento giochi}}\label{README.md_autotoc_md17}
+{\bfseries{DISPONIBILE PER IL VISITATORE E L\textquotesingle{}AMMINISTRATORE}}
+
+Per questa funzione esistono due metodi di ordinamento\+:
+\begin{DoxyEnumerate}
+\item Per copie vendute
+\item Per media di valutazione
+\end{DoxyEnumerate}
+
+In entrambi i casi l\textquotesingle{}algoritmo utilizzato è il {\bfseries{shell sort}}
+
+Innanzitutto bisogna assicurarsi che all\textquotesingle{}interno del catalogo ci siano dei giochi, altrimenti l\textquotesingle{}ordinamento non avrebbe senso, fatto ciò si passa alla lettura di tutti i giochi i quali verranno inseriti all\textquotesingle{}interno di un\textquotesingle{}array che verrà poi ordinato, l\textquotesingle{}ordinamento non viene eseguito se il numero di giochi nel catalogo {\bfseries{è uguale}} a 1.
+
+Il criterio di ordinamento è deciso dalla modalità selezionata dall\textquotesingle{}utente, dunque per il 1° metodo verranno utilizzati direttamente i dati del gioco contenuto nella cella che si sta valutando, mentre per il 2° è necessario che vengano analizzate tutte le recensioni per poter ottenere la media delle valutazioni, dunque si sfrutta la funzione che si occupa di ciò ({\itshape calcola\+Statistiche}), ciò che restituirà verrà poi utilizzato per il confronto.
+
+Terminato l\textquotesingle{}ordinamento, l\textquotesingle{}array ordinato sarà consultabile.\hypertarget{README.md_autotoc_md18}{}\doxysubsubsection{\texorpdfstring{Funzione di acquisto}{Funzione di acquisto}}\label{README.md_autotoc_md18}
+{\bfseries{DISPONIBILE SOLO PER IL VISITATORE}}
+
+In base al gioco selezionato, viene recuperato tramite la {\itshape ricerca specifica} e poi aggiornato il contatore delle copie vendute di 1. Il gioco verrà modificato nel catalogo tramite la funzione modifica.\hypertarget{README.md_autotoc_md19}{}\doxysubsection{\texorpdfstring{Altre funzioni utili}{Altre funzioni utili}}\label{README.md_autotoc_md19}
+Oltre alla funzioni che interagiscono e riguardano esclusivamente il catalogo e i giochi al suo interno, ci sono anche altre funzioni o dati necessari per il funzionamento del sistema
+
+Quest\textquotesingle{}ultimi sono contenuti all\textquotesingle{}interno del file {\itshape \doxylink{utility_8c_source}{utility.\+c}/.h}. Le funzioni sono\+:
+
+
+\begin{DoxyItemize}
+\item {\itshape trim}, pulizia delle stringhe
+\item {\itshape acquisisci\+Gioco}, acquisisce i dati di un gioco e nel mentre esegue i controlli sui vincoli d\textquotesingle{}integrità di ogni dato.
+\item {\itshape apri\+Catalogo}, funzione per agevolare il meccanismo di apertura del file
+\item {\itshape analisi\+Query}, parsing delle query
+\item {\itshape check\+Memory}, funzione necessaria per la gestione e l\textquotesingle{}allocazione (o reallocazione) di una struttura dati, alla base di questa funzione ci sono i puntatori con i quali è possibile tenere traccia delle aree di memoria che vengono modificate in base all\textquotesingle{}evenienza, tramite questa funzione è possible svincolarsi dal creare array di dati con dimensione fissa che potrebbero occupare molta più memoria di quella che effettivamente necessitano. Terminate le sue operazioni, il vettore, se necessario, risulterà con una capacità maggiore.
+\item {\itshape shell\+Sort}, funzione per l\textquotesingle{}ordinamento dei giochi, {\bfseries{l\textquotesingle{}ordinamente non avviene anche sul file, solo in un\textquotesingle{}array}}. L\textquotesingle{} algoritmo che garantisce un tempo di esecuzione non troppo elevato ({\itshape n log n}) rispetto ad altri algoritmi di ordinamento. La tipologia di ordinamento è {\bfseries{decrescente}}
+\item {\itshape is\+Alredy\+Added}, viene chiamata prima della funzione di aggiunta così da prevenire inserimenti inutili all\textquotesingle{}interno del catalogo. Il tipo di controllo che viene applicato in questo caso, sui campi, è a {\itshape matching esatto} dunque {\bfseries{tutti}} i campi esclusi quelli inerenti alle {\itshape recensioni}. Se anche un singolo carattere è diverso allora il gioco verrà considerato come nuovo dunque potrà essere aggiunto all\textquotesingle{}interno del catalogo. 
+\end{DoxyItemize}
