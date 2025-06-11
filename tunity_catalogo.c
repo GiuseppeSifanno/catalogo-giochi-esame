@@ -61,6 +61,22 @@ void test_aggiungiGioco(void) {
 	TEST_ASSERT_EQUAL_INT_MESSAGE(0, aggiungiGioco(gioco), "SE 1 E' GIA' PRESENTE");
 }
 
+void test_analisiQuery(void) {
+	char query[MAX_CHAR] = "test_titolo";
+	unsigned short num_elementi = 0;
+	char **parametri = analisiQuery(query, &num_elementi);
+	TEST_ASSERT_EQUAL_INT(1, num_elementi);
+	TEST_ASSERT_EQUAL_STRING("test_titolo", parametri[0]);
+	free(parametri);
+}
+
+void test_ricercaGlobale(void) {
+	char query[MAX_CHAR] = "test_titolo";
+	unsigned short num_elementi = 0;
+
+	TEST_ASSERT_NOT_NULL(ricercaGlobale(query, &num_elementi));
+}
+
 void test_modificaGioco(void) {
 	//gioco con numero di copie modificate
 	gioco_t gioco = {
@@ -78,22 +94,6 @@ void test_modificaGioco(void) {
 	unsigned short num_elementi = 0;
 	long *offset = ricercaGlobale(query, &num_elementi);
 	TEST_ASSERT_EQUAL_INT_MESSAGE(1, modificaGioco(offset[0], &gioco), "SE 0 IL GIOCO POTREBBE NON ESSERE PRESENTE");
-}
-
-void test_analisiQuery(void) {
-	char query[MAX_CHAR] = "test_titolo";
-	unsigned short num_elementi = 0;
-	char **parametri = analisiQuery(query, &num_elementi);
-	TEST_ASSERT_EQUAL_INT(1, num_elementi);
-	TEST_ASSERT_EQUAL_STRING("test_titolo", parametri[0]);
-	free(parametri);
-}
-
-void test_ricercaGlobale(void) {
-	char query[MAX_CHAR] = "test_titolo";
-	unsigned short num_elementi = 0;
-
-	TEST_ASSERT_NOT_NULL(ricercaGlobale(query, &num_elementi));
 }
 
 void test_inserisciRecensione(void) {
@@ -130,9 +130,9 @@ int main(void) {
 
 	RUN_TEST(test_calcolaStatistiche);
 	RUN_TEST(test_aggiungiGioco);
-	RUN_TEST(test_modificaGioco);
 	RUN_TEST(test_analisiQuery);
 	RUN_TEST(test_ricercaGlobale);
+	RUN_TEST(test_modificaGioco);
 	RUN_TEST(test_inserisciRecensione);
 	RUN_TEST(test_acquistaGioco);
 	//eseguire per ultimo così da eliminare il gioco usato come test
