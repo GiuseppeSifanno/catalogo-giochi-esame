@@ -200,3 +200,20 @@ Quest'ultimi sono contenuti all'interno del file *utility.c/.h*. Le funzioni son
 - *shellSort*, funzione per l'ordinamento dei giochi, **l'ordinamente non avviene anche sul file, solo in un'array**. L' algoritmo che garantisce un tempo di esecuzione non troppo elevato (*n log n*) rispetto ad altri algoritmi di ordinamento. La tipologia di ordinamento è **decrescente**
 
 - *isAlredyAdded*, viene chiamata prima della funzione di aggiunta così da prevenire inserimenti inutili all'interno del catalogo. Il tipo di controllo che viene applicato in questo caso, sui campi, è a *matching esatto* dunque **tutti** i campi esclusi quelli inerenti alle *recensioni*. Se anche un singolo carattere è diverso allora il gioco verrà considerato come nuovo dunque potrà essere aggiunto all'interno del catalogo.
+
+# Test Unity
+
+**Nome del file con i test:** tunity_catalogo.c
+
+Per questa progettazione sono stati inclusi anche dei test unity. I test vengono effettuati solo su una parte di tutte le funzioni che possono generare un risultato deterministico.
+
+Di seguito ci sono i test effettuati:
+
+* **test_calcolaStatistiche** : Calcolo della media delle valutazioni per un gioco creato e inizializzato ma non presente nel catalogo.
+* **test_aggiungiGioco** : Aggiunta di un gioco all'interno del catalogo.
+* **test_analisiQuery** : Analisi della query: "*test_titolo*" per verificare il ritorno di un parametro
+* **test_ricercaGlobale** :  Ricerca del gioco inserito precedentemente, verrà restituito **solo** il gioco che desideriamo cercare poiché nessun altro avrà quel titolo.
+* **test_modificaGioco** : Modifica delle stesso gioco all'interno del catalogo dopo averlo cercato
+* **test_inserisciRecensione** : Inserimento di una recensione del gioco di test.
+* **test_acquistaGioco** : Acquisto di una copia del gioco di test.
+* **test_eliminaGioco** : Cancellazione del gioco di test così da non lasciare tracce dei test all'interno del catalogo.
